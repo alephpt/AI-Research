@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\CNN",
+    "\\Discriminator",
+    "\\GAN",
+    "\\RL",
+    "\\tests",
+    "\\utilities"
+  ],
+  "SelectedNode": "\\Discriminator",
+  "PreviewInSolutionExplorer": false
+}

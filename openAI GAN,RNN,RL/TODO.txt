@@ -1,0 +1,25 @@
+COMPLETE: 
+ -- test GAN -> CNN
+ -- test GAN using the output of the CNN
+ -- create function test for the RL using the output of the CNN
+
+ 
+define `backpropDiscriminator(gan->discriminator, discriminator_loss);`
+define `updateWeightsCNN(generator);`
+define `updateWeightsCNN(discriminator);`
+
+
+REMAINING:
+// create a function test for RL to decide whether the CNN should use the GAN data, or whether the GAN should use the CNN data
+// create a functional test for the CNN and RL increasing eachothers performance
+// create a functional test to test the GAN, CNN and RL are all communicating with one another
+// create a functional test to determine if the RL is learning from the GAN
+// create a functional test to determine if the GAN is learning from the RL AI
+// create a functional test to determine if the RL is learning from the CNN
+// create a functional test to determine if the CNN is learning from the CNN
+// create a functional test to show the evolution of the entire network
+
+// Define a function to allow the RL to adjust the initial values of the CNN type
+// Define a function to allow the RL to adjust the initial values of the GAN type
+
+
