@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{aeefdb85-6703-44c0-8309-db2983bb9ab8}</ProjectGuid>
+    <RootNamespace>CARL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Alpha Dev</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CARL.c" />
+    <ClCompile Include="CNN\CNNLayer.c" />
+    <ClCompile Include="CNN\CNN.c" />
+    <ClCompile Include="Connectors\CA_Connectors.c" />
+    <ClCompile Include="Connectors\ARL_Connectors.c" />
+    <ClCompile Include="Connectors\RKC_Connectors.c" />
+    <ClCompile Include="Connectors\Protocol_Connectors.c" />
+    <ClCompile Include="GAN\Generator.c" />
+    <ClCompile Include="GAN\Optimizer.c" />
+    <ClCompile Include="GAN\GAN.c" />
+    <ClCompile Include="GAN\Discriminator.c" />
+    <ClCompile Include="Protocols\ARL_Protocol.c" />
+    <ClCompile Include="Protocols\CA_Protocol.c" />
+    <ClCompile Include="Protocols\RKC_Protocol.c" />
+    <ClCompile Include="Protocols\CARL_Protocol.c" />
+    <ClCompile Include="RL\RL.c" />
+    <ClCompile Include="Tests\Type_Tests.c" />
+    <ClCompile Include="Tests\Tests.c" />
+    <ClCompile Include="Tests\RL_Tests.c" />
+    <ClCompile Include="Tests\Protocol_Tests.c" />
+    <ClCompile Include="Tests\GAN_Tests.c" />
+    <ClCompile Include="Tests\Connectors_Tests.c" />
+    <ClCompile Include="Tests\CNN_Tests.c" />
+    <ClCompile Include="Tests\GAN_Tests.h" />
+    <ClCompile Include="Types\Activation.c" />
+    <ClCompile Include="Types\Feature.c" />
+    <ClCompile Include="Types\Matrix.c" />
+    <ClCompile Include="Types\Tensor.c" />
+    <ClCompile Include="Types\Vector.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CNN\CNNLayer.h" />
+    <ClInclude Include="Connectors\CA_Connectors.h" />
+    <ClInclude Include="Connectors\Protocol_Connectors.h" />
+    <ClInclude Include="Connectors\ARL_Connectors.h" />
+    <ClInclude Include="Connectors\RKC_Connectors.h" />
+    <ClInclude Include="GAN\Discriminator.h" />
+    <ClInclude Include="GAN\GAN.h" />
+    <ClInclude Include="GAN\Generator.h" />
+    <ClInclude Include="GAN\Optimizer.h" />
+    <ClInclude Include="Protocols\ARL_Protocol.h" />
+    <ClInclude Include="Protocols\CARL_Protocol.h" />
+    <ClInclude Include="Protocols\CA_Protocol.h" />
+    <ClInclude Include="Protocols\RKC_Protocol.h" />
+    <ClInclude Include="RL\RL.h" />
+    <ClInclude Include="CNN\CNN.h" />
+    <ClInclude Include="Tests\Connectors_Tests.h" />
+    <ClInclude Include="Tests\CNN_Tests.h" />
+    <ClInclude Include="Tests\RL_Tests.h" />
+    <ClInclude Include="Tests\Protocol_Tests.h" />
+    <ClInclude Include="Tests\Type_Tests.h" />
+    <ClInclude Include="Tests\Tests.h" />
+    <ClInclude Include="Types\Feature.h" />
+    <ClInclude Include="Types\Activation.h" />
+    <ClInclude Include="Types\Matrix.h" />
+    <ClInclude Include="Types\Tensor.h" />
+    <ClInclude Include="Types\Maths.h" />
+    <ClInclude Include="Types\Types.h" />
+    <ClInclude Include="Types\Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Directive.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
