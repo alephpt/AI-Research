@@ -1,40 +1,34 @@
 #include "../utilities/shop.h"
 
-CA_Protocol* initCA_Protocol(CNN* generator, Discriminator* discriminator, int batch_size, int n_inputs, int n_outputs, 
-                                         int n_generator_layers, int n_discriminator_layers, int* generator_layer_sizes, 
-                                         int* discriminator_layer_sizes, int* generator_filter_sizes, int generator_n_filters, 
-                                         int* discriminator_filter_sizes, int discriminator_n_filters, int generator_batch_size, 
-                                         int discriminator_batch_size, int generator_epochs, int discriminator_epochs, 
-                                         int generator_steps, int discriminator_steps, float generator_learning_rate, 
-                                         float discriminator_learning_rate) {
+CA_Protocol* initCA_Protocol(CNN* generator, Discriminator* discriminator, int batch_size, int n_inputs, int n_outputs) {
     CA_Protocol* protocol = (CA_Protocol*)malloc(sizeof(CA_Protocol));
     protocol->generator = generator;
     protocol->discriminator = discriminator;
     protocol->batch_size = batch_size;
     protocol->n_inputs = n_inputs;
     protocol->n_outputs = n_outputs;
-    protocol->n_generator_layers = n_generator_layers;
-    protocol->n_discriminator_layers = n_discriminator_layers;
-    protocol->generator_layer_sizes = generator_layer_sizes;
-    protocol->discriminator_layer_sizes = discriminator_layer_sizes;
-    protocol->generator_filter_sizes = generator_filter_sizes;
-    protocol->generator_n_filters = generator_n_filters;
-    protocol->discriminator_filter_sizes = discriminator_filter_sizes;
-    protocol->discriminator_n_filters = discriminator_n_filters;
-    protocol->generator_batch_size = generator_batch_size;
-    protocol->discriminator_batch_size = discriminator_batch_size;
-    protocol->generator_epochs = generator_epochs;
-    protocol->discriminator_epochs = discriminator_epochs;
-    protocol->generator_steps = generator_steps;
-    protocol->discriminator_steps = discriminator_steps;
+    protocol->n_generator_layers = generator->n_layers;
+    protocol->n_discriminator_layers = discriminator->layers;
+    protocol->generator_layer_sizes = generator->layer_sizes;
+    protocol->discriminator_layer_sizes = discriminator->layer_sizes;
+    protocol->generator_filter_sizes = generator->filter_sizes;
+    protocol->generator_n_filters = generator->n_filters;
+    protocol->discriminator_filter_sizes = discriminator->filter_sizes;
+    protocol->discriminator_n_filters = discriminator->n_filters;
+    protocol->generator_batch_size = generator->batch_size;
+    protocol->discriminator_batch_size = discriminator->batch_size;
+    protocol->generator_epochs = generator->epochs;
+    protocol->discriminator_epochs = discriminator->epochs;
+    protocol->generator_steps = generator->steps;
+    protocol->discriminator_steps = discriminator->steps;
     protocol->generator_iterations = 0;
     protocol->discriminator_iterations = 0;
     protocol->generator_batch_iterations = 0;
     protocol->discriminator_batch_iterations = 0;
     protocol->generator_batch_steps = 0;
     protocol->discriminator_batch_steps = 0;
-    protocol->generator_learning_rate = generator_learning_rate;
-    protocol->discriminator_learning_rate = discriminator_learning_rate;
+    protocol->generator_learning_rate = generator->learning_rate;
+    protocol->discriminator_learning_rate = discriminator->learning_rate;
     protocol->real_data = allocateMatrix(protocol->batch_size, protocol->n_inputs);
     protocol->generator_output = allocateMatrix(protocol->batch_size, protocol->n_outputs);
     protocol->discriminator_output = allocateMatrix(protocol->batch_size, protocol->n_outputs);
@@ -45,30 +39,30 @@ CA_Protocol* initCA_Protocol(CNN* generator, Discriminator* discriminator, int b
     protocol->discriminator_learning_rate = 0.01;
     protocol->n_inputs = n_inputs;
     protocol->n_outputs = n_outputs;
-    protocol->n_generator_layers = n_generator_layers;
-    protocol->n_discriminator_layers = n_discriminator_layers;
-    protocol->generator_layer_sizes = (int*)malloc(sizeof(int) * n_generator_layers);
-    protocol->discriminator_layer_sizes = (int*)malloc(sizeof(int) * n_discriminator_layers);
-    protocol->generator_weights = allocateMatrix(n_generator_layers, n_inputs);
-    protocol->generator_biases = allocateMatrix(n_generator_layers, 1);
-    protocol->discriminator_weights = allocateMatrix(n_discriminator_layers, n_inputs);
-    protocol->discriminator_biases = allocateMatrix(n_discriminator_layers, 1);
+    protocol->n_generator_layers = generator->n_layers;
+    protocol->n_discriminator_layers = discriminator->n_layers;
+    protocol->generator_layer_sizes = (int*)malloc(sizeof(int) * generator->n_layers);
+    protocol->discriminator_layer_sizes = (int*)malloc(sizeof(int) * discriminator->n_layers);
+    protocol->generator_weights = allocateMatrix(generator->n_layers, n_inputs);
+    protocol->generator_biases = allocateMatrix(generator->n_layers, 1);
+    protocol->discriminator_weights = allocateMatrix(discriminator->n_layers, n_inputs);
+    protocol->discriminator_biases = allocateMatrix(discriminator->n_layers, 1);
     protocol->generator_filter_sizes = (int*)malloc(sizeof(int) * n_generator_layers);
-    protocol->generator_n_filters = n_generator_filters;
-    protocol->discriminator_filter_sizes = (int*)malloc(sizeof(int) * n_discriminator_layers);
-    protocol->discriminator_n_filters = n_discriminator_filters;
-    protocol->generator_batch_size = generator_batch_size;
-    protocol->discriminator_batch_size = discriminator_batch_size;
-    protocol->generator_epochs = generator_epochs;
-    protocol->discriminator_epochs = discriminator_epochs;
-    protocol->generator_steps = generator_steps;
-    protocol->discriminator_steps = discriminator_steps;
-    protocol->generator_iterations = generator_iterations;
-    protocol->discriminator_iterations = discriminator_iterations;
-    protocol->generator_batch_iterations = generator_batch_iterations;
-    protocol->discriminator_batch_iterations = discriminator_batch_iterations;
-    protocol->generator_batch_steps = generator_batch_steps;
-    protocol->discriminator_batch_steps = discriminator_batch_steps;
+    protocol->generator_n_filters = generator->n_filters;
+    protocol->discriminator_filter_sizes = (int*)malloc(sizeof(int) * discriminator->n_layers);
+    protocol->discriminator_n_filters = discriminator->n_filters;
+    protocol->generator_batch_size = generator->batch_size;
+    protocol->discriminator_batch_size = discriminator->batch_size;
+    protocol->generator_epochs = generator->epochs;
+    protocol->discriminator_epochs = discriminator->epochs;
+    protocol->generator_steps = generator->steps;
+    protocol->discriminator_steps = discriminator->steps;
+    protocol->generator_iterations = generator->iterations;
+    protocol->discriminator_iterations = discriminator->iterations;
+    protocol->generator_batch_iterations = generator->batch_iterations;
+    protocol->discriminator_batch_iterations = discriminator->batch_iterations;
+    protocol->generator_batch_steps = generator->batch_steps;
+    protocol->discriminator_batch_steps = discriminator->batch_steps;
     return protocol;
 }
 

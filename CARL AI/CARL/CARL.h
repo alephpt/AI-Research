@@ -57,13 +57,7 @@ typedef struct ARL_Protocol {
     float** discriminator_error;
 } ARL_Protocol;
 
-CA_Protocol* initCA_Protocol(CNN* generator, Discriminator* discriminator, int batch_size, int n_inputs, int n_outputs, 
-                                         int n_generator_layers, int n_discriminator_layers, int* generator_layer_sizes, 
-                                         int* discriminator_layer_sizes, int* generator_filter_sizes, int generator_n_filters, 
-                                         int* discriminator_filter_sizes, int discriminator_n_filters, int generator_batch_size, 
-                                         int discriminator_batch_size, int generator_epochs, int discriminator_epochs, 
-                                         int generator_steps, int discriminator_steps, float generator_learning_rate, 
-                                         float discriminator_learning_rate);
+CA_Protocol* initCA_Protocol(CNN* generator, Discriminator* discriminator, int batch_size, int n_inputs, int n_outputs);
 ARL_Protocol* initARL_Protocol(ARL_Protocol* protocol, GAN* gan, RL* rl, int batch_size, int n_steps);
 void trainCA_Protocol(CA_Protocol* protocol, float** real_data);
 void trainARL_Protocol(ARL_Protocol* protocol, int n_steps);
