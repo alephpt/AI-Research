@@ -140,7 +140,27 @@ float** forwardPropCNNfromGan(CNN* cnn, float** gan_data) {
     return cnn_output;
 }
 
-void forwardPropCNN_A(CNN* cnn, float* input) {
+float** forwardPropCNN_A(Discriminator* discriminator, float** generator_output) {
+    int i, j, k;
+    for (i = 0; i < discriminator->n_layers; i++) {
+        for (j = 0; j < discriminator->layers[i]->n_neurons; j++) {
+            for (k = 0; k < discriminator->layers[i]->n_inputs; k++) {
+                discriminator->layers[i]->neurons[j] += discriminator->layers[i]->weights[j][k] * generator_output[k];
+            }
+            discriminator->layers[i]->neurons[j] += discriminator->layers[i]->bias[j];
+            if (discriminator->layers[i]->activation_function == RELU) {
+                discriminator->layers[i]->neurons[j] = relu(discriminator->layers[i]->neurons[j]);
+            }
+            else if (discriminator->layers[i]->activation_function == SIGMOID) {
+                discriminator->layers[i]->neurons[j] = sigmoid(discriminator->layers[i]->neurons[j]);
+            }
+        }
+        generator_output = discriminator->layers[i]->neurons;
+    }
+    return generator_output;
+}
+
+void forwardPropCNN_VOID(CNN* cnn, float* input) {
     // Perform forward propagation
     for (int i = 0; i < cnn->n_layers; i++) {
         // Multiply input by weights and add biases
@@ -260,13 +280,26 @@ void backpropCNN_B(CNN* cnn, float** delta_input) {
     deallocate2DArray(delta_output, n_layers);
 }
 
-float** calculateOutputError(CNN* generator, float generator_loss) {
+static float** calculateOutputError(CNN* generator, float generator_loss) {
     int n_outputs = generator->n_outputs;
     float** output_error = allocateMatrix(1, n_outputs);
     for (int i = 0; i < n_outputs; i++) {
         output_error[0][i] = generator_loss * generator->output[0][i];
     }
     return output_error;
+}
+
+void backpropLayer(CNNLayer* layer, float** error) {
+    // Calculate the error for the current layer
+    float** error_next = matrixMultiply(transpose(layer->weights), error);
+    // Update the weights of the current layer
+    layer->weights = matrixAdd(layer->weights, scalarMultiply(layer->learning_rate, matrixMultiply(error, transpose(layer->input))));
+    // Update the biases of the current layer
+    layer->biases = matrixAdd(layer->biases, scalarMultiply(layer->learning_rate, error));
+    // Recursively backpropagate through the previous layers
+    if (layer->previous_layer != NULL) {
+        backpropLayer(layer->previous_layer, error_next);
+    }
 }
 
 void backpropCNNgenerator(CNN* generator, float generator_loss) {

@@ -1,4 +1,5 @@
 #include "GAN.h"
+#include <stdbool.h>
 
 GAN* createGAN(int n_inputs, int n_outputs, int n_layers, int* filter_sizes, int n_filters, int* layer_sizes) {
     GAN* gan = (GAN*)malloc(sizeof(GAN));
@@ -45,6 +46,48 @@ void updateWeightsGAN(GAN* gan, float** newWeights) {
     }
 }
 
+bool isSimilar(float** generatedData, float** goodData, int sample_size, CNN* cnn) {
+    float epsilon = 0.01; // set a small threshold for comparison
+    for (int i = 0; i < sample_size; i++) {
+        for (int j = 0; j < cnn->n_inputs; j++) {
+            if (abs(generatedData[i][j] - goodData[i][j]) > epsilon) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void updateGeneratorWeights(float** weights, float** output, float** error, float learning_rate) {
+    int n_outputs = len(output);
+    int n_inputs = len(output[0]);
+    for (int i = 0; i < n_outputs; i++) {
+        for (int j = 0; j < n_inputs; j++) {
+            weights[i][j] -= learning_rate * output[i][j] * error[i][j];
+        }
+    }
+}
+
+static void updateWeightsCNNgenerator(CNN* generator) {
+    for (int i = 0; i < generator->n_layers; i++) {
+        updateGeneratorWeights(generator->layers[i]->weights, generator->layers[i]->output, generator->layers[i]->error, generator->learning_rate);
+    }
+}
+
+void updateDiscriminatorWeights(float** weights, float** output, float** error, float learning_rate) {
+    int n_outputs = len(output);
+    int n_inputs = len(output[0]);
+    for (int i = 0; i < n_outputs; i++) {
+        for (int j = 0; j < n_inputs; j++) {
+            weights[i][j] -= learning_rate * output[i][j] * error[i][j];
+        }
+    }
+}
+
+static void updateWeightsCNNdiscriminator(Discriminator* discriminator) {
+    updateWeights(discriminator->weights, discriminator->output, discriminator->error, discriminator->learning_rate);
+}
+
 void trainGAN(RL* rl) {
     // Retrieve generator and discriminator from GAN
     CNN* generator = rl->gan->generator;
@@ -63,6 +106,6 @@ void trainGAN(RL* rl) {
     backpropGAN(rl->gan, generator_loss, discriminator_loss);
 
     // Update generator and discriminator weights
-    updateWeightsCNN(generator);
-    updateWeightsCNN(discriminator);
+    updateWeightsCNNgenerator(generator);
+    updateWeightsCNNdiscriminator(discriminator);
 }

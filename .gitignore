@@ -1,2 +1,7 @@
 .vs/
 .vs/*
+.*/.vs/
+.*/.vs/*
+.*/package*
+CARL\ AI/packages/
+CARL\ AI/x64/

@@ -1,20 +1,22 @@
+#include <stdbool.h>
 #include "shop.h"
 
-    ## LOGICAL COMPARISON ##
-bool isSimilar(float** generatedData, float** goodData, int sample_size) {
-    float epsilon = 0.01; // set a small threshold for comparison
-    for (int i = 0; i < sample_size; i++) {
-        for (int j = 0; j < cnn->n_inputs; j++) {
-            if (abs(generatedData[i][j] - goodData[i][j]) > epsilon) {
-                return false;
-            }
-        }
+    // ACTIVATION FUNCTIONS //
+
+float relu(float x) {
+    if (x < 0) { return 0; }
+    return x;
+}
+
+float relu_derivative(float x) {
+    if (x < 0) {
+        return 0;
     }
-    return true;
+    return 1;
 }
 
 
-    ## TRANSPOSITION ##
+    // TRANSPOSITION //
 float** transpose(float** a, int n_rows, int n_cols) {
     float** transposed = allocate2DArray(n_cols, n_rows);
     for (int i = 0; i < n_rows; i++) {
@@ -25,7 +27,7 @@ float** transpose(float** a, int n_rows, int n_cols) {
     return transposed;
 }
 
-    ## SIGMOIDS ##
+    // SIGMOIDS //
 float sigmoid(float x) {
     return 1.0 / (1.0 + exp(-x));
 }
@@ -40,7 +42,7 @@ void sigmoidLayer(float* layer, int size) {
     }
 }
 
-    ## 1D ARRAYS ##
+    // 1D ARRAYS //
 float* allocate1DArray(int n_filters) {
     float* array = (float*)malloc(n_filters * sizeof(float));
     return array;
@@ -80,7 +82,7 @@ void normalize(float* array, int size) {
 }
 
 
-    ## 2D ARRAYS ##
+    // 2D ARRAYS //
 float** allocate2DArray(int rows, int cols) {
     float** arr = (float**)malloc(rows * sizeof(float*));
     for (int i = 0; i < rows; i++) {
@@ -119,7 +121,7 @@ float** subtract2DArray(float** array1, int rows1, int cols1, float** array2, in
 }
 
 
-    ## MATRICIES ##
+    // MATRICIES //
 float** allocateMatrix(int batch_size, int n_inputs) {
     float** matrix = (float**)malloc(batch_size * sizeof(float*));
     for (int i = 0; i < batch_size; i++) {
@@ -128,6 +130,12 @@ float** allocateMatrix(int batch_size, int n_inputs) {
     return matrix;
 }
 
+void freeMatrix(float** matrix, int n_rows) {
+    for (int i = 0; i < n_rows; i++) {
+        free(matrix[i]);
+    }
+    free(matrix);
+}
 
 float** generateRandomNoise(int n_inputs, int batch_size) {
     float** random_noise = allocateMatrix(batch_size, n_inputs);
@@ -184,7 +192,7 @@ void deserializeMatrix(char* buffer, float** matrix) {
     }
 }
 
-    ## SCALARS ##
+    // SCALARS //
 void scalarMultiply(float scalar, float* array, int size) {
     for (int i = 0; i < size; i++) {
         array[i] = array[i] * scalar;
@@ -199,7 +207,7 @@ void scalarMultiply2D(float scalar, float** array, int rows, int cols) {
     }
 }
 
-    ## MATHS ##
+    // MATHS //
 void elementWiseMultiply(float* a, float* b, int n) {
     for (int i = 0; i < n; i++) {
         a[i] = a[i] * b[i];

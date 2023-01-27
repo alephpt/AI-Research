@@ -10,6 +10,7 @@ define `updateWeightsCNN(discriminator);`
 
 
 REMAINING:
+// define a function to syncronize the CNN, the CNN Layers, and the CNN* generator member of the GAN
 // create a function test for RL to decide whether the CNN should use the GAN data, or whether the GAN should use the CNN data
 // create a functional test for the CNN and RL increasing eachothers performance
 // create a functional test to test the GAN, CNN and RL are all communicating with one another
@@ -23,3 +24,10 @@ REMAINING:
 // Define a function to allow the RL to adjust the initial values of the GAN type
 
 
+
+syncCNNandDiscriminator(generator, discriminator) 
+    Verify that the number of inputs and outputs for the generator and discriminator match.
+    Copy the weights and biases of the generator's CNN layers to the corresponding layers in the discriminator.
+    Update the learning rate of the discriminator to match that of the generator.
+    Iterate through each layer of the generator and update the layer sizes, filter sizes, and number of filters in the corresponding layers of the discriminator.
+    Finally, update the input and output pointers of the discriminator to match those of the generator.
