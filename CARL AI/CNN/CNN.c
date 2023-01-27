@@ -61,6 +61,46 @@ float evaluateCNN(CNN* cnn, float** testData, int* testLabels) {
     return (float)n_correct / n_total;
 }
 
+void forwardPassCNN(float** input, float** output, int n_inputs, int n_outputs, 
+                    float** weights, float** biases, CNNLayer* layers, int n_layers, 
+                    int* filter_sizes, int n_filters, int* layer_sizes) {
+    // Initialize the input layer
+    for (int i = 0; i < n_inputs; i++) {
+        layers[0].output[i] = input[i];
+    }
+    // Iterate through each layer and perform the forward pass
+    for (int i = 1; i < n_layers; i++) {
+        CNNLayer* current_layer = &layers[i];
+        CNNLayer* previous_layer = &layers[i-1];
+        int previous_layer_size = layer_sizes[i-1];
+        int current_layer_size = layer_sizes[i];
+        // Perform matrix multiplication
+        for (int j = 0; j < current_layer_size; j++) {
+            float sum = 0;
+            for (int k = 0; k < previous_layer_size; k++) {
+                sum += previous_layer->output[k] * current_layer->weights[k][j];
+            }
+            // Add bias and apply activation function
+            current_layer->output[j] = activation_function(sum + current_layer->biases[j]);
+        }
+    }
+    // Copy the output of the last layer to the output array
+    for (int i = 0; i < n_outputs; i++) {
+        output[i] = layers[n_layers-1].output[i];
+    }
+}
+
+void generateCNNFakeData(CNN* generator, int batch_size) {
+    assert(generator != NULL);
+    // Initialize input with random noise
+    generator->input = generateRandomNoise(batch_size, generator->n_inputs);
+    // Perform forward pass through the generator
+    forwardPassCNN(generator->input, generator->output, generator->n_inputs, generator->n_outputs, 
+                    generator->weights, generator->biases, generator->layers, generator->n_layers, 
+                    generator->filter_sizes, generator->n_filters, generator->layer_sizes);
+}
+
+
 void updateGeneratorOutput(CNN* generator, float** error) {
     for (int i = 0; i < generator->n_outputs; i++) {
         for (int j = 0; j < generator->batch_size; j++) {
@@ -342,4 +382,29 @@ float** generate2DCNNData(int n_samples, int n_inputs) {
         }
     }
     return generatedData;
+}
+
+void adjustCNNWeightsandBiases(CNN* cnn, float** new_weights, float** new_biases) {
+    for(int i = 0; i < cnn->n_layers; i++) {
+        for(int j = 0; j < cnn->layer_sizes[i]; j++) {
+            cnn->weights[i][j] = new_weights[i][j];
+            cnn->biases[i][j] = new_biases[i][j];
+        }
+    }
+}
+
+void updateRLValues(CNN* cnn, float** rl_values, int n_rl_values) {
+    int current_index = 0;
+    for (int i = 0; i < cnn->n_layers; i++) {
+        for (int j = 0; j < cnn->layer_sizes[i]; j++) {
+            cnn->weights[i][j] = rl_values[current_index];
+            current_index++;
+        }
+    }
+    for (int i = 0; i < cnn->n_layers; i++) {
+        for (int j = 0; j < cnn->layer_sizes[i]; j++) {
+            cnn->biases[i][j] = rl_values[current_index];
+            current_index++;
+        }
+    }
 }

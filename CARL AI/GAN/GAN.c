@@ -24,6 +24,39 @@ float** forwardPropGANfromCNN(GAN* gan, float** cnn_data) {
     return discriminator_output;
 }
 
+
+void updateWeights(CNN* generator, Discriminator* discriminator) {
+    for(int i = 0; i < generator->n_layers; i++) {
+        for(int j = 0; j < generator->layer_sizes[i]; j++) {
+            generator->weights[i][j] += generator->learning_rate * generator->error[i][j];
+            generator->biases[i][j] += generator->learning_rate * generator->error[i][j];
+        }
+    }
+    for(int i = 0; i < discriminator->n_layers; i++) {
+        for(int j = 0; j < discriminator->layer_sizes[i]; j++) {
+            discriminator->weights[i][j] += discriminator->learning_rate * discriminator->error[i][j];
+            discriminator->biases[i][j] += discriminator->learning_rate * discriminator->error[i][j];
+        }
+    }
+}
+
+void trainGAN(GAN* gan, int batch_size) {
+    // Step 1: Generate fake data
+    float** fake_data = generateFakeData(gan->generator, batch_size);
+
+    // Step 2: Train discriminator on real data and fake data
+    trainDiscriminator(gan->discriminator, gan->real_data, fake_data, batch_size);
+
+    // Step 3: Train generator to fool the discriminator
+    float generator_loss = trainGenerator(gan->generator, gan->discriminator, batch_size);
+
+    // Step 4: Update generator and discriminator weights
+    updateWeights(gan->generator, gan->discriminator);
+
+    // Step 5: Clean up
+    freeMatrix(fake_data);
+}
+
 void backpropGAN(GAN* gan, float generator_loss, float discriminator_loss) {
     backpropCNN(gan->generator, generator_loss);
     backpropDiscriminator(gan->discriminator, discriminator_loss);
@@ -108,4 +141,12 @@ void trainGAN(RL* rl) {
     // Update generator and discriminator weights
     updateWeightsCNNgenerator(generator);
     updateWeightsCNNdiscriminator(discriminator);
+}
+
+void adjustGANValues(GAN* gan, float** generator_weights, float** generator_biases, float** discriminator_weights, 
+                    float** discriminator_biases) {
+    gan->generator->weights = generator_weights;
+    gan->generator->biases = generator_biases;
+    gan->discriminator->weights = discriminator_weights;
+    gan->discriminator->biases = discriminator_biases;
 }

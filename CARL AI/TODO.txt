@@ -3,25 +3,28 @@ COMPLETE:
  -- test GAN using the output of the CNN
  -- create function test for the RL using the output of the CNN
 
- 
-define `backpropDiscriminator(gan->discriminator, discriminator_loss);`
-define `updateWeightsCNN(generator);`
-define `updateWeightsCNN(discriminator);`
 
 
 REMAINING:
-// define a function to syncronize the CNN, the CNN Layers, and the CNN* generator member of the GAN
+// define a protocol to integrate and connect the CNN type and RL types defined as follows
+// create a functional test to show the evolution of the entire network
+// define a functional test to determine if the CA_Protocol is functioning properly
+// define a functional test to determine if the ARL_Protocol is functioning properly
+// define a functional test to determine if the CA_Protocol and ARL_Protocol are integrating synchronously 
+// define a functional test to show the CA_Protocol and ARL_Protocol are evolving
+// define a function to synchronize the RL protocol with the CNNLayers
+// define a function to synchronize the RL protocol with the CNN
+// define a function for the RL to self evaluate and grade it's rewards
+// define a function for the RL to set new values to initialize the GAN
 // create a function test for RL to decide whether the CNN should use the GAN data, or whether the GAN should use the CNN data
 // create a functional test for the CNN and RL increasing eachothers performance
 // create a functional test to test the GAN, CNN and RL are all communicating with one another
 // create a functional test to determine if the RL is learning from the GAN
 // create a functional test to determine if the GAN is learning from the RL AI
 // create a functional test to determine if the RL is learning from the CNN
-// create a functional test to determine if the CNN is learning from the CNN
-// create a functional test to show the evolution of the entire network
+// create a functional test to determine if the CNN is learning from the GAN
 
-// Define a function to allow the RL to adjust the initial values of the CNN type
-// Define a function to allow the RL to adjust the initial values of the GAN type
+
 
 
 

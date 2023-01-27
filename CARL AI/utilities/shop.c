@@ -3,6 +3,7 @@
 
     // ACTIVATION FUNCTIONS //
 
+    // RELU //
 float relu(float x) {
     if (x < 0) { return 0; }
     return x;
@@ -16,15 +17,32 @@ float relu_derivative(float x) {
 }
 
 
-    // TRANSPOSITION //
-float** transpose(float** a, int n_rows, int n_cols) {
-    float** transposed = allocate2DArray(n_cols, n_rows);
-    for (int i = 0; i < n_rows; i++) {
-        for (int j = 0; j < n_cols; j++) {
-            transposed[j][i] = a[i][j];
-        }
+    // LEAKY_RELU //
+
+float leaky_relu(float x, float alpha) {
+    if (x > 0) {
+        return x;
     }
-    return transposed;
+    else {
+        return alpha * x;
+    }
+}
+
+float leaky_relu_derivative(float x, float alpha) {
+    if (x > 0) {
+        return 1;
+    } else {
+        return alpha;
+    }
+}
+
+    // TANH //
+float tanh(float x) {
+    return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
+}
+
+float tanh_derivative(float x) {
+    return 1.0 - x*x;
 }
 
     // SIGMOIDS //
@@ -41,6 +59,19 @@ void sigmoidLayer(float* layer, int size) {
         layer[i] = 1 / (1 + exp(-layer[i]));
     }
 }
+
+
+    // TRANSPOSITION //
+float** transpose(float** a, int n_rows, int n_cols) {
+    float** transposed = allocate2DArray(n_cols, n_rows);
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_cols; j++) {
+            transposed[j][i] = a[i][j];
+        }
+    }
+    return transposed;
+}
+
 
     // 1D ARRAYS //
 float* allocate1DArray(int n_filters) {

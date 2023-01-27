@@ -81,6 +81,25 @@ void destroyRL(RL* rl) {
     free(rl);
 }
 
+static void updateRewards(RL* rl, float** generator_weights, float** generator_biases) {
+    // Update rewards based on current generator weights and biases
+    // This could involve running the generator with various inputs and comparing the outputs to a desired outcome
+    // The specific implementation would depend on the specific algorithm being used for the RL
+}
+
+static void updatePolicy(RL* rl, float** generator_weights, float** generator_biases) {
+    // Update policy based on current rewards and generator weights and biases
+    // This could involve updating the probability distribution over actions or updating the value function
+    // The specific implementation would depend on the specific algorithm being used for the RL
+}
+
+void updateRL(RL* rl, float** generator_weights, float** generator_biases) {
+    // update the rewards and policy based on the generator's current weights and biases
+    updateRewards(rl, generator_weights, generator_biases);
+    updatePolicy(rl, generator_weights, generator_biases);
+}
+
+
 // The Q-learning update rule is Q(s,a) = R(s,a) + γ * max(Q(s',a')) 
 // where R is the reward and γ is the discount factor.
 void updateRLQ(RL* rl) {
@@ -238,4 +257,132 @@ void selectRLAction(RL* rl, char* buffer) {
         }
     }
     sprintf(buffer, "%d", max_index);
+}
+
+
+void forwardPass(float** weights, float** q, int n_layers, int* layer_sizes, int n_inputs, int batch_size) {
+    float** input = q;
+    float** output;
+    for(int i = 0; i < n_layers; i++) {
+        int n_neurons = layer_sizes[i];
+        output = allocateMatrix(batch_size, n_neurons);
+        for(int j = 0; j < batch_size; j++) {
+            for(int k = 0; k < n_neurons; k++) {
+                float sum = 0;
+                for(int l = 0; l < n_inputs; l++) {
+                    sum += input[j][l] * weights[i][l*n_neurons + k];
+                }
+                output[j][k] = sigmoid(sum);
+            }
+        }
+        n_inputs = n_neurons;
+        input = output;
+    }
+    q = output;
+    deallocateMatrix(input, batch_size, n_inputs);
+}
+
+float calculateReward(float q) { 
+    return q;
+}
+
+float calculatePolicy(float reward, float value, float gamma) {
+    return reward + gamma * value;
+}
+
+float calculateValue(float reward, float value, float gamma) {
+    return reward + gamma * value;
+}
+
+
+
+void updateRewards(RL* rl, float** generator_weights, float** generator_biases) {
+    // Update rewards based on generator's performance
+    int batch_size = rl->gan->batch_size;
+    int n_inputs = rl->gan->n_inputs;
+    int n_outputs = rl->gan->n_outputs;
+    int n_layers = rl->n_layers;
+    int* layer_sizes = rl->layer_sizes;
+    float** q = rl->q;
+    float** reward = rl->reward;
+    float** policy = rl->policy;
+    float** value = rl->value;
+    float gamma = rl->gamma;
+
+    // Perform forward pass with generator weights and biases
+    forwardPass(generator_weights, generator_biases, q, n_layers, layer_sizes, n_inputs, batch_size);
+
+    // Calculate rewards based on generator output
+    for (int i = 0; i < batch_size; i++) {
+        for (int j = 0; j < n_outputs; j++) {
+            reward[i][j] = calculateReward(q[i][j]);
+        }
+    }
+
+    // Update policy and value based on rewards
+    for (int i = 0; i < batch_size; i++) {
+        for (int j = 0; j < n_outputs; j++) {
+            policy[i][j] = calculatePolicy(reward[i][j], value[i][j], gamma);
+            value[i][j] = calculateValue(reward[i][j], value[i][j], gamma);
+        }
+    }
+}
+
+void updatePolicy(RL* rl, float** generator_weights, float** generator_biases) {
+    for (int i = 0; i < rl->batch_size; i++) {
+        for (int j = 0; j < rl->n_outputs; j++) {
+            rl->policy[i][j] = calculatePolicy(rl->reward[i][j], rl->value[i][j], rl->gamma);
+        }
+    }
+
+    // update weights and biases of generator using policy
+    updateWeights(rl->gan->generator, generator_weights, generator_biases);
+}
+
+void backwardPass(float** weights, float** q, int n_layers, int* layer_sizes, int n_inputs, int batch_size, float gamma) {
+    for (int i = 0; i < batch_size; i++) {
+        for (int j = 0; j < layer_sizes[n_layers - 1]; j++) {
+            float reward = calculateReward(q[i][j]);
+            float value = calculateValue(reward, q[i][j], gamma);
+            q[i][j] = calculatePolicy(reward, value, gamma);
+        }
+    }
+
+    for (int k = n_layers - 2; k >= 0; k--) {
+        for (int i = 0; i < batch_size; i++) {
+            for (int j = 0; j < layer_sizes[k]; j++) {
+                float sum = 0;
+                for (int l = 0; l < layer_sizes[k + 1]; l++) {
+                    sum += weights[k][j][l] * q[i][l];
+                }
+                q[i][j] = sum;
+            }
+        }
+    }
+
+    for (int k = 0; k < n_layers - 1; k++) {
+        for (int i = 0; i < layer_sizes[k]; i++) {
+            for (int j = 0; j < layer_sizes[k + 1]; j++) {
+                float sum = 0;
+                for (int l = 0; l < batch_size; l++) {
+                    sum += q[l][i] * q[l][j];
+                }
+                weights[k][i][j] -= sum;
+            }
+        }
+    }
+}
+
+void trainRL(RL* rl, int batch_size) {
+    // define the training loop
+    for (int i = 0; i < rl->gan->generator->epochs; i++) {
+        // forward pass
+        forwardPass(rl->weights, rl->q, rl->n_layers, rl->layer_sizes, rl->n_inputs, batch_size);
+        // update rewards
+        updateRewards(rl, rl->gan->generator_weights, rl->gan->generator_biases);
+        // update policy
+        updatePolicy(rl, rl->gan->generator_weights, rl->gan->generator_biases);
+        // backward pass
+        backwardPass(rl->weights, rl->q, rl->n_layers, rl->layer_sizes, rl->n_inputs, batch_size, rl->gamma);
+    }
 }

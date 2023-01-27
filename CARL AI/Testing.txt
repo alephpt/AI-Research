@@ -1,4 +1,4 @@
-here are a few general steps that could be taken to test the network:
+There are a few general steps that could be taken to test the network:
 
     Unit Testing: Test each component of the network (GAN, CNN, and RL) separately using unit tests. This will 
     ensure that each component is working correctly on its own before moving on to testing the entire network.
@@ -52,6 +52,33 @@ can be run quickly and easily, and that the results can be recorded and analyzed
 
 
 /// TESTS ///
+
+// CARL TESTS //
+
+// TEST 1: void test_initCNN_Disc_Protocol()
+
+This test simply initializes the CA side of the protocol and asserts that it was created properly.
+
+
+// TEST 2: 
+
+This test simply test the ARL side of the protocol and asserts that it was created properly.
+
+
+// TEST 3:
+
+This test initializes the CNN, Discriminator, GAN and RL, creates instances of the CNN_Disc_Protocol and 
+GAN_RL_Protocol, trains them for multiple epochs, and compares the initial and final losses and rewards to 
+ensure that the protocols are evolving.
+
+
+// TEST ???:
+
+This test is to determine if the CNN_Disc_Protocol and the GAN_RL_Protocol types are communicating with one another: 
+-- Still In Development --
+
+
+// FUNCTIONAL TESTS //
 
 // TEST 1: test_GAN_to_CNN
 

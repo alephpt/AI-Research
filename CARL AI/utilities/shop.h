@@ -1,3 +1,8 @@
+#ifndef SHOP_H
+#define SHOP_H
+
+#include <assert.h>
+
 float** transpose(float** a, int n_rows, int n_cols);
 
 float sigmoid(float x);
@@ -27,3 +32,5 @@ void scalarMultiply2D(float scalar, float** array, int rows, int cols);
 void elementWiseMultiply(float* a, float* b, int n);
 float dotProduct(float* a, float* b, int length);
 float** dot(float** matrix1, float** matrix2, int rows1, int cols1, int cols2);
+
+#endif

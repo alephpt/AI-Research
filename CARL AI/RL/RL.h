@@ -7,19 +7,27 @@
 
 /*
 typedef struct RL {
+    GAN* gan;
     int n_inputs;
     int n_states;
     int n_actions;
     int n_outputs;
+    float** weights;
+    int n_layers;
+    int* layer_sizes;
+    float** q;
     float** reward;
     float** policy;
     float** value;
     float gamma;
 } RL;
+
 */
 
 
 // missing -> real_data
+// missing -> discriminator_weights
+// missing -> discriminator_biases
 typedef struct RL {
     GAN* gan;
     int n_inputs;
@@ -38,6 +46,7 @@ typedef struct RL {
 
 
 RL* createRL(int n_inputs, int n_states, int n_actions, int n_outputs, int n_layers, int* layer_sizes, float gamma);
+void updateRL(RL* rl, float** generator_weights, float** generator_biases);
 void updateRLQ(RL* rl);
 void updateRLNewQ(RL* rl, float newQ[rl->n_states][rl->n_actions]);
 void updateRLPolicy(RL* rl);
