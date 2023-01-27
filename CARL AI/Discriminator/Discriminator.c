@@ -53,7 +53,7 @@ void updateDiscriminatorWeights(float** weights, float** output, float** error, 
     int n_inputs = sizeof(weights) / sizeof(weights[0]);
     for (int i = 0; i < n_inputs; i++) {
         for (int j = 0; j < n_outputs; j++) {
-            weights[i][j] -= learning_rate * error[j] * output[i];
+            weights[i][j] -= learning_rate * error[i][j] * output[i][j];
         }
     }
 }

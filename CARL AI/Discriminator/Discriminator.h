@@ -23,5 +23,7 @@ Discriminator* createDiscriminator(int n_inputs, int n_outputs, int n_layers, in
 float computeDiscriminatorLoss(float** discriminator_output, float** real_data, int batch_size);
 float computeGeneratorLoss(float* discriminator_output, int batch_size);
 void backpropDiscriminator(Discriminator* discriminator, float discriminator_loss);
+void updateDiscriminatorWeights(float** weights, float** output, float** error, float learning_rate);
+void syncDiscriminatorToCNN(CNN* generator, Discriminator* discriminator);
 
 #endif
