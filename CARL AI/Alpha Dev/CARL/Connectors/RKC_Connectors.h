@@ -1,8 +1,4 @@
-#ifndef TESTS_H
-#define TESTS_H
-
+#pragma once
 #include "../RL/RL.h"
 #include "../CNN/CNN.h"
-
-#endif
 

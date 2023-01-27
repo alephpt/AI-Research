@@ -1,6 +1,3 @@
-#ifndef GAN_TESTS_H
-#define GAN_TESTS_H
-
+#pragma once
 #include "../GAN/GAN.h"
 
-#endif

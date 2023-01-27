@@ -1,5 +1,12 @@
-#ifndef TENSOR_H
-#define TENSOR_H
+#pragma once
+#include <stdlib.h>
 
+typedef struct {
+	int rank;
+	int* shape;
+	float* data;
+} Tensor;
 
-#endif
+Tensor* initTensor(int rank, int* dims);
+int getRank(Tensor);
+

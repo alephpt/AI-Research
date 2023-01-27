@@ -1,6 +1,3 @@
-#ifndef RL_TESTS_H
-#define RL_TESTS_H
-
+#pragma once
 #include "../RL/RL.h"
 
-#endif

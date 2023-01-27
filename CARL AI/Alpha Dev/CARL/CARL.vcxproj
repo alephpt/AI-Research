@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <CompileAs>CompileAsC</CompileAs>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,35 +129,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CARL.c" />
-    <ClCompile Include="CNN\CNNLayer.c" />
-    <ClCompile Include="CNN\CNN.c" />
-    <ClCompile Include="Connectors\CA_Connectors.c" />
-    <ClCompile Include="Connectors\ARL_Connectors.c" />
-    <ClCompile Include="Connectors\RKC_Connectors.c" />
-    <ClCompile Include="Connectors\Protocol_Connectors.c" />
-    <ClCompile Include="GAN\Generator.c" />
-    <ClCompile Include="GAN\Optimizer.c" />
-    <ClCompile Include="GAN\GAN.c" />
-    <ClCompile Include="GAN\Discriminator.c" />
-    <ClCompile Include="Protocols\ARL_Protocol.c" />
-    <ClCompile Include="Protocols\CA_Protocol.c" />
-    <ClCompile Include="Protocols\RKC_Protocol.c" />
-    <ClCompile Include="Protocols\CARL_Protocol.c" />
-    <ClCompile Include="RL\RL.c" />
-    <ClCompile Include="Tests\Type_Tests.c" />
-    <ClCompile Include="Tests\Tests.c" />
-    <ClCompile Include="Tests\RL_Tests.c" />
-    <ClCompile Include="Tests\Protocol_Tests.c" />
-    <ClCompile Include="Tests\GAN_Tests.c" />
-    <ClCompile Include="Tests\Connectors_Tests.c" />
-    <ClCompile Include="Tests\CNN_Tests.c" />
+    <ClCompile Include="Alpha Dev.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="CNN\CNNLayer.cpp" />
+    <ClCompile Include="CNN\CNN.cpp" />
+    <ClCompile Include="Connectors\CA_Connectors.cpp" />
+    <ClCompile Include="Connectors\ARL_Connectors.cpp" />
+    <ClCompile Include="Connectors\RKC_Connectors.cpp" />
+    <ClCompile Include="Connectors\Protocol_Connectors.cpp" />
+    <ClCompile Include="GAN\Generator.cpp" />
+    <ClCompile Include="GAN\Optimizer.cpp" />
+    <ClCompile Include="GAN\GAN.cpp" />
+    <ClCompile Include="GAN\Discriminator.cpp" />
+    <ClCompile Include="Protocols\ARL_Protocol.cpp" />
+    <ClCompile Include="Protocols\CA_Protocol.cpp" />
+    <ClCompile Include="Protocols\RKC_Protocol.cpp" />
+    <ClCompile Include="Protocols\CARL_Protocol.cpp" />
+    <ClCompile Include="RL\RL.cpp" />
+    <ClCompile Include="Tests\Type_Tests.cpp" />
+    <ClCompile Include="Tests\Tests.cpp" />
+    <ClCompile Include="Tests\RL_Tests.cpp" />
+    <ClCompile Include="Tests\Protocol_Tests.cpp" />
+    <ClCompile Include="Tests\GAN_Tests.cpp" />
+    <ClCompile Include="Tests\Connectors_Tests.cpp" />
+    <ClCompile Include="Tests\CNN_Tests.cpp" />
     <ClCompile Include="Tests\GAN_Tests.h" />
-    <ClCompile Include="Types\Activation.c" />
-    <ClCompile Include="Types\Feature.c" />
-    <ClCompile Include="Types\Matrix.c" />
-    <ClCompile Include="Types\Tensor.c" />
-    <ClCompile Include="Types\Vector.c" />
+    <ClCompile Include="Types\Activation.cpp" />
+    <ClCompile Include="Types\Maths.cpp" />
+    <ClCompile Include="Types\Feature.cpp" />
+    <ClCompile Include="Types\Matrix.cpp" />
+    <ClCompile Include="Types\Tensor.cpp" />
+    <ClCompile Include="Types\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CNN\CNNLayer.h" />

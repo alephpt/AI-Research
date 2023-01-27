@@ -15,91 +15,94 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CARL.c">
+    <ClCompile Include="Alpha Dev.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Vector.c">
+    <ClCompile Include="Types\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Tensor.c">
+    <ClCompile Include="Types\Tensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Matrix.c">
+    <ClCompile Include="Types\Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Feature.c">
+    <ClCompile Include="Types\Feature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RL\RL.c">
+    <ClCompile Include="RL\RL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Protocols\CARL_Protocol.c">
+    <ClCompile Include="Protocols\CARL_Protocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Protocols\RKC_Protocol.c">
+    <ClCompile Include="Protocols\RKC_Protocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Protocols\CA_Protocol.c">
+    <ClCompile Include="Protocols\CA_Protocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Protocols\ARL_Protocol.c">
+    <ClCompile Include="Protocols\ARL_Protocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GAN\Discriminator.c">
+    <ClCompile Include="GAN\Discriminator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GAN\GAN.c">
+    <ClCompile Include="GAN\GAN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNN.c">
+    <ClCompile Include="CNN\CNN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNNLayer.c">
+    <ClCompile Include="CNN\CNNLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GAN\Optimizer.c">
+    <ClCompile Include="GAN\Optimizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GAN\Generator.c">
+    <ClCompile Include="GAN\Generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tests\GAN_Tests.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\CNN_Tests.c">
+    <ClCompile Include="Tests\CNN_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\Connectors_Tests.c">
+    <ClCompile Include="Tests\Connectors_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\GAN_Tests.c">
+    <ClCompile Include="Tests\GAN_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\Protocol_Tests.c">
+    <ClCompile Include="Tests\Protocol_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\RL_Tests.c">
+    <ClCompile Include="Tests\RL_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\Tests.c">
+    <ClCompile Include="Tests\Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\Type_Tests.c">
+    <ClCompile Include="Tests\Type_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Activation.c">
+    <ClCompile Include="Types\Activation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Connectors\CA_Connectors.c">
+    <ClCompile Include="Connectors\CA_Connectors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Connectors\ARL_Connectors.c">
+    <ClCompile Include="Connectors\ARL_Connectors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Connectors\Protocol_Connectors.c">
+    <ClCompile Include="Connectors\Protocol_Connectors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Connectors\RKC_Connectors.c">
+    <ClCompile Include="Connectors\RKC_Connectors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Maths.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,8 +1,4 @@
-#ifndef ARL_CONNECTORS_H
-#define ARL_CONNECTORS_H
-
+#pragma once
 #include "../GAN/GAN.h"
 #include "../RL/RL.h"
 
-
-#endif

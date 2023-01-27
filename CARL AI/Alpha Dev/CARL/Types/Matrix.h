@@ -1,5 +1,10 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#pragma once
+#include <stdlib.h>
 
+typedef struct {
+    float* data;
+    int rows;
+    int cols;
+} Matrix;
 
-#endif
+Matrix* initMatrix(int rows, int cols);

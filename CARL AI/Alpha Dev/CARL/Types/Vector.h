@@ -1,5 +1,9 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#pragma once
 
+typedef struct Vector{
+    float* data;
+    int size;
+} Vector;
 
-#endif
+Vector* initVector(int size);
+

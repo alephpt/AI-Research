@@ -1,6 +1,3 @@
-#ifndef CNN_H
-#define CNN_H
-
+#pragma once
 #include "CNNLayer.h"
 
-#endif

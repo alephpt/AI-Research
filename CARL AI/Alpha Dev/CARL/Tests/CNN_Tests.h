@@ -1,6 +1,3 @@
-#ifndef CNN_TESTS_H
-#define CNN_TESTS_H
-
+#pragma once
 #include "../CNN/CNN.h"
 
-#endif

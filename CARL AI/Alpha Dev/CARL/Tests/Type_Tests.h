@@ -1,6 +1,11 @@
-#ifndef TYPE_TESTS_H
-#define TYPE_TESTS_H
-
+#pragma once
+#include <stdio.h>
+#include <stdlib.h>
 #include "../Types/Types.h"
 
-#endif
+void testVector();
+void testMatrix();
+void test3DTensor();
+void test4DTensor();
+
+

@@ -1,6 +1,2 @@
-#ifndef CONNECTORS_TESTS_H
-#define CONNECTORS_TESTS_H
-
+#pragma once
 #include "../Connectors/Protocol_Connectors.h"
-
-#endif

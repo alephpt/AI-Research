@@ -1,8 +1,4 @@
-#ifndef GAN_H
-#define GAN_H
-
+#pragma once
 #include "Discriminator.h"
 #include "Generator.h"
 #include "Optimizer.h"
-
-#endif

@@ -1,7 +1,4 @@
-#ifndef CA_CONNECTORS_H
-#define CA_CONNECTORS_H
-
+#pragma once
 #include "../CNN/CNN.h"
 #include "../GAN/GAN.h"
 
-#endif
