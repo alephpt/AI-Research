@@ -51,7 +51,9 @@ can be run quickly and easily, and that the results can be recorded and analyzed
 
 
 
-/// TESTS ///
+        /// TESTS ///
+
+
 
 // CARL TESTS //
 
@@ -72,10 +74,41 @@ GAN_RL_Protocol, trains them for multiple epochs, and compares the initial and f
 ensure that the protocols are evolving.
 
 
+// TEST 4:
+
+This function takes in a GAN, an RL, the number of epochs to train for, and the batch size. It starts by 
+generating initial fake data using the generator. It then trains the discriminator on real and fake data for 
+the specified number of epochs. In each epoch, it calculates the error of the discriminator and trains the 
+generator based on that error. Then it updates the policy using the generator's weights and biases and updates 
+the generator using the new policy. Finally, it prints the current error at each epoch.
+
+
+// TEST 5:
+
+This unit test initializes the RLC_protocol using the initRLC function, then trains it using the trainRLC 
+function on a set of input and expected output data. It then evaluates the trained RLC_protocol on a new set 
+of test input data and compares the test output to the expected output. If the test output and expected output 
+are similar within a certain tolerance (determined by the value of epsilon), the test will pass.
+
+// TEST 6: testEvaluateCNN_GAN_Protocol
+
+
+// TEST 7: trainCA_Protocol
+
+
+// TEST 8: test_trainGAN_RL_Protocol_Finished
+
+
+// TEST 9: test_trainGAN_RL_Protocol_LossAndError
+
+
+
 // TEST ???:
 
 This test is to determine if the CNN_Disc_Protocol and the GAN_RL_Protocol types are communicating with one another: 
 -- Still In Development --
+
+
 
 
 // FUNCTIONAL TESTS //

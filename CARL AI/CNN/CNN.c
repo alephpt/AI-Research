@@ -47,6 +47,36 @@ int predictCNN(CNN* cnn, float* testData) {
     return prediction;
 }
 
+float* generateSampleData(CNN* generator, float* real_data) {
+    float* generated_data = predict(generator, real_data);
+    return generated_data;
+}
+
+float* forward_A(CNN* generator, float* real_data, int n_inputs)
+{
+    int n_layers = generator->n_layers;
+    //copy the input data to the first layer
+    memcpy(generator->layers[0].input, real_data, sizeof(float)*n_inputs);
+    for (int i = 1; i < n_layers; i++) {
+        forward(generator->layers[i], generator->layers[i-1].output);
+    }
+    return generator->layers[n_layers-1].output;
+}
+
+float* forward_B(CNN* generator, float* real_data, int n_inputs) {
+    generator->input_layer->data = real_data;
+
+    for (int i = 0; i < generator->n_layers; i++) {
+        generator->layers[i]->forward(generator->layers[i], generator->layers[i-1]);
+    }
+
+    return generator->output_layer->data;
+}
+
+float* generateSampleForward(CNN* generator, float* real_data, int n_inputs) {
+    float* generated_sample = generator->forward(generator, real_data, n_inputs);
+    return generated_sample;
+}
 
 float evaluateCNN(CNN* cnn, float** testData, int* testLabels) {
     int n_correct = 0;

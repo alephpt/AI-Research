@@ -4,6 +4,12 @@
 #include "../CNN/CNN.h"
 #include "../Discriminator/Discriminator.h"
 
+typedef struct CARL_Protocol {
+    CA_Protocol ca;
+    ARL_Protocol arl;
+    RC_protocol rc;
+} CARL_Protocol;
+
 typedef struct CA_Protocol {
     CNN* generator;
     Discriminator* discriminator;
@@ -57,8 +63,33 @@ typedef struct ARL_Protocol {
     float** discriminator_error;
 } ARL_Protocol;
 
+typedef struct RC_protocol {
+    CNN cnn;
+    RL rl;
+    GAN gan;
+    int n_inputs;
+    int n_states;
+    int n_actions;
+    int n_outputs;
+    float** weights;
+    int n_layers;
+    int* layer_sizes;
+    float** q;
+    float** reward;
+    float** policy;
+    float** value;
+    float gamma;
+    void (*adjustWeights)(struct RLC_protocol*);
+    void (*adjustGANWeights)(struct RLC_protocol*);
+} RC_protocol;
+
+
+
 CA_Protocol* initCA_Protocol(CNN* generator, Discriminator* discriminator, int batch_size, int n_inputs, int n_outputs);
 ARL_Protocol* initARL_Protocol(ARL_Protocol* protocol, GAN* gan, RL* rl, int batch_size, int n_steps);
+void initRC_protocol(RLC_protocol* rlc, int n_inputs, int n_states, int n_actions, int n_outputs, int* layer_sizes, 
+                      int n_layers, float gamma);
+void trainARL_Protocol(GAN_RL_Protocol* protocol, float** real_data);
 void trainCA_Protocol(CA_Protocol* protocol, float** real_data);
 void trainARL_Protocol(ARL_Protocol* protocol, int n_steps);
 

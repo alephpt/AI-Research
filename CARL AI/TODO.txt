@@ -4,13 +4,31 @@ COMPLETE:
  -- create function test for the RL using the output of the CNN
 
 
+#Pending:
+define a CARL_Protocol function to adjust n_inputs, n_outputs and n_layers on each evolution of the RC_Protocol, ARL_Protocol and CA_Protocol
+define a CARL_Protocol function to adjust the weights and biases on each evolution of the RC_Protocol, ARL_Protocol and CA_Protocol
+define a CARL_Protocol function to adjust the generator and discriminator values on each evolution of the RC_Protocol, ARL_Protocol and CA_Protocol
+define a CARL_Protocol function to adjust the states, rewards and policies on each evolution of the RC_Protocol, ARL_Protocol and CA_Protocol
+define a CARL_Protocol function to control the update functions on evolution of the RC_Protocol, ARL_Protocol and CA_Protocol
+
+
+# definitions:
+        float** generateGANData(protocol->gan, protocol->batch_size);
+        float** concatenateRealAndGeneratedData(real_data, generated_data, protocol->batch_size);
+        float** evaluateDiscriminator(protocol->gan, discriminator_inputs, protocol->batch_size);
+        float** createGeneratorTargets(protocol->batch_size);
+        float calculateGeneratorLoss(discriminator_outputs, generator_targets, protocol->batch_size);
+        float** calculateGeneratorError(discriminator_outputs, generator_targets, protocol->batch_size);
+        void adjustGeneratorWeights(protocol->gan, protocol->generator_error);
+        float**  evaluateRL(protocol->rl, rl_inputs, protocol->batch_size);
+        float** createRLTargets(protocol->batch_size);
+        float calculateRLLoss(rl_outputs, rl_targets, protocol->batch_size);
+        float** calculateRLError(rl_outputs, rl_targets, protocol->batch_size);
+        void adjustRLWeights(protocol->rl, rl_error);
+
+
 
 REMAINING:
-// define a protocol to integrate and connect the CNN type and RL types defined as follows
-// create a functional test to show the evolution of the entire network
-// define a functional test to determine if the CA_Protocol is functioning properly
-// define a functional test to determine if the ARL_Protocol is functioning properly
-// define a functional test to determine if the CA_Protocol and ARL_Protocol are integrating synchronously 
 // define a functional test to show the CA_Protocol and ARL_Protocol are evolving
 // define a function to synchronize the RL protocol with the CNNLayers
 // define a function to synchronize the RL protocol with the CNN
@@ -23,6 +41,16 @@ REMAINING:
 // create a functional test to determine if the GAN is learning from the RL AI
 // create a functional test to determine if the RL is learning from the CNN
 // create a functional test to determine if the CNN is learning from the GAN
+// create a function for the RL to determine the success of the GAN
+// create a function for the RL to determine the success of the CNN
+// create a function for the RL to determine the success of the CNNLayers
+// create a function for the RC_Protocol to determine the success of the RL predictions and the CNN classification
+// create a function for the ARL_Protocol to determine the success of the RL and Generator 
+// create a function for the ARL_Protocol to determine the success of the RL and Descriminator
+// create a function for the CA_Protocol to provide analysis points for the CARL Protocol to determin the success of the GAN and CNN
+// create a CNN function to increase the performance of the RL
+// create a RL function to increase the performance of the CNN
+// create a CARL_Protocol function to use the CA_Protocol and ARL_Protocol to increase the performance of the GAN
 
 
 

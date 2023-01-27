@@ -60,6 +60,8 @@ void sigmoidLayer(float* layer, int size) {
     }
 }
 
+    
+
 
     // TRANSPOSITION //
 float** transpose(float** a, int n_rows, int n_cols) {
@@ -151,6 +153,37 @@ float** subtract2DArray(float** array1, int rows1, int cols1, float** array2, in
     return result;
 }
 
+void conv2d(float* input, float*** filters, float** output, int n_inputs, int n_filters, int filter_size) {
+    for (int i = 0; i < n_filters; i++) {
+        for (int j = 0; j < n_inputs; j++) {
+            for (int k = 0; k < filter_size; k++) {
+                for (int l = 0; l < filter_size; l++) {
+                    output[i][j] += input[j] * filters[i][j][k][l];
+                }
+            }
+        }
+    }
+}
+
+
+void maxpool2d(float** input, float** output, int n_filters, int pool_size) {
+    for (int i = 0; i < n_filters; i++) {
+        for (int j = 0; j < n_inputs / pool_size; j++) {
+            for (int k = 0; k < n_inputs / pool_size; k++) {
+                float max = input[i][j * pool_size + k];
+                for (int l = 0; l < pool_size; l++) {
+                    for (int m = 0; m < pool_size; m++) {
+                        if (input[i][(j * pool_size + l) * n_inputs + k * pool_size + m] > max) {
+                            max = input[i][(j * pool_size + l) * n_inputs + k * pool_size + m];
+                        }
+                    }
+                }
+                output[i][j * n_inputs / pool_size + k] = max;
+            }
+        }
+    }
+}
+
 
     // MATRICIES //
 float** allocateMatrix(int batch_size, int n_inputs) {
@@ -178,6 +211,35 @@ float** generateRandomNoise(int n_inputs, int batch_size) {
     return random_noise;
 }
 
+void convMatrix(float** input, float** filters, float** output, int n_inputs, int n_filters, int filter_size) {
+    for (int filter = 0; filter < n_filters; filter++) {
+        for (int i = 0; i < n_inputs - filter_size + 1; i++) {
+            for (int j = 0; j < n_inputs - filter_size + 1; j++) {
+                float sum = 0;
+                for (int k = 0; k < filter_size; k++) {
+                    for (int l = 0; l < filter_size; l++) {
+                        sum += input[i + k][j + l] * filters[filter][k * filter_size + l];
+                    }
+                }
+                output[filter][i * (n_inputs - filter_size + 1) + j] = sum;
+            }
+        }
+    }
+}
+
+void maxpoolMatrix(float** input, float** output, int n_inputs, int pool_size) {
+    for (int i = 0; i < n_inputs / pool_size; i++) {
+        for (int j = 0; j < n_inputs / pool_size; j++) {
+            float max_val = input[i * pool_size][j * pool_size];
+            for (int k = 0; k < pool_size; k++) {
+                for (int l = 0; l < pool_size; l++) {
+                    max_val = fmax(max_val, input[i * pool_size + k][j * pool_size + l]);
+                }
+            }
+            output[i][j] = max_val;
+        }
+    }
+}
 
 void serializeMatrix(float** matrix, int rows, int cols, char* buffer) {
     // Declare a variable to keep track of the current position in the buffer
@@ -223,21 +285,6 @@ void deserializeMatrix(char* buffer, float** matrix) {
     }
 }
 
-    // SCALARS //
-void scalarMultiply(float scalar, float* array, int size) {
-    for (int i = 0; i < size; i++) {
-        array[i] = array[i] * scalar;
-    }
-}
-
-void scalarMultiply2D(float scalar, float** array, int rows, int cols) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            array[i][j] = array[i][j] * scalar;
-        }
-    }
-}
-
     // MATHS //
 void elementWiseMultiply(float* a, float* b, int n) {
     for (int i = 0; i < n; i++) {
@@ -266,4 +313,18 @@ float** dot(float** matrix1, float** matrix2, int rows1, int cols1, int cols2) {
         }
     }
     return result;
+}
+
+void scalarMultiply(float scalar, float* array, int size) {
+    for (int i = 0; i < size; i++) {
+        array[i] = array[i] * scalar;
+    }
+}
+
+void scalarMultiply2D(float scalar, float** array, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            array[i][j] = array[i][j] * scalar;
+        }
+    }
 }

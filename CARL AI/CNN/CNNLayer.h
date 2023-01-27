@@ -14,6 +14,7 @@ typedef struct CNNLayer {
     int** neurons;
     float** weights;
     float** biases;
+    float activation_derivative;
     ActivationFunction activation_function;
 } CNNLayer;
 

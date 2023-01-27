@@ -228,6 +228,80 @@ float RLpredictCNN(RL* rl, float* cnn_output) {
     return maxQIndex;
 }
 
+void adjustGANwithRL(RL* rl, GAN* gan) {
+    // Perform RL algorithm to adjust the weights and biases of the GAN
+    // ...
+    // Update the GAN with the new weights and biases
+    gan->weights = rl->weights;
+    gan->generator->weights = rl->weights;
+    gan->generator->biases = rl->weights;
+    gan->discriminator->weights = rl->weights;
+    gan->discriminator->biases = rl->weights;
+}
+
+void adjustGeneratorWeights(CNN* generator, float** rl_weights) {
+    for (int i = 0; i < generator->n_layers; i++) {
+        for (int j = 0; j < generator->layer_sizes[i]; j++) {
+            generator->weights[i][j] += rl_weights[i][j];
+        }
+    }
+}
+
+void adjustDiscriminatorWeights(Discriminator* discriminator, float** rl_weights) {
+    int n_weights = discriminator->n_layers * discriminator->n_inputs * discriminator->n_outputs;
+    for (int i = 0; i < n_weights; i++) {
+        discriminator->weights[i] += rl_weights[i];
+    }
+}
+
+
+void updateGANwithRL(RL* rl, GAN* gan) {
+    float** q_values = getQValues(rl);
+    int action = selectAction(rl, q_values);
+    float reward = getReward(rl);
+
+    updateWeights(rl, action, reward, q_values);
+
+    adjustGeneratorWeights(gan->generator, rl->weights);
+    adjustDiscriminatorWeights(gan->discriminator, rl->weights);
+}
+
+float** getQValues(RL* rl) {
+    // Forward pass through the RL network to get the Q-values for all actions
+    // Code for forward pass goes here
+
+    return q_values;
+}
+
+int selectAction(RL* rl, float** q_values) {
+    // Use the epsilon-greedy algorithm or other method to select an action
+    // Code for action selection goes here
+
+    return action;
+}
+
+float getReward(RL* rl) {
+    // Calculate the reward based on the performance of the GAN
+    // Code for reward calculation goes here
+
+    return reward;
+}
+
+void updateWeights(RL* rl, int action, float reward, float** q_values) {
+    // Update the weights of the RL network using the Q-learning algorithm or other method
+    // Code for weight update goes here
+}
+
+void adjustGeneratorWeights(CNN* generator, float** rl_weights) {
+    // Update the weights of the generator network using the weights from the RL network
+    // Code for weight update goes here
+}
+
+void adjustDiscriminatorWeights(Discriminator* discriminator, float** rl_weights) {
+    // Update the weights of the discriminator network using the weights from the RL network
+    // Code for weight update goes here
+}
+
 int decideCNNorGAN(RL* rl, float* cnn_data, float** gan_data) {
     // Perform forward propagation on the CNN with the cnn_data
     float* cnn_output = forwardPropCNN_A(rl->cnn, cnn_data);
@@ -339,6 +413,8 @@ void updatePolicy(RL* rl, float** generator_weights, float** generator_biases) {
     updateWeights(rl->gan->generator, generator_weights, generator_biases);
 }
 
+
+
 void backwardPass(float** weights, float** q, int n_layers, int* layer_sizes, int n_inputs, int batch_size, float gamma) {
     for (int i = 0; i < batch_size; i++) {
         for (int j = 0; j < layer_sizes[n_layers - 1]; j++) {
@@ -384,5 +460,47 @@ void trainRL(RL* rl, int batch_size) {
         updatePolicy(rl, rl->gan->generator_weights, rl->gan->generator_biases);
         // backward pass
         backwardPass(rl->weights, rl->q, rl->n_layers, rl->layer_sizes, rl->n_inputs, batch_size, rl->gamma);
+    }
+}
+
+void evaluateRL(RL* rl, float* state, float* action, float reward, float* next_state) {
+    rl->updateQ(rl, state, action, reward, next_state);
+    rl->updatePolicy(rl);
+}
+
+void adjustRL(RL* rl) {
+    // adjust the weights of the RL network
+    for (int i = 0; i < rl->n_layers; i++) {
+        for (int j = 0; j < rl->layer_sizes[i]; j++) {
+            for (int k = 0; k < rl->layer_sizes[i+1]; k++) {
+                rl->weights[i][j][k] = updateWeight(rl->weights[i][j][k], rl->q[i][j], rl->reward[i][k], rl->policy[i][j], rl->value[i][k], rl->gamma);
+            }
+        }
+    }
+    // adjust the Q, reward, policy, and value matrices
+    for (int i = 0; i < rl->n_states; i++) {
+        for (int j = 0; j < rl->n_actions; j++) {
+            rl->q[i][j] = updateQ(rl->q[i][j], rl->reward[i][j], rl->policy[i][j], rl->value[i][j], rl->gamma);
+            rl->reward[i][j] = updateReward(rl->reward[i][j], rl->gan);
+            rl->policy[i][j] = updatePolicy(rl->policy[i][j], rl->q[i][j], rl->value[i][j]);
+            rl->value[i][j] = updateValue(rl->value[i][j], rl->q[i][j], rl->policy[i][j]);
+        }
+    }
+}
+
+void synchronizeRLwithCNNLayers(RL* rl, CNNLayer* cnn_layers, int n_cnn_layers) {
+    // Assign the weights and biases of the CNN layers to the RL
+    rl->weights = (float**) malloc(sizeof(float*) * n_cnn_layers);
+    for (int i = 0; i < n_cnn_layers; i++) {
+        rl->weights[i] = cnn_layers[i].weights;
+    }
+
+    // Assign the number of inputs, outputs, and neurons of the CNN layers to the RL
+    rl->n_inputs = cnn_layers[0].n_inputs;
+    rl->n_outputs = cnn_layers[n_cnn_layers - 1].n_outputs;
+    rl->n_layers = n_cnn_layers;
+    rl->layer_sizes = (int*) malloc(sizeof(int) * n_cnn_layers);
+    for (int i = 0; i < n_cnn_layers; i++) {
+        rl->layer_sizes[i] = cnn_layers[i].n_outputs;
     }
 }
