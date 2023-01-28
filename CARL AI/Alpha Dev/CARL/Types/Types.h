@@ -3,6 +3,5 @@
 #include "Matrix.h"
 #include "Tensor.h"
 #include "Vector.h"
-#include "Maths.h"
 #include "Activation.h"
 

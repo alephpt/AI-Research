@@ -1,15 +1,19 @@
 #pragma once
 #include "Neuron.h"
 
-typedef struct SNN {
+typedef struct SNN SNN;
+
+struct SNN {
 	int n_inputs;
 	int n_neurons;
 	Neuron* neurons;
 	float t;
 };
 
-void initSNN(SNN* snn, int n_inputs, int n_neurons, Activation activation_type, float t);
+// let's start with 10 neurons and 90 synapses
+void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type, float t);
 float** createConnectivityMatrix(SNN* snn);
+int synapseLimit(int n_neurons);
 
 // TODO: 
 /*
