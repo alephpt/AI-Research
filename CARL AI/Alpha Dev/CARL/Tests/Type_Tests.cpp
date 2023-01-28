@@ -1,5 +1,7 @@
 #include "Type_Tests.h"
 #include "../Types/Activation.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 void testActivationType() {
 	float x = -2.0;
@@ -29,6 +31,13 @@ void testActivationType() {
 	printf("softmax_derivative(%f) = %f\n", x, activation_derivative(SOFTMAX, x));
 	return;
 }
+
+
+// Test Features 
+
+// Test Samples
+
+// Test Dataset
 
 static inline void printVector(Vector* v) {
 	printf("hit printVector(Vector*)\n\n");

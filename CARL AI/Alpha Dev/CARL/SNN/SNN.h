@@ -8,6 +8,8 @@ typedef struct SNN {
 	float t;
 };
 
+float** createConnectivityMatrix(SNN* snn);
+
 // TODO: 
 /*
 	- Spike Generation
@@ -15,7 +17,7 @@ typedef struct SNN {
 	- Synapse Weight Update
 	- Neuron Activity/Firing Rate
 	- Network/Layer Connectivity Function
-		- Define a Connectivity Matrix
+		X Define a Connectivity Matrix
 		- Test the Output based on the Input
 	- Input/Output Testing
 	- Performance Evaluation

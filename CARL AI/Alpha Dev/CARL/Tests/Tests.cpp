@@ -6,6 +6,8 @@ void runTests() {
     // test3DTensor();
     // test4DTensor();
     testActivationType();
+    testinitSNN();
+    testConnectivityMatrix();
 
     return;
 }

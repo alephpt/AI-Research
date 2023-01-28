@@ -1,5 +1,6 @@
 #include "Activation.h"
 #include <Math.h>
+#include <stdio.h>
 
 static inline float relu(float x) {
     if (x < 0) { return 0.0f; }
@@ -74,7 +75,7 @@ float activation_derivative(Activation activation_type, float output) {
         return softmax_derivative(output);
     }
     else {
-        printf("Invalid activation type\n");
+        printf("ACTIVATION DERIVATIVE ERROR: Invalid activation type\n");
         return 0;
     }
 }
@@ -96,7 +97,7 @@ float activation(Activation activation_type, float output) {
         return softmax(output);
     }
     else {
-        printf("Invalid activation type\n");
+        printf("ACTIVATION ERROR: Invalid activation type\n");
         return 0;
     }
 }

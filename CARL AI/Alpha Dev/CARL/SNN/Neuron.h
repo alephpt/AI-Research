@@ -19,7 +19,7 @@ typedef struct Synapse {
 } Synapse;
 
 typedef struct Spike {
-	bool fired;																			// determines if a Spike is fire
+	bool fired;																			// determines if a Spike has been fired
 	float amplitude;																	// defined by the membrane_potential - V_rest;
 	int timestamp;																		// determines when a spike was fired
 } Spike;
