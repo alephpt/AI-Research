@@ -9,6 +9,21 @@ typedef struct Membrane {
 	float t;																			// time of which the membrane is being calculated
 };
 
+typedef struct Synapse {
+	float weight;																		// the strength of the connection
+	float delay;																		// time between the synaptic input and output
+	float n_spike_times;																// number of spike times
+	float* spike_times;																	// list of time instances when spikes occured
+	Neuron* pre_neuron;																	// the neuron that is sending the signal
+	Neuron* post_neuron;																// the neuron that is receiving the signal
+} Synapse;
+
+typedef struct Spike {
+	bool fired;																			// determines if a Spike is fire
+	float amplitude;																	// defined by the membrane_potential - V_rest;
+	int timestamp;																		// determines when a spike was fired
+} Spike;
+
 typedef struct Neuron {
 	int index;																			// used for topology
 	float* weights;																		// stores connection weight between current neuron and other neurons in the network
@@ -24,20 +39,7 @@ typedef struct Neuron {
 	Activation activation_type;															// determins the activation type to calculate the weights and bias' of a Neuron
 } Neuron;
 
-typedef struct Synapse {
-	float weight;																		// the strength of the connection
-	float delay;																		// time between the synaptic input and output
-	float n_spike_times;																// number of spike times
-	float* spike_times;																	// list of time instances when spikes occured
-	Neuron* pre_neuron;																	// the neuron that is sending the signal
-	Neuron* post_neuron;																// the neuron that is receiving the signal
-} Synapse;
 
-typedef struct Spike {
-	bool fired;																			// determines if a Spike is fire
-	float amplitude;																	// defined by the membrane_potential - V_rest;
-	int timestamp;																		// determines when a spike was fired
-} Spike;
 
 // /// /// Membrane Functions /// /// //
 // getMembranePotential();																// returns the current membrane potential
