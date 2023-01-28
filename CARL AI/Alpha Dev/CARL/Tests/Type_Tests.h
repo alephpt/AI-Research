@@ -7,5 +7,4 @@ void testVector();
 void testMatrix();
 void test3DTensor();
 void test4DTensor();
-
-
+void testActivationType();

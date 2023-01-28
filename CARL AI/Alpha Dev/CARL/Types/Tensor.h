@@ -8,5 +8,20 @@ typedef struct {
 } Tensor;
 
 Tensor* initTensor(int rank, int* dims);
-int getRank(Tensor);
-
+// addTensors
+// subtractTensors
+// scalarMultiply
+// scalarDivide
+// matrixMultiply
+// dotProduct
+// tensorProduct
+// innerProduct
+// outerProduct
+// transpose
+// broadcast
+// determinant
+// inverse
+// trace
+// contraction
+// reshape
+// slice

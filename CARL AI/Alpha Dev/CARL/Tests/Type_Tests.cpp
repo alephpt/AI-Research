@@ -1,7 +1,37 @@
 #include "Type_Tests.h"
+#include "../Types/Activation.h"
 
-static void printVector(Vector* v) {
-	printf("hit printVector(Vector*)\n");
+void testActivationType() {
+	float x = -2.0;
+
+	printf("Expecting:\n");
+	printf("sigmoid(-2.0) = 0.119203\n");
+	printf("sigmoid_derivative(-2.0) = 0.1049935\n");
+	printf("tanh(-2.0) = -0.9640276\n");
+	printf("tanh_derivative(-2.0) = 0.0706508\n");
+	printf("leaky_relu(-2.0) = -0.02\n");
+	printf("leaky_relu_derivative(-2.0) = 0.01\n");
+	printf("relu(-2.0) = 0.0\n");
+	printf("relu_derivative(-2.0) = 0.0\n");
+	printf("softmax(-2.0) = 0.1192029\n");
+	printf("softmax_derivative(-2.0) = 0.1049935\n\n");
+
+	printf("Received:\n");
+	printf("sigmoid(%f) = %f\n", x, activation(SIGMOID, x));
+	printf("sigmoid_derivative(%f) = %f\n", x, activation_derivative(SIGMOID, x));
+	printf("tanh(%f) = %f\n", x, activation(TANH, x));
+	printf("tanh_derivative(%f) = %f\n", x, activation_derivative(TANH, x));
+	printf("leaky_relu(%f) = %f\n", x, activation(LEAKY_RELU, x));
+	printf("leaky_relu_derivative(%f) = %f\n", x, activation_derivative(LEAKY_RELU, x));
+	printf("relu(%f) = %f\n", x, activation(RELU, x));
+	printf("relu_derivative(%f) = %f\n", x, activation_derivative(RELU, x));
+	printf("softmax(%f) = %f\n", x, activation(SOFTMAX, x));
+	printf("softmax_derivative(%f) = %f\n", x, activation_derivative(SOFTMAX, x));
+	return;
+}
+
+static inline void printVector(Vector* v) {
+	printf("hit printVector(Vector*)\n\n");
 
 	for (int i = 0; i < v->size; i++) {
 		printf("Vector[%d]: %f\n", i, v->data[i]);
@@ -15,15 +45,15 @@ void testVector() {
 	for (int i = 0; i < v->size; i++) {
 		v->data[i] = (float)(i + 1);
 	}
-	printf("populated Vector\n\n");
+	printf("populated Vector\n");
 	printVector(v);
-	printf("\ncleaning up Vector*\n\n");
+	printf("\ncleaning up Vector*\n\n - - - - - - - - - - - - - - - - \n\n");
 	delete(v->data);
 	delete(v);
 }
 
-static void printMatrix(Matrix* m) {
-	printf("hit printMatrix(Matrix*)\n");
+static inline void printMatrix(Matrix* m) {
+	printf("hit printMatrix(Matrix*)\n\n");
 	for (int i = 0; i < m->rows; i++) {
 		printf("Matrix row [%d]: ", i);
 		for (int j = 0; j < m->cols; j++) {
@@ -43,15 +73,15 @@ void testMatrix() {
 			m->data[i * m->cols + j] = (float)(i * m->cols + j);
 		}
 	}
-	printf("populated Matrix\n\n");
+	printf("populated Matrix\n");
 	printMatrix(m);
-	printf("\ncleaning up Matrix*\n\n");
+	printf("\ncleaning up Matrix*\n\n - - - - - - - - - - - - - - - - \n\n");
 
 	delete(m->data);
 	delete(m);
 }
 
-static void print3DTensor(Tensor* testTensor) {
+static inline void print3DTensor(Tensor* testTensor) {
 	printf("hit print3DTensor(Tensor*)\n\n");
 
 	for (int i = 0; i < testTensor->shape[0]; i++) {
@@ -85,13 +115,13 @@ void test3DTensor() {
 	}
 	printf("populated 3DTensor* \n");
 	print3DTensor(testTensor);
-	printf("\ncleaning up 3D Tensor*\n\n");
+	printf("\ncleaning up 3D Tensor*\n\n - - - - - - - - - - - - - - - - \n\n");
 
 	delete(testTensor->data);
 	delete(testTensor);
 }
 
-void print4DTensor(Tensor* testTensor) {
+static inline void print4DTensor(Tensor* testTensor) {
 	printf("hit print4DTensor(Tensor*)\n");
 	for (int i = 0; i < testTensor->shape[0]; i++) {
 		printf("\n // -- Tensor -- W: %d / %d\n", i, testTensor->shape[0]);
@@ -133,7 +163,8 @@ void test4DTensor() {
 	}
 	printf("populated 4DTensor()\n");
 	print4DTensor(testTensor);
-	printf("cleaning up 4D Tensor*\n\n");
+	printf("cleaning up 4D Tensor*\n\n - - - - - - - - - - - - - - - - \n\n");
 	delete(testTensor->data);
 	delete(testTensor);
 }
+

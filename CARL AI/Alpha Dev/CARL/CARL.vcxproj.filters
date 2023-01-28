@@ -191,6 +191,18 @@
     <ClInclude Include="Types\Maths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Types\Sample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Sample.cpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Dataset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Dataset.cpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Directive.txt" />

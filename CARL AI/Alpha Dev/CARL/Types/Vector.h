@@ -6,4 +6,16 @@ typedef struct Vector{
 } Vector;
 
 Vector* initVector(int size);
-
+// addition
+// subtraction
+// chainAddition
+// chainSubtraction
+// scalarMultiply
+// scalarDivide
+// dotProduct
+// crossProduct
+// normalization
+// vectorAngles
+// projection
+// rejection
+// linearCombination

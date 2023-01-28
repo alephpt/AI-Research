@@ -6,4 +6,4 @@
 #include "Protocol_Tests.h"
 #include "Connectors_Tests.h"
 
-
+void runTests();

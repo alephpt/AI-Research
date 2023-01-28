@@ -1,16 +1,11 @@
 #include <stdio.h>
-
-#include "./Tests/Type_Tests.h"
+#include "./Tests/Tests.h"
 
 int main()
 {
-    printf("CARL!\n");
+    printf("CARL!\n\n");
 
-    //testVector(); 
-    //printf("\n");
-    //testMatrix();
-    //test3DTensor();
-    test4DTensor();
+    runTests();
 
     return 0;
 }

@@ -1,6 +1,5 @@
 #include "Tensor.h"
 
-int getRank(Tensor* t) { return t->rank; }
 
 Tensor* initTensor(int rank, int* dims) {
     Tensor* t = new Tensor;

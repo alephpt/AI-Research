@@ -189,6 +189,10 @@
     <ClInclude Include="Types\Matrix.h" />
     <ClInclude Include="Types\Tensor.h" />
     <ClInclude Include="Types\Maths.h" />
+    <ClInclude Include="Types\Sample.h" />
+    <ClInclude Include="Types\Sample.cpp" />
+    <ClInclude Include="Types\Dataset.h" />
+    <ClInclude Include="Types\Dataset.cpp" />
     <ClInclude Include="Types\Types.h" />
     <ClInclude Include="Types\Vector.h" />
   </ItemGroup>
