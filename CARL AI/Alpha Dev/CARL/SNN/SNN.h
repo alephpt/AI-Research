@@ -8,6 +8,7 @@ typedef struct SNN {
 	float t;
 };
 
+void initSNN(SNN* snn, int n_inputs, int n_neurons, Activation activation_type, float t);
 float** createConnectivityMatrix(SNN* snn);
 
 // TODO: 

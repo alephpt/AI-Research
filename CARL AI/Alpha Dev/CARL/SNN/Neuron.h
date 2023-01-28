@@ -28,6 +28,7 @@ typedef struct Neuron {
 	int index;																			// used for topology
 	float* weights;																		// stores connection weight between current neuron and other neurons in the network
 	float bias;																			// can be added to the input before passing it through the activation function
+	float input;																		// stores the input of the neuron before the function is applied
 	float output;																		// stores the output of the neuron after the function is applied
 	float delta;																		// used for backpropagation
 	float memberane_potential;															// potential of a neuron firing
@@ -55,10 +56,14 @@ float membranePotential(float inputCurrent, Membrane membrane);
 // bool isFired();;																		// checks if the neuron has fired a spike in the current time step
 
 // /// /// Synapse Functions /// /// //
+void initSynapse(Synapse* synapse, float weight, float delay, Neuron* pre_neuron, Neuron* post_neuron);
+Synapse* createNewSynapse(Synapse* newSynapse, float w, float d, Neuron* pre, Neuron* post);
 // void setWeight(float weight);														// sets the weight of a synapse
 // void update()																		// updates the synpases output based on the input spike and weight
 
 // /// /// Spike Functions /// /// //
+void initSpike(Spike* spike);
+Spike* createNewSpike(Spike* spike);
 // bool isFired();																		// determines if a spike was fired
 // void fire();																			// sets fired to true
 // void reset();																		// sets fired to false

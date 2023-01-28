@@ -102,7 +102,16 @@
     <ClCompile Include="Connectors\RKC_Connectors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Maths.cpp">
+    <ClCompile Include="SNN\SNN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SNN\Neuron.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SNN\Spike.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\SNN_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,9 +197,6 @@
     <ClInclude Include="Types\Activation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Types\Maths.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Types\Sample.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -201,6 +207,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Types\Dataset.cpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SNN\SNN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SNN\Neuron.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SNN\Spike.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\SNN_Tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

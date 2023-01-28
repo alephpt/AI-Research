@@ -1,4 +1,68 @@
 ﻿  Alpha Dev.cpp
-  Tests.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\Types\Types.h(6,10): fatal  error C1083: Cannot open include file: 'Maths.h': No such file or directory
+  CNNLayer.cpp
+  CNN.cpp
+  CA_Connectors.cpp
+  ARL_Connectors.cpp
+  RKC_Connectors.cpp
+  Protocol_Connectors.cpp
+  Generator.cpp
+  Optimizer.cpp
+  GAN.cpp
+  Discriminator.cpp
+  ARL_Protocol.cpp
+  CA_Protocol.cpp
+  RKC_Protocol.cpp
+  CARL_Protocol.cpp
+  RL.cpp
+  Neuron.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(10,2): warning C4091: 'typedef ': ignored on left of 'Membrane' when no variable is declared
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,8): error C2143: syntax error: missing ';' before '*'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,20): error C2238: unexpected token(s) preceding ';'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,8): error C2143: syntax error: missing ';' before '*'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,21): error C2238: unexpected token(s) preceding ';'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.cpp(13,14): error C2039: 'pre_neuron': is not a member of 'Synapse'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(12,16): message : see declaration of 'Synapse'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.cpp(14,14): error C2039: 'post_neuron': is not a member of 'Synapse'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(12,16): message : see declaration of 'Synapse'
+  Spike.cpp
+  SNN.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(10,2): warning C4091: 'typedef ': ignored on left of 'Membrane' when no variable is declared
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,8): error C2143: syntax error: missing ';' before '*'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,20): error C2238: unexpected token(s) preceding ';'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,8): error C2143: syntax error: missing ';' before '*'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,21): error C2238: unexpected token(s) preceding ';'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\SNN.h(9,2): warning C4091: 'typedef ': ignored on left of 'SNN' when no variable is declared
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\SNN.cpp(15,64): error C2039: 'post_neuron': is not a member of 'Synapse'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(12,16): message : see declaration of 'Synapse'
+  SNN_Tests.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(10,2): warning C4091: 'typedef ': ignored on left of 'Membrane' when no variable is declared
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,8): error C2143: syntax error: missing ';' before '*'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(17,20): error C2238: unexpected token(s) preceding ';'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,8): error C2143: syntax error: missing ';' before '*'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\Neuron.h(18,21): error C2238: unexpected token(s) preceding ';'
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\SNN\SNN.h(9,2): warning C4091: 'typedef ': ignored on left of 'SNN' when no variable is declared
   Generating Code...
-  CARL.vcxproj -> C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\x64\Debug\Alpha Dev.exe
+  Compiling...
+  Type_Tests.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\Types\Types.h(6,10): fatal  error C1083: Cannot open include file: 'Maths.h': No such file or directory
+  Tests.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\Types\Types.h(6,10): fatal  error C1083: Cannot open include file: 'Maths.h': No such file or directory
+  RL_Tests.cpp
+  Protocol_Tests.cpp
+  GAN_Tests.cpp
+  Connectors_Tests.cpp
+  CNN_Tests.cpp
+  GAN_Tests.h
+  Activation.cpp
+  Feature.cpp
+  Matrix.cpp
+  Tensor.cpp
+  Vector.cpp
+  Generating Code...

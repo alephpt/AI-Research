@@ -9,7 +9,6 @@ typedef struct {
 
 Matrix* initMatrix(int rows, int cols);
 void printMatrix(float** data, int rows, int cols);
-void printMatrix(float* data, int rows, int cols);
 // add
 // subtract
 // scalarMultiply
