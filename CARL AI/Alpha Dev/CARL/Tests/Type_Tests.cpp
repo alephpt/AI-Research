@@ -20,15 +20,15 @@ void testActivationType() {
 
 	printf("Received:\n");
 	printf("sigmoid(%f) = %f\n", x, activation(SIGMOID, x));
-	printf("sigmoid_derivative(%f) = %f\n", x, activation_derivative(SIGMOID, x));
+	printf("sigmoid_derivative(%f) = %f\n", x, activationDerivative(SIGMOID, x));
 	printf("tanh(%f) = %f\n", x, activation(TANH, x));
-	printf("tanh_derivative(%f) = %f\n", x, activation_derivative(TANH, x));
+	printf("tanh_derivative(%f) = %f\n", x, activationDerivative(TANH, x));
 	printf("leaky_relu(%f) = %f\n", x, activation(LEAKY_RELU, x));
-	printf("leaky_relu_derivative(%f) = %f\n", x, activation_derivative(LEAKY_RELU, x));
+	printf("leaky_relu_derivative(%f) = %f\n", x, activationDerivative(LEAKY_RELU, x));
 	printf("relu(%f) = %f\n", x, activation(RELU, x));
-	printf("relu_derivative(%f) = %f\n", x, activation_derivative(RELU, x));
+	printf("relu_derivative(%f) = %f\n", x, activationDerivative(RELU, x));
 	printf("softmax(%f) = %f\n", x, activation(SOFTMAX, x));
-	printf("softmax_derivative(%f) = %f\n", x, activation_derivative(SOFTMAX, x));
+	printf("softmax_derivative(%f) = %f\n", x, activationDerivative(SOFTMAX, x));
 	return;
 }
 

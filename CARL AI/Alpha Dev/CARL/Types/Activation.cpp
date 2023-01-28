@@ -2,6 +2,7 @@
 #include <Math.h>
 #include <stdio.h>
 
+// RELU //
 static inline float relu(float x) {
     if (x < 0) { return 0.0f; }
     return x;
@@ -57,7 +58,10 @@ static inline float softmax_derivative(float x) {
     return s * (1.0f - s);
 }
 
-float activation_derivative(Activation activation_type, float output) {
+
+// ACTIVATION FUNCTIONS //
+
+float activationDerivative(Activation activation_type, float output) {
     if (activation_type == SIGMOID) {
         return sigmoid_derivative(output);
     }
@@ -101,3 +105,4 @@ float activation(Activation activation_type, float output) {
         return 0;
     }
 }
+
