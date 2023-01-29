@@ -1,16 +1,14 @@
 #include "SNN_Tests.h"
 #include "../Types/Matrix.h"
 #include "../Types/Activation.h"
+#include "../Types/General.h"
 #include <stdio.h>
-#include <chrono>
 
 int n_inputs = 5;
-int n_neurons = 5;
-int n_spikes = 3;
-float density = .3f;
-auto now = std::chrono::high_resolution_clock::now();
-double nanoseconds = std::chrono::duration<double, std::nano>(now.time_since_epoch()).count();
-double t = static_cast<double>(nanoseconds);
+int n_neurons = 4;
+int n_spikes = 0;
+float density = 1.0f;
+
 
 void testinitSNN() {
 	printf("hit testinitSNN()\n");
@@ -21,7 +19,7 @@ void testinitSNN() {
 	int n_synapses = synapseLimit(n_neurons, density);
 	Activation activation_type = TANH;
 	
-	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type, t);
+	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 
 	printf("hit initSNN(snn, %d, %d, %d, %d, %s, %lf)\n", 
 			n_inputs, n_neurons, n_synapses, n_spikes, getActivationString.at(activation_type).c_str(), 0.0f);
@@ -38,7 +36,7 @@ void testConnectivityMatrix() {
 	int n_synapses = synapseLimit(n_neurons, density);
 	Activation activation_type = TANH;
 	
-	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type, 0.0f);
+	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 	printf("hit initSNN(snn, %d, %d, %d, %d, %s, %lf)\n", 
 			n_inputs, n_neurons, n_synapses, n_spikes, getActivationString.at(activation_type).c_str(), 0.0f);
 

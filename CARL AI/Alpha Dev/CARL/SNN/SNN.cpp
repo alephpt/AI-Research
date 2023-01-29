@@ -1,5 +1,4 @@
 #include "SNN.h"
-#include "../Types/Activation.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -29,17 +28,17 @@ int synapseLimit(int n_neurons, float density) {
     return (int)((float)(n_neurons * (n_neurons - 1) / 2) * density);
 }
 
-void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type, double t) {
+void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type) {
     snn->n_inputs = n_in;
     snn->n_neurons = n_n;
     snn->n_synapses = n_syn;
     snn->n_spikes = n_sp;
     snn->neurons = new Neuron[n_n];
-    snn->t = t;
+    snn->t = getTime();
 
     for (int n_i = 0; n_i < n_n; n_i++) {
-        initNeuron(&snn->neurons[n_i], n_i, new float[n_in] , 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, t,
-                   new Membrane, n_syn, new Synapse[n_syn], n_sp, new Spike[n_sp], activation_type);
+        initNeuron(&snn->neurons[n_i], n_i, new float[n_in], 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                   new Membrane, (n_n - 1), new Synapse[n_n - 1], n_sp, new Spike[n_sp], activation_type);
     }
 }
 
@@ -82,7 +81,7 @@ void printSNN(SNN* snn) {
             printf("\t\t\t");
             for (int nst = 0; nst < snn->neurons[n_i].synapses[n_s].n_spike_times; nst++) {
                 if ((nst + 1) % 9 == 0) { printf("\t\t"); }
-                printf("%f", snn->neurons[n_i].synapses[n_s].spike_times[nst]);
+                printf("%.9lf", snn->neurons[n_i].synapses[n_s].spike_times[nst]);
                 if (nst != snn->neurons[n_i].synapses[n_s].n_spike_times - 1) {
                     printf(", ");
                 }
@@ -103,7 +102,7 @@ void printSNN(SNN* snn) {
         for (int n_s = 0; n_s < snn->neurons[n_i].n_spikes; n_s++) {
             printf("\t- Spike %d:\n", n_s);
             printf("\t\tfired: \t\t%s\n", snn->neurons[n_i].spikes[n_s].fired ? "true" : "false");
-            printf("\t\ttime: \t\t%lf\n", snn->neurons[n_i].spikes[n_s].timestamp);
+            printf("\t\ttime: \t\t%.9lf\n", snn->neurons[n_i].spikes[n_s].timestamp);
             printf("\t\tamplitude: \t%f\n", snn->neurons[n_i].spikes[n_s].amplitude);
         }
         printf("\n");

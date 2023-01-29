@@ -1,6 +1,6 @@
 #pragma once
 #include "../Types/Activation.h"
-
+#include "../Types/General.h"
 
 typedef struct Membrane Membrane;
 typedef struct Synapse Synapse;
@@ -19,7 +19,7 @@ struct Synapse {
 	float weight;																		// the strength of the connection
 	float delay;																		// time between the synaptic input and output
 	int n_spike_times;																    // number of spike times
-	float* spike_times;																	// list of time instances when spikes occured
+	double* spike_times;																// list of time instances when spikes occured
 	Neuron* pre_neuron;																	// the neuron that is sending the signal
 	Neuron* post_neuron;																// the neuron that is receiving the signal
 };
@@ -49,7 +49,7 @@ struct Neuron {
 
 
 // /// /// Membrane Functions /// /// //
-Neuron* initNeuron(Neuron* n, int idx, float* w, float b, float in, float out, float d, float mem_p, double t,
+Neuron* initNeuron(Neuron* n, int idx, float* w, float b, float in, float out, float d, float mem_p, 
                    Membrane* m, int n_syn, Synapse* syn, int n_sp, Spike* sp, Activation activation_time);
 // getMembranePotential();																// returns the current membrane potential
 // updateMembranePotential(float capacitance, float resistance, float inputCurrent);	// updates the potential
@@ -57,8 +57,8 @@ Neuron* initNeuron(Neuron* n, int idx, float* w, float b, float in, float out, f
 // resetMembranePotential();															// resets the membrane potential to the resting potential
 	
 // /// /// Neuron Functions /// /// //
-void initMembrane(Membrane* m, float capacitance, float resistance, float V_rest, float V_threshold, double t);
-Membrane* createNewMembrane(Membrane* m, float c, float r, float V_rest, float V_thresh, double t);
+void initMembrane(Membrane* m, float capacitance, float resistance, float V_rest, float V_threshold);
+Membrane* createNewMembrane(Membrane* m, float c, float r, float V_rest, float V_thresh);
 float membranePotential(Membrane m);
 
 // addInputSynapse(Synapse* synapse);													// add input synapse to Neuron
@@ -67,14 +67,14 @@ float membranePotential(Membrane m);
 // bool isFired();;																		// checks if the neuron has fired a spike in the current time step
 
 // /// /// Synapse Functions /// /// //
-void initSynapse(Synapse* s, float weight, float delay, Neuron* pre_neuron, Neuron* post_neuron, double t);
-Synapse* createNewSynapse(Synapse* s, float w, float d, Neuron* pre, Neuron* post, double t);
+void initSynapse(Synapse* s, float weight, float delay, Neuron* pre_neuron, Neuron* post_neuron);
+Synapse* createNewSynapse(Synapse* s, float w, float d, Neuron* pre, Neuron* post);
 // void setWeight(float weight);														// sets the weight of a synapse
 // void update()																		// updates the synpases output based on the input spike and weight
 
 // /// /// Spike Functions /// /// //
-void initSpike(Spike* s, double t);
-Spike* createNewSpike(Spike* s, float a, double t);
+void initSpike(Spike* s, float a);
+Spike* createNewSpike(Spike* s, float a);
 // bool isFired();																		// determines if a spike was fired
 // void fire();																			// sets fired to true
 // void reset();																		// sets fired to false
