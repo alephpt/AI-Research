@@ -6,14 +6,18 @@ typedef struct SNN SNN;
 struct SNN {
 	int n_inputs;
 	int n_neurons;
+	int n_synapses;
+	int n_spikes;
 	Neuron* neurons;
-	float t;
+	double t;
 };
 
-// let's start with 10 neurons and 90 synapses
-void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type, float t);
 float** createConnectivityMatrix(SNN* snn);
-int synapseLimit(int n_neurons);
+int synapseLimit(int n_neurons, float density);
+
+void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type, double t);
+void printSNN(SNN* snn);
+
 
 // TODO: 
 /*
