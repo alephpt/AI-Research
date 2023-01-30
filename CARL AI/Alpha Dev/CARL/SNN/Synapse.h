@@ -17,7 +17,7 @@ struct Synapse{
 // /// /// Synapse Functions /// /// //
 void initSynapse(Synapse* s, float weight, float delay, Neuron* pre_neuron, Neuron* post_neuron);
 Synapse* createNewSynapse(Synapse* s, int idx, float w, float d, Neuron* pre, Neuron* post);
-void printSynapses(Synapse* ss, int n_s);
+void printSynapses(Neuron* n);
 void connectNeurons(int neuron_a, int neuron_b);
 // void setWeight(float weight);														// sets the weight of a synapse
 // void update()																		// updates the synpases output based on the input spike and weight

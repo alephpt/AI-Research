@@ -18,9 +18,9 @@ Membrane* createNewMembrane(Membrane* m, float c, float r, float V_rest, float V
 
 void printMembrane (Membrane* m) {
     printf("Membrane:\n");
-    printf("\tcapacitance: \t\t%f\n", m->capacitance);
-    printf("\tresistance: \t\t%f\n", m->resistance);
-    printf("\tV_rest: \t\t%f\n", m->V_rest);
-    printf("\tV_threshold: \t\t%f\n", m->V_threshold);
-    printf("\tt: \t\t\t%.9lf\n", m->t);
+    printf("\tcapacitance: \t%f\n", m->capacitance);
+    printf("\tresistance: \t%f\n", m->resistance);
+    printf("\tV_rest: \t%f\n", m->V_rest);
+    printf("\tV_threshold: \t%f\n", m->V_threshold);
+    printf("\tt: \t\t%.9lf\n", m->t);
 }

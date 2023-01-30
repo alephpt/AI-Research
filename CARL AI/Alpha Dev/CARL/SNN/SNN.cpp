@@ -73,6 +73,6 @@ void printSNN(SNN* snn) {
     
     for (int ni = 0; ni < snn->n_neurons; ni++) {
         printNeuron(&snn->neurons[ni], ni);
-        printSynapses(*snn->neurons[ni].synapses, snn->neurons[ni].n_synapses);
+        printSynapses(&snn->neurons[ni]);
     }
 }

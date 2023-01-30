@@ -29,16 +29,16 @@ Neuron* initNeuron(Activation activation, Neuron* n, Membrane* m, Spike* sp, int
 
 void printNeuron(Neuron* n, int n_i) {
     printf("\t\t\t-- Neuron %d --\n", n_i);
-    printf("activation_type:\t\t%s\n", getActivationString.at(n->activation_type).c_str());
-    printf("index: \t\t\t\t%d\n", n->index);
-    printf("inputs: \t\t\t%d\n  ", n->n_inputs);
+    printf("activation_type:\t%s\n", getActivationString.at(n->activation_type).c_str());
+    printf("index: \t\t\t%d\n", n->index);
+    printf("inputs: \t\t%d\n  ", n->n_inputs);
     for (int i = 0; i < n->n_inputs; i++) {
         printf("- %d: %f -", i, n->inputs[i]);
         if ((i + 1) % 5 == 0 && i != 0 || i == n->n_inputs - 1) {
             printf("\n");
         }
     }
-    printf("outputs: \t\t\t%d\n  ", n->n_outputs);
+    printf("outputs: \t\t%d\n  ", n->n_outputs);
     for (int i = 0; i < n->n_outputs; i++) {
         printf("- %d: %f -", i, n->outputs[i]);
         if ((i + 1) % 5 == 0 && i != 0 || i == n->n_outputs - 1) {
@@ -52,9 +52,9 @@ void printNeuron(Neuron* n, int n_i) {
             printf("\n");
         }
     }
-    printf("bias: \t\t\t\t%f\n", n->bias);
-    printf("delta: \t\t\t\t%f\n", n->delta);
-    printf("membrane_potential: \t\t%f\n", n->bias);
+    printf("bias: \t\t%f\n", n->bias);
+    printf("delta: \t\t\t%f\n", n->delta);
+    printf("membrane_potential: \t%f\n", n->bias);
     printMembrane(&n->membrane);
     printf("n_spikes: %d\n", n->n_spikes);
     for (int n_s = 0; n_s < n->n_spikes; n_s++) {

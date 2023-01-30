@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 int n_inputs = 3;
-int n_neurons = 10000;
+int n_neurons = 4;
 int n_spikes = 2;
 float density = 1.0f;
 
@@ -24,8 +24,7 @@ void testinitSNN() {
 	
 	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 
-	
-	//printSNN(snn);
+	printSNN(snn);
 	return;
 }
 
@@ -35,11 +34,12 @@ void testConnectivityMatrix() {
 	printf("new SNN*\n");
 
 	int n_synapses = synapseLimit(n_neurons, density);
-	Activation activation_type = TANH;
+	Activation activation_type = LEAKY_RELU;
 	
-	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 	printf("hit initSNN(snn, %d, %d, %d, %d, %s, %lf)\n\n", 
 			n_inputs, n_neurons, n_synapses, n_spikes, getActivationString.at(activation_type).c_str(), 0.0f);
+	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
+
 
 	float** conn_matrix = createConnectivityMatrix(snn);
 
