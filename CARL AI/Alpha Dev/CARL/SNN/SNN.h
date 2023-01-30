@@ -7,6 +7,7 @@ typedef struct Neuron Neuron;
 
 struct SNN {
 	int n_inputs;
+	int n_outputs;
 	int n_neurons;
 	int n_synapses;
 	int n_spikes;

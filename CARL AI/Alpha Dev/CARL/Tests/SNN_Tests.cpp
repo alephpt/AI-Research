@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 int n_inputs = 3;
-int n_neurons = 3;
+int n_neurons = 10000;
 int n_spikes = 2;
 float density = 1.0f;
 
