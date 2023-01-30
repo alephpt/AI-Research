@@ -12,8 +12,9 @@ void initSynapse(Synapse* s, float weight, float delay, Neuron* pre_neuron, Neur
     s->post_neuron = post_neuron;
 }
 
-Synapse* createNewSynapse(Synapse* s, float w, float d, Neuron* pre, Neuron* post) {
+Synapse* createNewSynapse(Synapse* s, int idx, float w, float d, Neuron* pre, Neuron* post) {
     initSynapse(s, w, d, pre, post);
+    s->index = idx;
     return s;
 }
 
@@ -26,6 +27,7 @@ void printSynapses(Synapse* ss, int n_s) {
     printf("n_synapses: %d\n", n_s);
     for (int n = 0; n < n_s; n++) {
         printf("\t- Synapse %d:\n", n);
+        printf("\t\tindex: \t%f\n", ss[n].index);
         printf("\t\tweight: \t%f\n", ss[n].weight);
         printf("\t\tdelay: \t\t%f\n", ss[n].delay);
         printf("\t\tn_spike_time: \t%d\n", ss[n].n_spike_times);

@@ -22,5 +22,5 @@ void printMembrane (Membrane* m) {
     printf("\tresistance: \t\t%f\n", m->resistance);
     printf("\tV_rest: \t\t%f\n", m->V_rest);
     printf("\tV_threshold: \t\t%f\n", m->V_threshold);
-    printf("\tt: \t\t\t%lf\n", m->t);
+    printf("\tt: \t\t\t%.9lf\n", m->t);
 }
