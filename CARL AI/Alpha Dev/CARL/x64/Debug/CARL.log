@@ -1,2 +1,42 @@
-﻿  SNN_Tests.cpp
+﻿  Alpha Dev.cpp
+  CNNLayer.cpp
+  CNN.cpp
+  CA_Connectors.cpp
+  ARL_Connectors.cpp
+  RKC_Connectors.cpp
+  Protocol_Connectors.cpp
+  Generator.cpp
+  Optimizer.cpp
+  GAN.cpp
+  Discriminator.cpp
+  ARL_Protocol.cpp
+  CA_Protocol.cpp
+  RKC_Protocol.cpp
+  CARL_Protocol.cpp
+  RL.cpp
+  Membrane.cpp
+  Neuron.cpp
+  Spike.cpp
+  SNN.cpp
+  Generating Code...
+  Compiling...
+  Synapse.cpp
+  SNN_Tests.cpp
+  Type_Tests.cpp
+  Tests.cpp
+  RL_Tests.cpp
+  Protocol_Tests.cpp
+  GAN_Tests.cpp
+  Connectors_Tests.cpp
+  CNN_Tests.cpp
+  GAN_Tests.h
+  Activation.cpp
+C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\CARL\Types\Activation.cpp(88,56): warning C4305: 'argument': truncation from 'double' to 'float'
+  Feature.cpp
+  General.cpp
+  Matrix.cpp
+  Tensor.cpp
+  Vector.cpp
+  Generating Code...
+x64\Debug\GAN_Tests.obj : warning LNK4042: object specified more than once; extras ignored
   CARL.vcxproj -> C:\Users\aleph\Desktop\AI_Generated\CARL AI\Alpha Dev\x64\Debug\Alpha Dev.exe

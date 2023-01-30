@@ -15,6 +15,8 @@ void testActivationType() {
 	printf("leaky_relu_derivative(-2.0) = 0.01\n");
 	printf("relu(-2.0) = 0.0\n");
 	printf("relu_derivative(-2.0) = 0.0\n");
+	printf("softplus(-2.0) = 0.119203\n");
+	printf("softplus_derivative(-2.0) = 0.1192029");
 	printf("softmax(-2.0) = 0.1192029\n");
 	printf("softmax_derivative(-2.0) = 0.1049935\n\n");
 
@@ -27,8 +29,12 @@ void testActivationType() {
 	printf("leaky_relu_derivative(%f) = %f\n", x, activationDerivative(LEAKY_RELU, x));
 	printf("relu(%f) = %f\n", x, activation(RELU, x));
 	printf("relu_derivative(%f) = %f\n", x, activationDerivative(RELU, x));
+	printf("softplus(%f) = %f\n", x, activation(SOFTPLUS, x));
+	printf("softplus_derivative(%f) = %f\n", x, activationDerivative(SOFTPLUS, x));
 	printf("softmax(%f) = %f\n", x, activation(SOFTMAX, x));
 	printf("softmax_derivative(%f) = %f\n", x, activationDerivative(SOFTMAX, x));
+	printf("gaussian(%f) = %f\n", x, activation(GAUSSIAN, x));
+	printf("gaussian_derivative(%f) = %f\n", x, activationDerivative(GAUSSIAN, x));
 	return;
 }
 

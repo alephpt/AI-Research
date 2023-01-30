@@ -5,9 +5,10 @@ void runTests() {
     // testMatrix();
     // test3DTensor();
     // test4DTensor();
-    //testActivationType();
-    testinitSNN();
+    testActivationType();
+    //testinitSNN();
     //testConnectivityMatrix();
+    //testGeneratorinit();
 
     return;
 }

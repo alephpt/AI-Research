@@ -7,7 +7,9 @@ typedef enum Activation {
     LEAKY_RELU,
     SIGMOID,
     TANH,
-    SOFTMAX
+    SOFTPLUS,
+    SOFTMAX,
+    GAUSSIAN
 } Activation;
 
 
@@ -16,7 +18,9 @@ const std::map<const Activation, const std::string> getActivationString = {
      {LEAKY_RELU, "LEAKY RELU"}, 
      {SIGMOID, "SIGMOID"}, 
      {TANH, "TANH"}, 
-     {SOFTMAX, "SOFTMAX"} 
+     {SOFTPLUS, "SOFTPLUS"},
+     {SOFTMAX, "SOFTMAX"},
+     {GAUSSIAN, "GAUSSIAN"}
 };
 
 float activationDerivative(Activation activation_type, float output);

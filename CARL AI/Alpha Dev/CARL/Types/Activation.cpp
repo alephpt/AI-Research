@@ -2,6 +2,30 @@
 #include <Math.h>
 #include <stdio.h>
 
+constexpr auto M_PI = 3.14159265358979323846;
+
+// SIGMOIDS //
+static inline float sigmoid(float x) {
+    return 1.0f / (1.0f + expf(-x));
+}
+
+static inline float sigmoid_derivative(float x) {
+    float s = sigmoid(x);
+    return s * (1.0f - s);
+}
+
+
+// TANH //
+
+static inline float tanh(float x) {
+    return (expf(x) - expf(-x)) / (expf(x) + expf(-x));
+}
+
+static inline float tanh_derivative(float x) {
+    return 1.0f - powf(tanh(x), 2.0f);
+}
+
+
 // RELU //
 static inline float relu(float x) {
     if (x < 0) { return 0.0f; }
@@ -26,31 +50,22 @@ static inline float leaky_relu_derivative(float x, float alpha) {
     else { return alpha; }
 }
 
-// TANH //
 
-static inline float tanh(float x) {
-    return (expf(x) - expf(-x)) / (expf(x) + expf(-x));
+
+ // SOFTPLUS //
+static inline float softplus(float x) {
+    return logf(1.0f + expf(x));
 }
 
-static inline float tanh_derivative(float x) {
-    return 1.0f - powf(tanh(x), 2.0f);
-}
 
-// SIGMOIDS //
-static inline float sigmoid(float x) {
+static inline float softplus_derivative(float x) {
     return 1.0f / (1.0f + expf(-x));
 }
-
-static inline float sigmoid_derivative(float x) {
-    float s = sigmoid(x);
-    return s * (1.0f - s);
-}
-
 
 // SOFTMAX //
 
 static inline float softmax(float x) {
-    return (float)(expf(x) / (expf(x) + 1));
+    return expf(x) / (expf(x) + 1.0f);
 }
 
 static inline float softmax_derivative(float x) {
@@ -59,13 +74,26 @@ static inline float softmax_derivative(float x) {
 }
 
 
+
+ // GAUSSIAN //
+
+static inline float gaussian(float x) {
+    float mean = 0.0f;
+    float standard_deviation = 1.0f;
+
+    return (1.0f / (standard_deviation * sqrtf(2.0f * (float)M_PI))) * expf(-0.5f * powf((x - mean) / standard_deviation, 2.0f));
+}
+
+static inline float gaussian_derivative(float x) {
+    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * M_PI);
+}
+
 // ACTIVATION FUNCTIONS //
 
 float activationDerivative(Activation activation_type, float output) {
     if (activation_type == SIGMOID) {
         return sigmoid_derivative(output);
     }
-
     else if (activation_type == TANH) {
         return tanh_derivative(output);;
     }
@@ -75,8 +103,14 @@ float activationDerivative(Activation activation_type, float output) {
     else if (activation_type == LEAKY_RELU) {
         return leaky_relu_derivative(output, (float)0.01);
     }
+    else if (activation_type == SOFTPLUS) {
+        return softplus_derivative(output);
+    }
     else if (activation_type == SOFTMAX) {
         return softmax_derivative(output);
+    }
+    else if (activation_type == GAUSSIAN) {
+        return gaussian_derivative(output);
     }
     else {
         printf("ACTIVATION DERIVATIVE ERROR: Invalid activation type\n");
@@ -97,8 +131,14 @@ float activation(Activation activation_type, float output) {
     else if (activation_type == LEAKY_RELU) {
         return leaky_relu(output, (float)0.01);
     }
+    else if (activation_type == SOFTPLUS) {
+        return softplus(output);
+    }
     else if (activation_type == SOFTMAX) {
         return softmax(output);
+    }
+    else if (activation_type == GAUSSIAN) {
+        return gaussian(output);
     }
     else {
         printf("ACTIVATION ERROR: Invalid activation type\n");
