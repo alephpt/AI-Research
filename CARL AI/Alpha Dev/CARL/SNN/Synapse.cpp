@@ -2,9 +2,10 @@
 #include "../Types/General.h"
 #include "SNN.h"
 
-void initSynapse(Synapse* s, float weight, float delay, Neuron* pre_neuron, Neuron* post_neuron) {
+void initSynapse(Synapse* s, float weight, float delay, float decay, Neuron* pre_neuron, Neuron* post_neuron) {
     s->weight = weight;
     s->delay = delay;
+    s->decay = decay;
     s->n_spike_times = 1;
     s->spike_times = new double[s->n_spike_times];
     s->spike_times[0] = getTime();
@@ -12,8 +13,8 @@ void initSynapse(Synapse* s, float weight, float delay, Neuron* pre_neuron, Neur
     s->post_neuron = post_neuron;
 }
 
-Synapse* createNewSynapse(Synapse* s, int idx, float w, float d, Neuron* pre, Neuron* post) {
-    initSynapse(s, w, d, pre, post);
+Synapse* createNewSynapse(Synapse* s, int idx, float w, float del, float dec, Neuron* pre, Neuron* post) {
+    initSynapse(s, w, del, dec, pre, post);
     s->index = idx;
     return s;
 }
@@ -28,25 +29,27 @@ void printSynapses(Neuron* n) {
     int n_s = n->n_synapses;
     printf("n_synapses: %d\n", n_s);
     for (int si = 0; si < n_s; si++) {
-        printf("\t- Synapse %d:\n", si);
-        printf("\t\tindex: \t%f", ss[si]->index);
-        printf("\t\tweight: \t%f", ss[si]->weight);
-        printf("\t\tdelay: \t\t%f\n", ss[si]->delay);
-        printf("\t\tn_spike_time: \t%d\n", ss[si]->n_spike_times);
-        printf("\t\t\t");
-        for (int nst = 0; nst < ss[si]->n_spike_times; nst++) {
-            if ((nst + 1) % 9 == 0) { printf("\t\t"); }
-            printf("%.9lf", ss[si]->spike_times[nst]);
-            if (nst != ss[si]->n_spike_times - 1) {
-                printf(", ");
-            }
-            if ((nst + 1) % 9 == 0 || nst == ss[si]->n_spike_times - 1) { printf("\n"); }
-        } 
         int preidx = 0;
         int postidx = 0;
         if (ss[si]->pre_neuron != NULL) { preidx = ss[si]->pre_neuron->index; }
         if (ss[si]->post_neuron != NULL) { postidx = ss[si]->post_neuron->index; }
+        
+        printf("\t- Synapse %d:\t", si);
+        printf("\tindex: \t\t%d", ss[si]->index);
         printf("\t\tpre_neuron: \t%d", preidx);
         printf("\t\tpost_neuron: \t%d\n", postidx);
+        printf("\t\t\t\tweight: \t%f", ss[si]->weight);
+        printf("\tdelay: \t\t%f", ss[si]->delay);
+        printf("\tdecay: \t\t%f\n", ss[si]->decay);
+        printf("\t\t\t\tn_spike_time: \t%d\n\t\t\t\t\t\t", ss[si]->n_spike_times);
+        printf("[ ");
+        for (int nst = 0; nst < ss[si]->n_spike_times; nst++) {
+            printf("%.9lf", ss[si]->spike_times[nst]);
+            if (nst != ss[si]->n_spike_times - 1) { printf(", "); }
+            if (nst == ss[si]->n_spike_times - 1) { printf(" ]\n"); }
+            else  if ((nst + 1) % 9 == 0) { printf("\n\t\t\t\t\t\t"); }
+        } 
+
     }
+    printf("\n");
 }

@@ -114,6 +114,15 @@
     <ClCompile Include="Tests\SNN_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SNN\Synapse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SNN\Membrane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\General.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RL\RL.h">
@@ -219,6 +228,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tests\SNN_Tests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SNN\Synapse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SNN\Membrane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\General.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

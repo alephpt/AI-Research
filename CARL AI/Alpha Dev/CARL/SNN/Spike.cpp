@@ -1,5 +1,5 @@
-#include "Spike.h"
 #include "../Types/General.h"
+#include "Spike.h"
 #include <stdio.h>
 
 
@@ -10,8 +10,8 @@ void initSpike(Spike* s, float a) {
 }
 
 void printSpike(Spike* s, int n) {
-    printf("\t- Spike %d:\n", n);
-    printf("\t\tfired: \t%s", s->fired ? "true" : "false");
+    printf("\t- Spike %d:\t", n);
+    printf("\tfired: \t\t%s", s->fired ? "true" : "false");
     printf("\t\tamplitude: \t%f", s->amplitude);
     printf("\ttime: \t%.9lf\n", s->timestamp);
 }

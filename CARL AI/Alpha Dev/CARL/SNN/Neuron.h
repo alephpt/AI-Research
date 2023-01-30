@@ -1,11 +1,9 @@
 #pragma once
 #include "../Types/Activation.h"
-#include "../Types/General.h"
 #include "Spike.h"
 #include "Synapse.h"
 #include "Membrane.h"
 
-typedef struct Membrane Membrane;
 typedef struct Synapse Synapse;
 typedef struct Spike Spike;
 
