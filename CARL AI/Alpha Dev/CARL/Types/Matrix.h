@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 
-struct {
+typedef struct {
     float* data;
     int rows;
     int cols;

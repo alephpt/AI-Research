@@ -4,23 +4,9 @@
 #include <stdlib.h>
 
 void testActivationType() {
-	float x = -2.0;
+	float x = -10.0;
 
-	printf("Expecting:\n");
-	printf("sigmoid(-2.0) = 0.119203\n");
-	printf("sigmoid_derivative(-2.0) = 0.1049935\n");
-	printf("tanh(-2.0) = -0.9640276\n");
-	printf("tanh_derivative(-2.0) = 0.0706508\n");
-	printf("leaky_relu(-2.0) = -0.02\n");
-	printf("leaky_relu_derivative(-2.0) = 0.01\n");
-	printf("relu(-2.0) = 0.0\n");
-	printf("relu_derivative(-2.0) = 0.0\n");
-	printf("softplus(-2.0) = 0.119203\n");
-	printf("softplus_derivative(-2.0) = 0.1192029");
-	printf("softmax(-2.0) = 0.1192029\n");
-	printf("softmax_derivative(-2.0) = 0.1049935\n\n");
-
-	printf("Received:\n");
+	printf("Ativation type:\n");
 	printf("sigmoid(%f) = %f\n", x, activation(SIGMOID, x));
 	printf("sigmoid_derivative(%f) = %f\n", x, activationDerivative(SIGMOID, x));
 	printf("tanh(%f) = %f\n", x, activation(TANH, x));
