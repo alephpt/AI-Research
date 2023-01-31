@@ -5,3 +5,4 @@
 #include "Vector.h"
 #include "Activation.h"
 
+typedef Tensor tensor;
