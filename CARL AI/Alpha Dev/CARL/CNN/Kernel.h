@@ -14,10 +14,10 @@ typedef enum FilterDimensions {
     FIVExFIVE
 } FilterDimensions;
 
-typedef struct Kernel{
+class Kernel{
+    Kernel(FilterDimensions);
+    Kernel(FilterDimensions, int);
+    ~Kernel();
     std::vector<std::vector<float>> values;
     int rows, columns; 
-} Kernel;
-
-Kernel* initKernel(FilterDimensions);
-Kernel* initKernel(FilterDimensions, int n);
+};

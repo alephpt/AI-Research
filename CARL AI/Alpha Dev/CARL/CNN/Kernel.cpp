@@ -25,16 +25,12 @@ static inline void (*lookupNFilter[])(int* r, int* c, int n) = {
     invalidNFilter, invalidNFilter, oneXn, invalidNFilter, nXone, invalidNFilter, invalidNFilter
 };
 
-Kernel* initKernel (FilterDimensions filter) {
-    Kernel* k = new Kernel;
-    lookupFilter[filter](&k->rows, &k->columns);
-    k->values = std::vector(k->rows, std::vector(k->columns, 0.0f));
-    return k;
+Kernel::Kernel(FilterDimensions filter) {
+    lookupFilter[filter](&this->rows, &this->columns);
+    this->values = std::vector(this->rows, std::vector(this->columns, 0.0f));
 }
 
-Kernel* initKernel (FilterDimensions filter, int n) {
-    Kernel* k = new Kernel;
-    lookupNFilter[filter](&k->rows, &k->columns, n);
-    k->values = std::vector(k->rows, std::vector(k->columns, 0.0f));
-    return k;
+Kernel::Kernel(FilterDimensions filter, int n) {
+    lookupNFilter[filter](&this->rows, &this->columns, n);
+    this->values = std::vector(this->rows, std::vector(this->columns, 0.0f));
 }
