@@ -16,34 +16,65 @@ void testConvolutionInit() {
     printf("c.stride: %d\n", c.stride);
     printf("c.input_h: %d\n", c.input_h);
     printf("c.input_w: %d\n", c.input_w);
-    printf("c.padding_x: %d\n", c.padding_x);
-    printf("c.padding_y: %d\n", c.padding_y);
     c.k->print();
     
+}
+
+void testConvolutionOffsets() {
+    int width = 5;
+    int height = 7;
+    FilterDimensions filter = FIVExFIVE;
+
+    std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
+    Convolution c = Convolution(RELU, height, width, filter);
+
+    c.k->print();
+
+    c.k->setFilterType(OFFSET_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(ASCENDING_OFFSET_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(INVERSE_OFFSET_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(VERTICAL_OFFSET_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(VERTICAL_INVERSE_OFFSET_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(GRADIENT_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(GAUSSIAN_FILTER);
+    c.k->print();
+
+    return;
 }
 
 void testConvolution() {
     int output_h = 0;
     int output_w = 0;
     int width = 10;
-    int height = 10;
-    FilterDimensions filter = THREExTHREE;
+    int height = 17;
+    FilterDimensions filter = FIVExFIVE;
 
     std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
-    Convolution c = Convolution(height, width, filter);
+    Convolution c = Convolution(RELU, height, width, filter);
+    c.k->setFilterType(OFFSET_FILTER);
 
     printf("test Convolution(%d, %d, %s)\n", height, width, filterString[filter].c_str());
     printf("c.stride: %d\n", c.stride);
     printf("c.input_h: %d\n", c.input_h);
     printf("c.input_w: %d\n", c.input_w);
-    printf("c.padding_x: %d\n", c.padding_x);
-    printf("c.padding_y: %d\n", c.padding_y);
     c.k->print();
 
     printf("\ninput vector - %d x %d\n", width, height);
     print2DVector(input_data, height, width);
 
-    std::vector<std::vector<float>> output_data = c.convolute(input_data, height, width, &output_h, &output_w);
+    std::vector<std::vector<float>> output_data = c.dilationConvolute(input_data, height, width, &output_h, &output_w);
 
     printf("\noutput vector - %d x %d\n", output_w, output_h);
     print2DVector(output_data, output_h, output_w);

@@ -13,7 +13,8 @@ void runTests() {
     // testKernelInit();
     // testAdjustKernelDims();
     // testConvolutionInit();
-    testConvolution();
+    testConvolutionOffsets();
+    // testConvolution();
 
         // SNN Tests //
     // testinitSNN();

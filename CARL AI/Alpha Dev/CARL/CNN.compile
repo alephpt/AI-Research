@@ -1,2 +1,2 @@
-g++ Alpha\ Dev.cpp Tests/Tests.cpp Tests/CNN_Tests.cpp CNN/CNN.cpp CNN/Kernel.cpp
+g++ Alpha\ Dev.cpp Tests/Tests.cpp Tests/CNN_Tests.cpp CNN/CNN.cpp CNN/Convolution.cpp CNN/Kernel.cpp Types/General.cpp Types/Activation.cpp
 

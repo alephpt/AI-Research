@@ -1,24 +1,8 @@
 #include "Kernel.h"
+#include "KernelHelper.h"
 #include <vector>
 #include <stdio.h>
-
-static inline void oneXone(int* r, int* c) { *r = 1; *c = 1; }
-static inline void oneXthree(int* r, int* c) { *r = 1; *c = 3; }
-static inline void oneXn(int* r, int* c, int n) { *r = 1; *c = n; }
-static inline void threeXone(int* r, int* c) { *r = 3; *c = 1; }
-static inline void nXone(int* r, int* c, int n) { *r = n; *c = 1; }
-static inline void threeXthree(int* r, int* c) { *r = 3; *c = 3; }
-static inline void fiveXfive(int* r, int* c) { *r = 5; *c = 5; }
-static inline void sevenXseven(int* r, int* c) { *r = 7; *c = 7; }
-static inline void elevenXeleven(int* r, int* c) { *r = 11; *c = 11; }
-
-static inline void invalidFilter(int* r, int* c) {
-    printf(" [Kernel Filter Error]: Invalid implementation of Kernel Filter for non-N type.\n");
-}
-
-static inline void invalidNFilter(int* r, int* c, int n) {
-    printf(" [Kernel Filter Error]: Invalid implementation of Kernel Filter for N type.\n");
-}
+#include <math.h>
 
 
 static void (*lookupFilter[])(int* r, int* c) = {
@@ -29,51 +13,112 @@ static void (*lookupNFilter[])(int* r, int* c, int n) = {
     invalidNFilter, invalidNFilter, oneXn, invalidNFilter, nXone, invalidNFilter, invalidNFilter, invalidNFilter, invalidNFilter
 };
 
+static void (*lookupFilterStyle[])(Filter* filter) = {
+    populateAscendingFilter,
+    populateOffsetFilter, 
+    populateAscendingOffsetFilter,
+    populateVerticalOffsetFilter,
+    populateInverseOffsetFilter,
+    populateInverseVerticalOffsetFilter,
+    populateGradientFilter,
+    populateGaussianFilter
+};
+
 
     // Constructor / Destructor
+Kernel::Kernel() {
+    activation_type = SIGMOID;
+    dims = THREExTHREE;
+    lookupFilter[dims](&filter.rows, &filter.columns);
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(ASCENDING_FILTER);
+}
+
+Kernel::Kernel(Activation a) {
+    activation_type = a;
+    dims = THREExTHREE;
+    lookupFilter[dims](&filter.rows, &filter.columns);
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(ASCENDING_FILTER);
+}
 
 Kernel::Kernel(FilterDimensions f) {
+    activation_type = SIGMOID;
     dims = f;
-    lookupFilter[f](&filter.rows, &filter.columns);
-    filter.values = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    lookupFilter[dims](&filter.rows, &filter.columns);
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(ASCENDING_FILTER);
+}
+
+Kernel::Kernel(Activation a, FilterDimensions f) {
+    activation_type = a;
+    dims = f;
+    lookupFilter[dims](&filter.rows, &filter.columns);
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(ASCENDING_FILTER);
 }
 
 Kernel::Kernel(FilterDimensions f, int n) {
+    activation_type = SIGMOID;
     dims = f;
-    lookupNFilter[f](&filter.rows, &filter.columns, n);
-    filter.values = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    lookupNFilter[dims](&filter.rows, &filter.columns, n);
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(ASCENDING_FILTER);
 }
 
-Kernel::~Kernel() { filter.values.clear(); }
+Kernel::Kernel(Activation a, FilterDimensions f, int n) {
+    activation_type = a;
+    dims = f;
+    lookupNFilter[dims](&filter.rows, &filter.columns, n);
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(ASCENDING_FILTER);
+}
+
+
+Kernel::~Kernel() { filter.weights.clear(); }
 
 
     // public functions
-
 int Kernel::getRows() { return filter.rows; }
 int Kernel::getColumns() { return filter.columns; }
+Activation Kernel::getActivationType() { return activation_type; }
+
+float Kernel::getProductSum(std::vector<std::vector<float>> input) {
+    float sum = 0.0f;
+
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            sum += input[y][x] + filter.weights[y][x];
+        }
+    }
+
+    return sum;
+}
 
 float Kernel::getMax(std::vector<std::vector<float>> input)
 {
     float max = 0.0f;
 
-    for (int y = 0; y < filter.rows; y++) {
-        for (int x = 0; x < filter.columns; x++) {
-            float newMax = input[y][x] * filter.values[y][x];
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            float newMax = input[y][x];
             
-            if (max < newMax) { max = newMax; }
+            if (newMax > max) { max = newMax; }
         }
     }
 
     return max;
 }
 
+
+
 float Kernel::getMaxMean(std::vector<std::vector<float>> input)
 {
     float max = 0.0f;
 
-    for (int y = 0; y < filter.rows; y++) {
-        for (int x = 0; x < filter.columns; x++) {
-            float maxMean = input[y][x] * filter.values[y][x] / 2;
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            float maxMean = input[y][x] + filter.weights[y][x] / 2;
             if (max < maxMean) { max = maxMean; }
         }
     }
@@ -81,26 +126,42 @@ float Kernel::getMaxMean(std::vector<std::vector<float>> input)
     return max;
 }
 
-float Kernel::getMeanSum(std::vector<std::vector<float>> input)
+
+
+float Kernel::getSum(std::vector<std::vector<float>> input)
 {
     float sum = 0.0f;
 
-    for (int y = 0; y < filter.rows; y++) {
-        for (int x = 0; x < filter.columns; x++) {
-            sum += (input[y][x] + filter.values[y][x]) / 2;
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            sum += input[y][x] + filter.weights[y][x];
         }
     }
 
     return sum;
 }
 
-float Kernel::getSum(std::vector<std::vector<float>> input)
+float Kernel::getSumMean(std::vector<std::vector<float>> input)
+{
+    float sum = 0.0f;
+    int total = filter.rows + filter.columns;
+
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            sum += input[y][x] + filter.weights[y][x];
+        }
+    }
+
+    return sum / total;
+}
+
+float Kernel::getMeanSum(std::vector<std::vector<float>> input)
 {
     float sum = 0.0f;
 
-    for (int y = 0; y < filter.rows; y++) {
-        for (int x = 0; x < filter.columns; x++) {
-            sum += input[y][x] + filter.values[y][x];
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            sum += (input[y][x] + filter.weights[y][x]) / 2;
         }
     }
 
@@ -112,9 +173,9 @@ float Kernel::getMean(std::vector<std::vector<float>> input)
     float sum = 0.0f;
     int total = filter.rows + filter.columns;
 
-    for (int y = 0; y < filter.rows; y++) {
-        for (int x = 0; x < filter.columns; x++) {
-            sum += input[y][x] + filter.values[y][x];
+    for (int y = 0; y < filter.rows; y += 1 + stride) {
+        for (int x = 0; x < filter.columns; x += 1 + stride) {
+            sum += (input[y][x] + filter.weights[y][x]) / 2;
         }
     }
 
@@ -122,46 +183,52 @@ float Kernel::getMean(std::vector<std::vector<float>> input)
 }
 
 
-float Kernel::getSumMean(std::vector<std::vector<float>> input)
-{
-    float sum = 0.0f;
-    int total = filter.rows + filter.columns;
 
-    for (int y = 0; y < filter.rows; y++) {
-        for (int x = 0; x < filter.columns; x++) {
-            sum += input[y][x] + filter.values[y][x] / 2;
-        }
-    }
-
-    return sum / total;
+void Kernel::populateFilter(FilterStyle style) {
+    lookupFilterStyle[style](&filter);
+    return;
 }
 
 void Kernel::adjustDimensions(FilterDimensions f)
 {
-    filter.values.clear();
+    filter.weights.clear();
     dims = f;
     lookupFilter[f](&filter.rows, &filter.columns);
-    filter.values = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    return;
 }
 
 void Kernel::adjustDimensions(FilterDimensions f, int n)
 {
-    filter.values.clear();
+    filter.weights.clear();
     dims = f;
     lookupNFilter[f](&filter.rows, &filter.columns, n);
-    filter.values = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    return;
+}
+
+void Kernel::setFilterType(FilterStyle s) {
+    style = s;
+    populateFilter(style);
+    return;
+}
+
+void Kernel::setStride(int s) {
+    stride = s;
+    return;
 }
 
 void Kernel::print()
 {
-    printf("%s Kernel has %d k->rows and %d k->cols\n", filterString[dims].c_str(), filter.rows, filter.columns);
+    printf("%s %s Kernel has %d k->rows and %d k->cols\n", filterString[dims].c_str(), filterStyleString[style].c_str(), filter.rows, filter.columns);
     for (int y = 0; y < filter.rows; y++) {
         printf("\t\t");
         for (int x = 0; x < filter.columns; x++) {
-            printf("[%.2f] ", filter.values[y][x]);
+            printf("[%.2f] ", filter.weights[y][x]);
         }
         printf("\n");
     }
     printf("\n");
+    return;
 }
 

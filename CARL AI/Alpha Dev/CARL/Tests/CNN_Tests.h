@@ -3,6 +3,7 @@
 
 // Convolution Tests
 void testConvolutionInit();
+void testConvolutionOffsets();
 void testConvolution();
 
 

@@ -1,8 +1,8 @@
 #include "Activation.h"
-#include <Math.h>
+#include <math.h>
 #include <stdio.h>
 
-constexpr auto M_PI = 3.14159265358979323846;
+static const float pi = 3.1415926;
 
 // SIGMOIDS //
 static inline float sigmoid(float x) {
@@ -17,7 +17,7 @@ static inline float sigmoid_derivative(float x) {
 
 // TANH //
 
-static inline float tanh(float x) {
+static inline float tanh_activation(float x) {
     return (expf(x) - expf(-x)) / (expf(x) + expf(-x));
 }
 
@@ -81,11 +81,11 @@ static inline float gaussian(float x) {
     float mean = 0.0f;
     float standard_deviation = 1.0f;
 
-    return (1.0f / (standard_deviation * sqrtf(2.0f * (float)M_PI))) * expf(-0.5f * powf((x - mean) / standard_deviation, 2.0f));
+    return (1.0f / (standard_deviation * sqrtf(2.0f * (float)pi))) * expf(-0.5f * powf((x - mean) / standard_deviation, 2.0f));
 }
 
 static inline float gaussian_derivative(float x) {
-    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * (float)M_PI);
+    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * (float)pi);
 }
 
 // ACTIVATION FUNCTIONS //
