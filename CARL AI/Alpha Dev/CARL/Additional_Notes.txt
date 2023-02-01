@@ -32,9 +32,7 @@
                     (image feature maps or object classifications about the state of the environment.)
      - RNN -> RL: to make informed decisions and take actions based on the history of events in the environment. 
                     (sequence representations or hidden states about the state of a sequential environment.)
-     RNN/CNN -> RL: The outputs of the RNN or CNN (such as predictions or classifications) could be used as inputs to the RL system. The RL system can use these outputs to learn how to improve the performance of the RNN/CNN by adjusting its weights.
-
-    SNN -> RL: The outputs of the SNN (such as spiking activations) could be used as inputs to the RL system. The RL system can use these outputs to learn how to control the SNN and improve its performance.
+     - SNN -> RL: to learn how to control the SNN and improve its performance.
 
 
 The RL aspect of CARL would make a decision on whether to optimize and recalculate the weights for the GAN or the CNN/RNN branching based on a set of predefined criteria and rewards. 
@@ -71,3 +69,9 @@ processing.
 For example, the SNN can provide the RL with information about the input, such as the state of the environment, and the RL can use this information to determine the best action to 
 take. On the other hand, the RL can provide the SNN with feedback about its outputs, and the SNN can use this information to adjust its internal connections and weights. In this way, 
 the SNN and the RL can work together to achieve a common goal.
+
+
+for commit in `git rev-list --all`; do
+    git log -n 1 --pretty=%ad $commit
+    git archive $commit | tar -x -O | wc -w
+done
