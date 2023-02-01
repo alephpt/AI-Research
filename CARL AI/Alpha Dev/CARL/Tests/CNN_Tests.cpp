@@ -23,7 +23,7 @@ void testConvolutionInit() {
 void testConvolutionOffsets() {
     int width = 5;
     int height = 7;
-    FilterDimensions filter = FIVExFIVE;
+    FilterDimensions filter = ELEVENxELEVEN;
 
     std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
     Convolution c = Convolution(RELU, height, width, filter);
