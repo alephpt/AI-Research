@@ -20,7 +20,7 @@ void testConvolutionInit() {
     
 }
 
-void testConvolutionOffsets() {
+void testConvolutionFilters() {
     int width = 5;
     int height = 7;
     FilterDimensions filter = ELEVENxELEVEN;
@@ -28,26 +28,25 @@ void testConvolutionOffsets() {
     std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
     Convolution c = Convolution(RELU, height, width, filter);
 
-//    c.k->print();
-
-    c.k->setFilterType(OFFSET_FILTER);
     c.k->print();
 
-//    c.k->setFilterType(ASCENDING_OFFSET_FILTER);
-//    c.k->print();
-
-    c.k->setFilterType(INVERSE_OFFSET_FILTER);
+    c.k->setFilterType(NEGATIVE_ASCENDING_FILTER);
     c.k->print();
 
-    c.k->setFilterType(VERTICAL_OFFSET_FILTER);
+    c.k->setFilterType(GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(VERTICAL_INVERSE_OFFSET_FILTER);
+    c.k->setFilterType(INVERSE_GRADIENT_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(VERTICAL_GRADIENT_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(VERTICAL_INVERSE_GRADIENT_FILTER);
     c.k->print();
 
     c.k->setFilterType(TOP_LEFT_GRADIENT_FILTER);
     c.k->print();
-
 
     c.k->setFilterType(BOTTOM_LEFT_GRADIENT_FILTER);
     c.k->print();
@@ -64,30 +63,47 @@ void testConvolutionOffsets() {
     return;
 }
 
-void testConvolution() {
+void convolve(Convolution* c, FilterStyle filter_type, std::vector<std::vector<float>> input_data, int height, int width) {
     int output_h = 0;
     int output_w = 0;
-    int width = 10;
-    int height = 17;
+    
+    printf("\n");
+    c->k->setFilterType(filter_type);
+    c->k->print();
+
+    std::vector<std::vector<float>> output_data = c->convolute(input_data, height, width, &output_h, &output_w);
+
+    printf("\noutput vector - %d x %d\n", output_w, output_h);
+    print2DVector(output_data, output_h, output_w);
+}
+
+void testConvolutions() {
+    int width = 16;
+    int height = 20;
     FilterDimensions filter = FIVExFIVE;
+    Activation activation_type = TANH;
+    FilterStyle filter_type = BOTTOM_LEFT_GRADIENT_FILTER;
+
+
+    Convolution c = Convolution(activation_type, height, width, filter);
+    c.k->setFilterType(filter_type);
 
     std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
-    Convolution c = Convolution(RELU, height, width, filter);
-    c.k->setFilterType(OFFSET_FILTER);
-
+    
     printf("test Convolution(%d, %d, %s)\n", height, width, filterString[filter].c_str());
     printf("c.stride: %d\n", c.stride);
     printf("c.input_h: %d\n", c.input_h);
     printf("c.input_w: %d\n", c.input_w);
-    c.k->print();
+    printf("c.k.filter: %s\n", filterStyleString[c.k->getFilterType()].c_str());
+    printf("c.k.activation: %s\n", activationString[c.k->getActivationType()].c_str());
+
 
     printf("\ninput vector - %d x %d\n", width, height);
     print2DVector(input_data, height, width);
 
-    std::vector<std::vector<float>> output_data = c.dilationConvolute(input_data, height, width, &output_h, &output_w);
-
-    printf("\noutput vector - %d x %d\n", output_w, output_h);
-    print2DVector(output_data, output_h, output_w);
+    convolve(&c, BOTTOM_LEFT_GRADIENT_FILTER, input_data, height, width);
+    convolve(&c, BALANCED_GAUSSIAN_FILTER, input_data, height, width);
+    convolve(&c, CONICAL_FILTER, input_data, height, width);
 
     return;
 }

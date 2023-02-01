@@ -15,14 +15,15 @@ static void (*lookupNFilter[])(int* r, int* c, int n) = {
 
 static void (*lookupFilterStyle[])(Filter* filter) = {
     populateAscendingFilter,
-    populateOffsetFilter, 
-    populateAscendingOffsetFilter,
-    populateVerticalOffsetFilter,
-    populateInverseOffsetFilter,
-    populateInverseVerticalOffsetFilter,
+    populateNegativeAscendingFilter,
+    populateGradientFilter,
+    populateVerticalGradientFilter,
+    populateInverseGradientFilter,
+    populateInverseVerticalGradientFilter,
     populateTLBRGradientFilter,
     populateBLTRGradientFilter,
     populateGaussianFilter,
+    populateBalancedGaussianFilter,
     populateNegativeGaussianFilter,
     populateConicalFilter
 };
@@ -85,13 +86,14 @@ Kernel::~Kernel() { filter.weights.clear(); }
 int Kernel::getRows() { return filter.rows; }
 int Kernel::getColumns() { return filter.columns; }
 Activation Kernel::getActivationType() { return activation_type; }
+FilterStyle Kernel::getFilterType() { return style; }
 
 float Kernel::getProductSum(std::vector<std::vector<float>> input) {
     float sum = 0.0f;
 
     for (int y = 0; y < filter.rows; y += 1 + stride) {
         for (int x = 0; x < filter.columns; x += 1 + stride) {
-            sum += input[y][x] + filter.weights[y][x];
+            sum += input[y][x] * filter.weights[y][x];
         }
     }
 
@@ -222,46 +224,9 @@ void Kernel::setStride(int s) {
     return;
 }
 
-void printColor(float in) {
-    if (in < -0.985f) {
-        // magenta
-        printf("\033[0;35m[%.2lf] \033[0m", in);
-    } else
-    if (in < -0.7f) {
-        // red
-        printf("\033[0;31m[%.2lf] \033[0m", in);
-    } else
-    if (in < -0.35f) {
-        // bright red
-        printf("\033[0;91m[%.2lf] \033[0m", in);
-    } else 
-    if (in < -0.11f) {
-        // dark yellow
-        printf("\033[0;33m[%.2lf] \033[0m", in);
-    } else
-    if (in < 0.19) {
-        // dark green
-        printf("\033[0;32m[%.2f] \033[0m", in);
-    } else
-    if (in < 0.35f) {
-        // dark blue
-        printf("\033[0;34m[%.2f] \033[0m", in);
-    } else
-    if (in < 0.7f) {
-        // bright blue
-        printf("\033[0;94m[%.2f] \033[0m", in);
-    } else
-    if (in < 0.9f) {
-        // bright cyan
-        printf("\033[0;96m[%.2f] \033[0m", in);
-    } else {
-        printf("[%.2f] ", in);
-    }
-}
-
 void Kernel::print()
 {
-    printf("%s %s Kernel has %d k->rows and %d k->cols\n", filterString[dims].c_str(), filterStyleString[style].c_str(), filter.rows, filter.columns);
+    printf("%s %s Kernel\n", filterString[dims].c_str(), filterStyleString[style].c_str());
     for (int y = 0; y < filter.rows; y++) {
         printf("\t\t");
         for (int x = 0; x < filter.columns; x++) {

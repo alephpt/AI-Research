@@ -2,6 +2,24 @@
 #include <map>
 #include <string>
 
+const std::string activationString[] = { 
+    "RELU", 
+    "LEAKY RELU", 
+    "SIGMOID", 
+    "TANH", 
+    "SOFTPLUS", 
+    "SOFTMAX", 
+    "GAUSSIAN", 
+    "RELU_DERIVATIVE",
+    "LEAKY RELU_DERIVATIVE", 
+    "SIGMOID_DERIVATIVE", 
+    "TANH_DERIVATIVE", 
+    "SOFTPLUS_DERIVATIVE", 
+    "SOFTMAX_DERIVATIVE", 
+    "GAUSSIAN_DERIVATIVE"
+
+};
+
 typedef enum Activation {
     RELU,
     LEAKY_RELU,
@@ -9,19 +27,16 @@ typedef enum Activation {
     TANH,
     SOFTPLUS,
     SOFTMAX,
-    GAUSSIAN
+    GAUSSIAN,
+    RELU_DERIVATIVE,
+    LEAKY_RELU_DERIVATIVE,
+    SIGMOID_DERIVATIVE,
+    TANH_DERIVATIVE,
+    SOFTPLUS_DERIVATIVE,
+    SOFTMAX_DERIVATIVE,
+    GAUSSIAN_DERIVATIVE
 } Activation;
 
 
-const std::map<const Activation, const std::string> getActivationString = {
-     {RELU, "RELU"}, 
-     {LEAKY_RELU, "LEAKY RELU"}, 
-     {SIGMOID, "SIGMOID"}, 
-     {TANH, "TANH"}, 
-     {SOFTPLUS, "SOFTPLUS"},
-     {SOFTMAX, "SOFTMAX"},
-     {GAUSSIAN, "GAUSSIAN"}
-};
 
-float activationDerivative(Activation activation_type, float output);
 float activation(Activation activation_type, float output);

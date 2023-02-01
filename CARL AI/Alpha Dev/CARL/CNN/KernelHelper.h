@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Kernel.h"
+#include "../Types/General.h"
 #include <math.h>
 
 static const float pi = 3.1415926f;
@@ -27,7 +28,7 @@ inline void invalidNFilter(int* r, int* c, int n) {
 
 
     // FILTER PATTERNS
-inline void populateOffsetFilter(Filter* filter) {
+inline void populateGradientFilter(Filter* filter) {
     int rows = filter->rows;
     int cols = filter->columns;
 
@@ -38,7 +39,7 @@ inline void populateOffsetFilter(Filter* filter) {
     }
 }
 
-inline void populateInverseOffsetFilter(Filter* filter) {
+inline void populateInverseGradientFilter(Filter* filter) {
     int rows = filter->rows;
     int cols = filter->columns;
 
@@ -49,7 +50,7 @@ inline void populateInverseOffsetFilter(Filter* filter) {
     }
 }
 
-inline void populateVerticalOffsetFilter(Filter* filter) {
+inline void populateVerticalGradientFilter(Filter* filter) {
     int rows = filter->rows;
     int cols = filter->columns;
 
@@ -60,7 +61,7 @@ inline void populateVerticalOffsetFilter(Filter* filter) {
     }
 }
 
-inline void populateInverseVerticalOffsetFilter(Filter* filter) {
+inline void populateInverseVerticalGradientFilter(Filter* filter) {
     int rows = filter->rows;
     int cols = filter->columns;
 
@@ -83,7 +84,7 @@ inline void populateAscendingFilter(Filter* filter) {
     }
 }
 
-inline void populateAscendingOffsetFilter(Filter* filter) {
+inline void populateNegativeAscendingFilter(Filter* filter) {
     int cols = filter->columns;
     int rows = filter->rows;
     int units = rows * cols;
@@ -138,6 +139,26 @@ inline void populateGaussianFilter(Filter* filter) {
     return;
 }
 
+inline void populateBalancedGaussianFilter(Filter* filter) {
+    int rows = filter->rows;
+    int cols = filter->columns;
+    float y_mean = (float)rows / 2.0f;
+    float x_mean = (float)cols / 2.0f;
+    float y_sigma = (float)rows / 6.0f;
+    float x_sigma = (float)cols / 6.0f;
+
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
+            float dx = (float)x + 0.5f - x_mean;
+            float dy = (float)y + 0.5f - y_mean;
+            float radial = sqrtf(dx * dx + dy * dy);
+            filter->weights[y][x] = (float)expf(-radial * radial / (2 * x_sigma * y_sigma)) - 0.166f;
+        }
+    }
+
+    return;
+}
+
 inline void populateNegativeGaussianFilter(Filter* filter) {
     int rows = filter->rows;
     int cols = filter->columns;
@@ -169,7 +190,7 @@ inline void populateConicalFilter(Filter* filter) {
             float dx = (float)(x);
             float dy = (float)(y) - y_mean;
             float theta = atan2f(dy, dx);
-            filter->weights[y][x] = ((theta + pi) / pi - 1.0f) * 2.0f ;
+            filter->weights[y][x] = ((theta + pi) / pi - 1.0f) * 2.0f  + 0.166f;
         }
     }
 

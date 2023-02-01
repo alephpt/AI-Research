@@ -3,8 +3,8 @@
 
 // Convolution Tests
 void testConvolutionInit();
-void testConvolutionOffsets();
-void testConvolution();
+void testConvolutionFilters();
+void testConvolutions();
 
 
 // Kernel Tests

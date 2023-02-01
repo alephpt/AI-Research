@@ -90,35 +90,28 @@ static inline float gaussian_derivative(float x) {
 
 // ACTIVATION FUNCTIONS //
 
-float activationDerivative(Activation activation_type, float output) {
-    if (activation_type == SIGMOID) {
+float activation(Activation activation_type, float output) {
+    if (activation_type == SIGMOID_DERIVATIVE) {
         return sigmoid_derivative(output);
     }
-    else if (activation_type == TANH) {
+    else if (activation_type == TANH_DERIVATIVE) {
         return tanh_derivative(output);;
     }
-    else if (activation_type == RELU) {
+    else if (activation_type == RELU_DERIVATIVE) {
         return relu_derivative(output);
     }
-    else if (activation_type == LEAKY_RELU) {
+    else if (activation_type == LEAKY_RELU_DERIVATIVE) {
         return leaky_relu_derivative(output, 0.01f);
     }
-    else if (activation_type == SOFTPLUS) {
+    else if (activation_type == SOFTPLUS_DERIVATIVE) {
         return softplus_derivative(output);
     }
-    else if (activation_type == SOFTMAX) {
+    else if (activation_type == SOFTMAX_DERIVATIVE) {
         return softmax_derivative(output);
     }
-    else if (activation_type == GAUSSIAN) {
+    else if (activation_type == GAUSSIAN_DERIVATIVE) {
         return gaussian_derivative(output);
-    }
-    else {
-        printf("ACTIVATION DERIVATIVE ERROR: Invalid activation type\n");
-        return 0;
-    }
-}
-
-float activation(Activation activation_type, float output) {
+    } else
     if (activation_type == SIGMOID) {
         return sigmoid(output);
     }

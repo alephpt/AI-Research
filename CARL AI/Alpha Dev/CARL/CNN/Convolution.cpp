@@ -44,8 +44,8 @@ std::vector<std::vector<float>> Convolution::convolute(std::vector<std::vector<f
 			}
 
 //			convolved[i][j] = activation(k->getActivationType(), k->getMax(cached));
-			//convolved[i][j] = activationDerivative(k->getActivationType(), k->getMean(cached));
-			convolved[i][j] = k->getProductSum(cached);
+			//convolved[i][j] = activation(k->getActivationType(), k->getMean(cached));
+			convolved[i][j] = activation(k->getActivationType(), k->getProductSum(cached));
 		}
 	}
 
@@ -55,6 +55,8 @@ std::vector<std::vector<float>> Convolution::convolute(std::vector<std::vector<f
 std::vector<std::vector<float>> Convolution::paddedConvolute(std::vector<std::vector<float>> input, int height, int width, int* output_h, int* output_w) {
 	std::vector<std::vector<float>> convolved = std::vector<std::vector<float>>(height, std::vector<float>(width, 0.0f));
 	
+	*output_h = height;
+	*output_w = width;
 	const int padding_y = k->getRows() / 2;
 	const int padding_x = width - k->getColumns() / 2;
 
@@ -73,14 +75,10 @@ std::vector<std::vector<float>> Convolution::paddedConvolute(std::vector<std::ve
 			}
 
 //			convolved[i][j] = activation(k->getActivationType(), k->getMax(cached));
-			convolved[i][j] = activationDerivative(k->getActivationType(), k->getMean(cached));
-			*output_h++;
-			*output_w++;
+			convolved[i][j] = activation(k->getActivationType(), k->getMean(cached));
 			//convolved[i][j] = k->getProductSum(cached);
 		}
 	}
-
-
 
 	return convolved;
 }
@@ -101,7 +99,7 @@ std::vector<std::vector<float>> Convolution::dilationConvolute(std::vector<std::
 			}
 
 //			convolved[i][j] = activation(k->getActivationType(), k->getMax(cached));
-			//convolved[i][j] = activationDerivative(k->getActivationType(), k->getMean(cached));
+			//convolved[i][j] = activation(k->getActivationType(), k->getMean(cached));
 			convolved[i][j] = k->getProductSum(cached);
 		}
 	}

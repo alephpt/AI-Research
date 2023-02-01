@@ -36,7 +36,7 @@ SNNNeuron* initNeuron(Activation activation_type, SNNNeuron* n, Membrane* m, Spi
 
 void printNeuron(SNNNeuron* n, int n_i) {
     printf("\n\t\t\t-- Neuron %d --\n", n_i);
-    printf("activation_type:\t\t%s\n", getActivationString.at(n->activation_type).c_str());
+    printf("activation_type:\t\t%s\n", activationString[n->activation_type].c_str());
     printf("index: \t\t\t\t%d\n", n->index);
     printf("inputs: \t\t\t%d\n\t\t\t\t[ ", n->n_inputs);
     for (int i = 0; i < n->n_inputs; i++) {

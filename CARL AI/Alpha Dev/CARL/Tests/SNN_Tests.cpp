@@ -17,7 +17,7 @@ void testinitSNN() {
 
 	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 	printf("hit initSNN(snn, %d, %d, %d, %d, %s, %lf)\n\n",
-		n_inputs, n_neurons, n_synapses, n_spikes, getActivationString.at(activation_type).c_str(), 0.0f);
+		n_inputs, n_neurons, n_synapses, n_spikes, activationString[activation_type].c_str(), 0.0f);
 
 	printSNN(snn);
 	return;
@@ -32,7 +32,7 @@ void testConnectivityMatrix() {
 	Activation activation_type = LEAKY_RELU;
 	
 	printf("hit initSNN(snn, %d, %d, %d, %d, %s, %lf)\n\n", 
-			n_inputs, n_neurons, n_synapses, n_spikes, getActivationString.at(activation_type).c_str(), 0.0f);
+			n_inputs, n_neurons, n_synapses, n_spikes, activationString[activation_type].c_str(), 0.0f);
 	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 
 
