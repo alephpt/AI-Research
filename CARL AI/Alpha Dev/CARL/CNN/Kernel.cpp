@@ -223,7 +223,7 @@ void Kernel::setStride(int s) {
 }
 
 void printColor(float in) {
-    if (in < -0.97f) {
+    if (in < -0.985f) {
         // magenta
         printf("\033[0;35m[%.2lf] \033[0m", in);
     } else
@@ -231,27 +231,27 @@ void printColor(float in) {
         // red
         printf("\033[0;31m[%.2lf] \033[0m", in);
     } else
-    if (in < -0.45f) {
+    if (in < -0.35f) {
         // bright red
         printf("\033[0;91m[%.2lf] \033[0m", in);
     } else 
-    if (in < -0.15f) {
+    if (in < -0.11f) {
         // dark yellow
         printf("\033[0;33m[%.2lf] \033[0m", in);
     } else
-    if (in < 0.1f) {
+    if (in < 0.19) {
         // dark green
         printf("\033[0;32m[%.2f] \033[0m", in);
     } else
-    if (in < 0.05f) {
+    if (in < 0.35f) {
         // dark blue
         printf("\033[0;34m[%.2f] \033[0m", in);
     } else
-    if (in < 0.4f) {
+    if (in < 0.7f) {
         // bright blue
         printf("\033[0;94m[%.2f] \033[0m", in);
     } else
-    if (in < 0.85f) {
+    if (in < 0.9f) {
         // bright cyan
         printf("\033[0;96m[%.2f] \033[0m", in);
     } else {
