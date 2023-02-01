@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 
-static const float pi = 3.1415926;
+static const float pi = 3.1415926f;
 
 // SIGMOIDS //
 static inline float sigmoid(float x) {
@@ -22,7 +22,7 @@ static inline float tanh_activation(float x) {
 }
 
 static inline float tanh_derivative(float x) {
-    return 1.0f - powf(tanh(x), 2.0f);
+    return 1.0f - powf(tanh_activation(x), 2.0f);
 }
 
 
@@ -81,11 +81,11 @@ static inline float gaussian(float x) {
     float mean = 0.0f;
     float standard_deviation = 1.0f;
 
-    return (1.0f / (standard_deviation * sqrtf(2.0f * (float)pi))) * expf(-0.5f * powf((x - mean) / standard_deviation, 2.0f));
+    return (1.0f / (standard_deviation * sqrtf(2.0f * pi))) * expf(-0.5f * powf((x - mean) / standard_deviation, 2.0f));
 }
 
 static inline float gaussian_derivative(float x) {
-    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * (float)pi);
+    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * pi);
 }
 
 // ACTIVATION FUNCTIONS //
@@ -101,7 +101,7 @@ float activationDerivative(Activation activation_type, float output) {
         return relu_derivative(output);
     }
     else if (activation_type == LEAKY_RELU) {
-        return leaky_relu_derivative(output, (float)0.01);
+        return leaky_relu_derivative(output, 0.01f);
     }
     else if (activation_type == SOFTPLUS) {
         return softplus_derivative(output);
@@ -123,13 +123,13 @@ float activation(Activation activation_type, float output) {
         return sigmoid(output);
     }
     else if (activation_type == TANH) {
-        return tanh(output);;
+        return tanh_activation(output);;
     }
     else if (activation_type == RELU) {
         return relu(output);
     }
     else if (activation_type == LEAKY_RELU) {
-        return leaky_relu(output, (float)0.01);
+        return leaky_relu(output, 0.01f);
     }
     else if (activation_type == SOFTPLUS) {
         return softplus(output);

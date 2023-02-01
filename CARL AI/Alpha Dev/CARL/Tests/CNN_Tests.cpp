@@ -28,13 +28,13 @@ void testConvolutionOffsets() {
     std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
     Convolution c = Convolution(RELU, height, width, filter);
 
-    c.k->print();
+//    c.k->print();
 
     c.k->setFilterType(OFFSET_FILTER);
     c.k->print();
 
-    c.k->setFilterType(ASCENDING_OFFSET_FILTER);
-    c.k->print();
+//    c.k->setFilterType(ASCENDING_OFFSET_FILTER);
+//    c.k->print();
 
     c.k->setFilterType(INVERSE_OFFSET_FILTER);
     c.k->print();
@@ -45,10 +45,20 @@ void testConvolutionOffsets() {
     c.k->setFilterType(VERTICAL_INVERSE_OFFSET_FILTER);
     c.k->print();
 
-    c.k->setFilterType(GRADIENT_FILTER);
+    c.k->setFilterType(TOP_LEFT_GRADIENT_FILTER);
+    c.k->print();
+
+
+    c.k->setFilterType(BOTTOM_LEFT_GRADIENT_FILTER);
     c.k->print();
 
     c.k->setFilterType(GAUSSIAN_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(NEGATIVE_GAUSSIAN_FILTER);
+    c.k->print();
+
+    c.k->setFilterType(CONICAL_FILTER);
     c.k->print();
 
     return;

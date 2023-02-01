@@ -7,7 +7,7 @@
     return m.V_rest + (m.V_threshold - m.V_rest) * (1.0f - expf((float)(- m.t) / (m.resistance * m.capacitance)));
 }
 
-SNNNeuron* initNeuron(Activation activation, SNNNeuron* n, Membrane* m, Spike* sp, int n_sp, 
+SNNNeuron* initNeuron(Activation activation_type, SNNNeuron* n, Membrane* m, Spike* sp, int n_sp, 
                     float* w, float b, int n_in, float* in, int n_out, float* out, float d, float mem_p) {
     n->weights = w;
     n->bias = b;
@@ -19,7 +19,7 @@ SNNNeuron* initNeuron(Activation activation, SNNNeuron* n, Membrane* m, Spike* s
     n->membrane_potential = mem_p;
     n->n_spikes = n_sp;
     n->spikes = sp;
-    n->activation_type = activation;
+    n->activation_type = activation_type;
     n->membrane = *createNewMembrane(m, 0.0f, 0.0f, 0.0f, 1.0f);
 
     for (int i = 0; i < n_in; i++) { n->inputs[i] = 0.0f; n->weights[i] = 0.0f; }

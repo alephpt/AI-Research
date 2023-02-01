@@ -29,7 +29,7 @@ float** createConnectivityMatrix(SNN* snn) {
 }
 
 int synapseLimit(int n_neurons, float density) {
-    return (int)((float)(n_neurons * (n_neurons - 1) / 2) * density);
+    return (n_neurons * (n_neurons - 1) / 2) * (int)density;
 }
 
 void initSNN(SNN* snn, int n_in, int nn, int n_syn, int n_sp, Activation activation_type) {

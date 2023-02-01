@@ -4,29 +4,32 @@
 #include <string>
 
 const std::string filterString[] = { "ONExONE", "ONExTHREE", "ONExN", "THREExONE", "NxONE", "THREExTHREE", "FIVExFIVE", "SEVENxSEVEN", "ELEVENxELEVEN" };
-const std::string filterStyleString[] = { "Ascending", "Offset", "Ascending Offset", "Vertical Offset", "Inverse Offset", "Vertical Inverse Offset", "Gradient", "Guassian" };
+const std::string filterStyleString[] = { "Ascending", "Offset", "Ascending Offset", "Vertical Offset", "Inverse Offset", "Vertical Inverse Offset", "Top Left Gradient", "Bottom_Left_Gradiant", "Guassian", "Negative Guassian", "Conical"};
 
 typedef enum FilterDimensions {
-    ONExONE,
-    ONExTHREE,
-    ONExN,
-    THREExONE,
-    NxONE,
-    THREExTHREE,
-    FIVExFIVE,
-    SEVENxSEVEN,
-    ELEVENxELEVEN
+        ONExONE,
+        ONExTHREE,
+        ONExN,
+        THREExONE,
+        NxONE,
+        THREExTHREE,
+        FIVExFIVE,
+        SEVENxSEVEN,
+        ELEVENxELEVEN
 } FilterDimensions;
 
 typedef enum FilterStyle {
-    ASCENDING_FILTER,
-    OFFSET_FILTER,
-    ASCENDING_OFFSET_FILTER,
-    VERTICAL_OFFSET_FILTER,
-    INVERSE_OFFSET_FILTER,
-    VERTICAL_INVERSE_OFFSET_FILTER,
-    GRADIENT_FILTER,
-    GAUSSIAN_FILTER
+        ASCENDING_FILTER,
+        OFFSET_FILTER,
+        ASCENDING_OFFSET_FILTER,
+        VERTICAL_OFFSET_FILTER,
+        INVERSE_OFFSET_FILTER,
+        VERTICAL_INVERSE_OFFSET_FILTER,
+        TOP_LEFT_GRADIENT_FILTER,
+        BOTTOM_LEFT_GRADIENT_FILTER,
+        GAUSSIAN_FILTER,
+        NEGATIVE_GAUSSIAN_FILTER,
+        CONICAL_FILTER
 } FilterStyle;
 
 typedef struct Filter {

@@ -20,8 +20,11 @@ static void (*lookupFilterStyle[])(Filter* filter) = {
     populateVerticalOffsetFilter,
     populateInverseOffsetFilter,
     populateInverseVerticalOffsetFilter,
-    populateGradientFilter,
-    populateGaussianFilter
+    populateTLBRGradientFilter,
+    populateBLTRGradientFilter,
+    populateGaussianFilter,
+    populateNegativeGaussianFilter,
+    populateConicalFilter
 };
 
 
@@ -184,7 +187,8 @@ float Kernel::getMean(std::vector<std::vector<float>> input)
 
 
 
-void Kernel::populateFilter(FilterStyle style) {
+void Kernel::populateFilter(FilterStyle s) {
+    style = s;
     lookupFilterStyle[style](&filter);
     return;
 }
@@ -218,13 +222,50 @@ void Kernel::setStride(int s) {
     return;
 }
 
+void printColor(float in) {
+    if (in < -0.97f) {
+        // magenta
+        printf("\033[0;35m[%.2lf] \033[0m", in);
+    } else
+    if (in < -0.7f) {
+        // red
+        printf("\033[0;31m[%.2lf] \033[0m", in);
+    } else
+    if (in < -0.45f) {
+        // bright red
+        printf("\033[0;91m[%.2lf] \033[0m", in);
+    } else 
+    if (in < -0.15f) {
+        // dark yellow
+        printf("\033[0;33m[%.2lf] \033[0m", in);
+    } else
+    if (in < 0.1f) {
+        // dark green
+        printf("\033[0;32m[%.2f] \033[0m", in);
+    } else
+    if (in < 0.05f) {
+        // dark blue
+        printf("\033[0;34m[%.2f] \033[0m", in);
+    } else
+    if (in < 0.4f) {
+        // bright blue
+        printf("\033[0;94m[%.2f] \033[0m", in);
+    } else
+    if (in < 0.85f) {
+        // bright cyan
+        printf("\033[0;96m[%.2f] \033[0m", in);
+    } else {
+        printf("[%.2f] ", in);
+    }
+}
+
 void Kernel::print()
 {
     printf("%s %s Kernel has %d k->rows and %d k->cols\n", filterString[dims].c_str(), filterStyleString[style].c_str(), filter.rows, filter.columns);
     for (int y = 0; y < filter.rows; y++) {
         printf("\t\t");
         for (int x = 0; x < filter.columns; x++) {
-            printf("[%.2f] ", filter.weights[y][x]);
+            printColor(filter.weights[y][x]);
         }
         printf("\n");
     }

@@ -8,20 +8,20 @@ typedef struct Synapse Synapse;
 typedef struct Spike Spike;
 
 struct SNNNeuron {
-	int index;																			// used for topology
-	int n_inputs;
-	float* inputs;																		// stores the input of the neuron before the function is applied
-	int n_outputs;
-	float* outputs;																		// stores the output of the neuron after the function is applied
-	float* weights;																		// stores connection weight between current neuron and other neurons in the network
-	float bias;																			// can be added to the input before passing it through the activation function
-	float delta;																		// used for backpropagation
-	float membrane_potential;															// potential of a neuron firing
+	int index = 0;																		// used for topology
+	int n_inputs = 0;
+	float* inputs = new float;															// stores the input of the neuron before the function is applied
+	int n_outputs = 0;
+	float* outputs = new float;															// stores the output of the neuron after the function is applied
+	float* weights = new float;															// stores connection weight between current neuron and other neurons in the network
+	float bias = 0.0f;																	// can be added to the input before passing it through the activation function
+	float delta = 0.0f;																	// used for backpropagation
+	float membrane_potential = 0.0f;													// potential of a neuron firing
 	Membrane membrane;																	// used to determine the membrane potential
-	int n_synapses = 0;																		// number of Synapses
-	Synapse** synapses;																	// connects Neurons to other Neurons to transmit spikes;
-	int n_spikes;																		// number of neural spikes
-	Spike* spikes;																		// used to track neural activity over time
+	int n_synapses = 0;																	// number of Synapses
+	Synapse** synapses = new Synapse*;													// connects Neurons to other Neurons to transmit spikes;
+	int n_spikes = 0;																	// number of neural spikes
+	Spike* spikes = new Spike;															// used to track neural activity over time
 	Activation activation_type;															// determins the activation type to calculate the weights and bias' of a Neuron
 };
 

@@ -1,11 +1,13 @@
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\vc143.pdb
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\vc143.idb
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\sample.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\discriminator.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\gan.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\optimizer.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\ganneuron.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\generator.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\ganfeature.obj
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\dataset.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\protocol_connectors.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\rkc_connectors.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\arl_connectors.obj
@@ -14,6 +16,7 @@ c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\pooling.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\cnnneuron.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\kernel.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\cnnfeature.obj
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\convolution.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\cnn.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\auxiliary.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.obj
@@ -39,10 +42,13 @@ c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\arl_protoco
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\vector.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\tensor.obj
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\matrix.obj
-c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\convolution.obj
-c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\sample.obj
-c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\dataset.obj
-c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\feature.obj
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\general.obj
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\x64\debug\alpha dev.exe
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.ilk
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\x64\debug\alpha dev.pdb
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.tlog\cl.command.1.tlog
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.tlog\cl.read.1.tlog
 c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.tlog\cl.write.1.tlog
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.tlog\link.command.1.tlog
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.tlog\link.read.1.tlog
+c:\users\aleph\desktop\ai_generated\carl ai\alpha dev\carl\x64\debug\alpha dev.tlog\link.write.1.tlog
