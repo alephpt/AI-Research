@@ -38,7 +38,7 @@ void initSNN(SNN* snn, int n_in, int nn, int n_syn, int n_sp, Activation activat
     snn->n_neurons = 0;
     snn->n_synapses = n_syn;
     snn->n_spikes = n_sp;
-    snn->neurons = new Neuron[nn];
+    snn->neurons = new SNNNeuron[nn];
     snn->t = getTime();
 
     printf(" - Initializing %d Neurons .. \n", nn);
@@ -54,8 +54,8 @@ void initSNN(SNN* snn, int n_in, int nn, int n_syn, int n_sp, Activation activat
     printf(" - Linking %d Neurons to %d Synapses .. \n", nn, (((nn - 1) * nn) / 2));
     for (int ni = 0; ni < nn - 1; ni++) {
         for (int nt = ni + 1; nt < nn; nt++) {
-            Neuron* i_neuron = &snn->neurons[ni];
-            Neuron* t_neuron = &snn->neurons[nt];
+            SNNNeuron* i_neuron = &snn->neurons[ni];
+            SNNNeuron* t_neuron = &snn->neurons[nt];
             i_neuron->synapses[i_neuron->n_synapses] = createNewSynapse(new Synapse, si, 0.0f, 0.0f, 1.0f, i_neuron, t_neuron);
             t_neuron->synapses[t_neuron->n_synapses++] = i_neuron->synapses[i_neuron->n_synapses++];
             si++;
@@ -63,7 +63,7 @@ void initSNN(SNN* snn, int n_in, int nn, int n_syn, int n_sp, Activation activat
     }
 }
 
-Neuron* getNeuron(SNN* snn, int idx) {
+SNNNeuron* getNeuron(SNN* snn, int idx) {
     return &snn->neurons[idx];
 }
 

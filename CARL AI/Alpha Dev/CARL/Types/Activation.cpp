@@ -85,7 +85,7 @@ static inline float gaussian(float x) {
 }
 
 static inline float gaussian_derivative(float x) {
-    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * M_PI);
+    return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * (float)M_PI);
 }
 
 // ACTIVATION FUNCTIONS //

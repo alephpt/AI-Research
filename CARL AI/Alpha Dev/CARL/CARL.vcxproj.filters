@@ -27,9 +27,6 @@
     <ClCompile Include="Types\Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Feature.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RL\RL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,9 +49,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CNN\CNN.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CNN\CNNLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GAN\Optimizer.cpp">
@@ -105,7 +99,7 @@
     <ClCompile Include="SNN\SNN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SNN\Neuron.cpp">
+    <ClCompile Include="SNN\SNNNeuron.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SNN\Spike.cpp">
@@ -123,6 +117,36 @@
     <ClCompile Include="Types\General.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CNN\Convolution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\Kernel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\CNNNeuron.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\Pooling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GAN\Dataset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GAN\GANFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GAN\Sample.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GAN\GANNeuron.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\CNNFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\Auxiliary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RL\RL.h">
@@ -132,9 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GAN\GAN.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CNN\CNNLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GAN\Generator.h">
@@ -165,9 +186,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Types\Tensor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Feature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tests\Tests.h">
@@ -206,22 +224,10 @@
     <ClInclude Include="Types\Activation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Types\Sample.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Sample.cpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Dataset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Dataset.cpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SNN\SNN.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SNN\Neuron.h">
+    <ClInclude Include="SNN\SNNNeuron.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SNN\Spike.h">
@@ -237,6 +243,36 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Types\General.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Convolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\CNNFeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Kernel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\CNNNeuron.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Pooling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GAN\Dataset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GAN\GANFeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GAN\Sample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GAN\GANNeuron.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Auxiliary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

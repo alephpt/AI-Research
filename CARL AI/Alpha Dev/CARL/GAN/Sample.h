@@ -1,11 +1,11 @@
 #pragma once
-#include "Feature.h"
+#include "GANFeature.h"
 #include <cstdio>
 
 typedef struct Sample {
     int n_features;
     char* family;
-    Feature* features;
+    GANFeature* features;
 } Sample;
 
 // Sample* initSample();

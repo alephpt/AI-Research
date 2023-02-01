@@ -2,19 +2,23 @@
 
 void runTests() {
         // Primitive Tests //
+    // testRandomNumbers();
     // testVector();
     // testMatrix();
     // test3DTensor();
     // test4DTensor();
-    //testActivationType();
+    // testActivationType();
 
         // CNN Tests //
-    testKernelInit();
+    // testKernelInit();
+    // testAdjustKernelDims();
+    // testConvolutionInit();
+    testConvolution();
 
         // SNN Tests //
-    //testinitSNN();
-    //testConnectivityMatrix();
-    //testGeneratorinit();
+    // testinitSNN();
+    // testConnectivityMatrix();
+    // testGeneratorinit();
 
     return;
 }

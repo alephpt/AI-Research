@@ -132,23 +132,32 @@
     <ClCompile Include="Alpha Dev.cpp">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
     </ClCompile>
-    <ClCompile Include="CNN\CNNLayer.cpp" />
+    <ClCompile Include="CNN\Auxiliary.cpp" />
     <ClCompile Include="CNN\CNN.cpp" />
+    <ClCompile Include="CNN\Convolution.cpp" />
+    <ClCompile Include="CNN\CNNFeature.cpp" />
+    <ClCompile Include="CNN\Kernel.cpp" />
+    <ClCompile Include="CNN\CNNNeuron.c" />
+    <ClCompile Include="CNN\Pooling.cpp" />
     <ClCompile Include="Connectors\CA_Connectors.cpp" />
     <ClCompile Include="Connectors\ARL_Connectors.cpp" />
     <ClCompile Include="Connectors\RKC_Connectors.cpp" />
     <ClCompile Include="Connectors\Protocol_Connectors.cpp" />
+    <ClCompile Include="GAN\Dataset.cpp" />
+    <ClCompile Include="GAN\GANFeature.cpp" />
     <ClCompile Include="GAN\Generator.cpp" />
+    <ClCompile Include="GAN\GANNeuron.c" />
     <ClCompile Include="GAN\Optimizer.cpp" />
     <ClCompile Include="GAN\GAN.cpp" />
     <ClCompile Include="GAN\Discriminator.cpp" />
+    <ClCompile Include="GAN\Sample.cpp" />
     <ClCompile Include="Protocols\ARL_Protocol.cpp" />
     <ClCompile Include="Protocols\CA_Protocol.cpp" />
     <ClCompile Include="Protocols\RKC_Protocol.cpp" />
     <ClCompile Include="Protocols\CARL_Protocol.cpp" />
     <ClCompile Include="RL\RL.cpp" />
     <ClCompile Include="SNN\Membrane.cpp" />
-    <ClCompile Include="SNN\Neuron.cpp" />
+    <ClCompile Include="SNN\SNNNeuron.cpp" />
     <ClCompile Include="SNN\Spike.cpp" />
     <ClCompile Include="SNN\SNN.cpp" />
     <ClCompile Include="SNN\Synapse.cpp" />
@@ -162,22 +171,30 @@
     <ClCompile Include="Tests\CNN_Tests.cpp" />
     <ClCompile Include="Tests\GAN_Tests.h" />
     <ClCompile Include="Types\Activation.cpp" />
-    <ClCompile Include="Types\Feature.cpp" />
     <ClCompile Include="Types\General.cpp" />
     <ClCompile Include="Types\Matrix.cpp" />
     <ClCompile Include="Types\Tensor.cpp" />
     <ClCompile Include="Types\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CNN\CNNLayer.h" />
+    <ClInclude Include="CNN\Auxiliary.h" />
+    <ClInclude Include="CNN\Convolution.h" />
+    <ClInclude Include="CNN\CNNFeature.h" />
+    <ClInclude Include="CNN\Kernel.h" />
+    <ClInclude Include="CNN\CNNNeuron.h" />
+    <ClInclude Include="CNN\Pooling.h" />
     <ClInclude Include="Connectors\CA_Connectors.h" />
     <ClInclude Include="Connectors\Protocol_Connectors.h" />
     <ClInclude Include="Connectors\ARL_Connectors.h" />
     <ClInclude Include="Connectors\RKC_Connectors.h" />
+    <ClInclude Include="GAN\Dataset.h" />
     <ClInclude Include="GAN\Discriminator.h" />
+    <ClInclude Include="GAN\GANFeature.h" />
     <ClInclude Include="GAN\GAN.h" />
     <ClInclude Include="GAN\Generator.h" />
+    <ClInclude Include="GAN\GANNeuron.h" />
     <ClInclude Include="GAN\Optimizer.h" />
+    <ClInclude Include="GAN\Sample.h" />
     <ClInclude Include="Protocols\ARL_Protocol.h" />
     <ClInclude Include="Protocols\CARL_Protocol.h" />
     <ClInclude Include="Protocols\CA_Protocol.h" />
@@ -185,7 +202,7 @@
     <ClInclude Include="RL\RL.h" />
     <ClInclude Include="CNN\CNN.h" />
     <ClInclude Include="SNN\Membrane.h" />
-    <ClInclude Include="SNN\Neuron.h" />
+    <ClInclude Include="SNN\SNNNeuron.h" />
     <ClInclude Include="SNN\Spike.h" />
     <ClInclude Include="SNN\SNN.h" />
     <ClInclude Include="SNN\Synapse.h" />
@@ -196,15 +213,10 @@
     <ClInclude Include="Tests\SNN_Tests.h" />
     <ClInclude Include="Tests\Type_Tests.h" />
     <ClInclude Include="Tests\Tests.h" />
-    <ClInclude Include="Types\Feature.h" />
     <ClInclude Include="Types\Activation.h" />
     <ClInclude Include="Types\General.h" />
     <ClInclude Include="Types\Matrix.h" />
     <ClInclude Include="Types\Tensor.h" />
-    <ClInclude Include="Types\Sample.h" />
-    <ClInclude Include="Types\Sample.cpp" />
-    <ClInclude Include="Types\Dataset.h" />
-    <ClInclude Include="Types\Dataset.cpp" />
     <ClInclude Include="Types\Types.h" />
     <ClInclude Include="Types\Vector.h" />
   </ItemGroup>

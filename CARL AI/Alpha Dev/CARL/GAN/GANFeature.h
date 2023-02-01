@@ -1,12 +1,12 @@
 #pragma once
 
-typedef struct Feature {
+typedef struct GANFeature {
 	float value;			// to track actual value						- actual value read, generated, or determined
 	float range;			// to determine limits							- used to narrow scope based on quality and deviation
 	float deviation;		// to determine offset of the value in a range	- used to adjust the range of target values
 	float quality;			// to determine the integrity					- target goal of 1
 	int index;
-} Feature;
+} GANFeature;
 
 // extract(data)
 // normalize()				// normalize the values so they are in the same range

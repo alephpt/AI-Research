@@ -7,7 +7,7 @@
 typedef struct Synapse Synapse;
 typedef struct Spike Spike;
 
-struct Neuron {
+struct SNNNeuron {
 	int index;																			// used for topology
 	int n_inputs;
 	float* inputs;																		// stores the input of the neuron before the function is applied
@@ -28,8 +28,8 @@ struct Neuron {
 
 // /// /// Neuron Functions /// /// //
 float membranePotential(Membrane m);
-void printNeuron(Neuron* n, int n_i);
-Neuron* initNeuron(Activation activation, Neuron* n, Membrane* m, Spike* sp, int n_sp, 
+void printNeuron(SNNNeuron* n, int n_i);
+SNNNeuron* initNeuron(Activation activation, SNNNeuron* n, Membrane* m, Spike* sp, int n_sp,
                     float* w, float b, int n_in, float* in, int n_out, float* out, float d, float mem_p);
 // addInputSynapse(Synapse* synapse);													// add input synapse to Neuron
 // addOutputSynapse(Synapse* synapse);													// add output synapse to Neuron

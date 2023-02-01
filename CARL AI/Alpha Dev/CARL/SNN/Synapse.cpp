@@ -2,7 +2,7 @@
 #include "../Types/General.h"
 #include "SNN.h"
 
-void initSynapse(Synapse* s, float weight, float delay, float decay, Neuron* pre_neuron, Neuron* post_neuron) {
+void initSynapse(Synapse* s, float weight, float delay, float decay, SNNNeuron* pre_neuron, SNNNeuron* post_neuron) {
     s->weight = weight;
     s->delay = delay;
     s->decay = decay;
@@ -13,7 +13,7 @@ void initSynapse(Synapse* s, float weight, float delay, float decay, Neuron* pre
     s->post_neuron = post_neuron;
 }
 
-Synapse* createNewSynapse(Synapse* s, int idx, float w, float del, float dec, Neuron* pre, Neuron* post) {
+Synapse* createNewSynapse(Synapse* s, int idx, float w, float del, float dec, SNNNeuron* pre, SNNNeuron* post) {
     initSynapse(s, w, del, dec, pre, post);
     s->index = idx;
     return s;
@@ -24,7 +24,7 @@ void connectNeurons(SNN* snn, Synapse* s, int neuron_a, int neuron_b) {
     s->post_neuron = &snn->neurons[neuron_b];
 }
 
-void printSynapses(Neuron* n) {
+void printSynapses(SNNNeuron* n) {
     Synapse** ss = n->synapses;
     int n_s = n->n_synapses;
     printf("n_synapses: %d\n", n_s);

@@ -2,6 +2,15 @@
 #include "../Types/Activation.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
+
+void testRandomNumbers() {
+	int width = 10;
+	int height = 17;
+
+	std::vector<std::vector<float>> random_values = generate2dNoise(height, width);
+	print2DVector(random_values, height, width);
+}
 
 void testActivationType() {
 	float x = -10.0;

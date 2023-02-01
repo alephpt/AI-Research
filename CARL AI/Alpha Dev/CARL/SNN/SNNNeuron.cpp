@@ -1,4 +1,4 @@
-#include "Neuron.h"
+#include "SNNNeuron.h"
 #include "Membrane.h"
 #include "../Types/General.h"
 #include <math.h>
@@ -7,7 +7,7 @@
     return m.V_rest + (m.V_threshold - m.V_rest) * (1.0f - expf((float)(- m.t) / (m.resistance * m.capacitance)));
 }
 
-Neuron* initNeuron(Activation activation, Neuron* n, Membrane* m, Spike* sp, int n_sp, 
+SNNNeuron* initNeuron(Activation activation, SNNNeuron* n, Membrane* m, Spike* sp, int n_sp, 
                     float* w, float b, int n_in, float* in, int n_out, float* out, float d, float mem_p) {
     n->weights = w;
     n->bias = b;
@@ -34,7 +34,7 @@ Neuron* initNeuron(Activation activation, Neuron* n, Membrane* m, Spike* sp, int
     return n;
 }
 
-void printNeuron(Neuron* n, int n_i) {
+void printNeuron(SNNNeuron* n, int n_i) {
     printf("\n\t\t\t-- Neuron %d --\n", n_i);
     printf("activation_type:\t\t%s\n", getActivationString.at(n->activation_type).c_str());
     printf("index: \t\t\t\t%d\n", n->index);

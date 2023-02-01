@@ -1,9 +1,9 @@
 #pragma once
-#include "Neuron.h"
+#include "SNNNeuron.h"
 
 
 typedef struct SNN SNN;
-typedef struct Neuron Neuron;
+typedef struct SNNNeuron SNNNeuron;
 
 struct SNN {
 	int n_inputs;
@@ -11,7 +11,7 @@ struct SNN {
 	int n_neurons;
 	int n_synapses;
 	int n_spikes;
-	Neuron* neurons;
+	SNNNeuron* neurons;
 	double t;
 };
 
@@ -20,7 +20,7 @@ float** createConnectivityMatrix(SNN* snn);
 int synapseLimit(int n_neurons, float density);
 
 void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type);
-Neuron* getNeuron(SNN* snn, int idx);
+SNNNeuron* getNeuron(SNN* snn, int idx);
 void printSNN(SNN* snn);
 
 
