@@ -216,6 +216,7 @@
     <ClInclude Include="Types\Activation.h" />
     <ClInclude Include="Types\General.h" />
     <ClInclude Include="Types\Matrix.h" />
+    <ClInclude Include="Additional_Notes.txt" />
     <ClInclude Include="Types\Tensor.h" />
     <ClInclude Include="Types\Types.h" />
     <ClInclude Include="Types\Vector.h" />

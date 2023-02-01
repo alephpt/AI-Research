@@ -28,6 +28,8 @@ Convolution::Convolution(Activation a, int h, int w, FilterDimensions f) {
 	k = new Kernel(a, f);
 }
 
+void Convolution::setStride(int s) { stride = s; }
+
 std::vector<std::vector<float>> Convolution::convolute(std::vector<std::vector<float>> input, int height, int width, int* output_h, int* output_w) {
 	std::vector<std::vector<float>> convolved = std::vector<std::vector<float>>(height, std::vector<float>(width, 0.0f));
 	
@@ -86,8 +88,8 @@ std::vector<std::vector<float>> Convolution::paddedConvolute(std::vector<std::ve
 std::vector<std::vector<float>> Convolution::dilationConvolute(std::vector<std::vector<float>> input, int height, int width, int* output_h, int* output_w) {
 	std::vector<std::vector<float>> convolved = std::vector<std::vector<float>>(height, std::vector<float>(width, 0.0f));
 	
-	*output_h = height - k->getRows() + 1;
-	*output_w = width - k->getColumns() + 1;
+	*output_h = height - k->getRows() + 1 / stride;
+	*output_w = width - k->getColumns() + 1 / stride;
 
 	for (int i = 0; i < *output_h; i++) {
 		std::vector<std::vector<float>> cached = std::vector<std::vector<float>>(k->getRows(), std::vector<float>(k->getColumns(), 0.0f));

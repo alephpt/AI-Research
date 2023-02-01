@@ -11,6 +11,7 @@ public:
     std::vector<std::vector<float>> convolute(std::vector<std::vector<float>>, int, int, int*, int*);
     std::vector<std::vector<float>> paddedConvolute(std::vector<std::vector<float>>, int, int, int*, int*);
     std::vector<std::vector<float>> dilationConvolute(std::vector<std::vector<float>>, int, int, int*, int*);
+    void setStride(int);
 
     int stride;
     int input_w;

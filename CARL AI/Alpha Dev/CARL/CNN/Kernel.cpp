@@ -25,6 +25,7 @@ static void (*lookupFilterStyle[])(Filter* filter) = {
     populateGaussianFilter,
     populateBalancedGaussianFilter,
     populateNegativeGaussianFilter,
+    populateModifiedGaussianFilter,
     populateConicalFilter
 };
 

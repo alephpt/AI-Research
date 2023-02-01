@@ -57,6 +57,9 @@ void testConvolutionFilters() {
     c.k->setFilterType(NEGATIVE_GAUSSIAN_FILTER);
     c.k->print();
 
+    c.k->setFilterType(BALANCED_GAUSSIAN_FILTER);
+    c.k->print();
+
     c.k->setFilterType(CONICAL_FILTER);
     c.k->print();
 
@@ -80,16 +83,15 @@ void convolve(Convolution* c, FilterStyle filter_type, std::vector<std::vector<f
 void testConvolutions() {
     int width = 16;
     int height = 20;
-    FilterDimensions filter = FIVExFIVE;
-    Activation activation_type = TANH;
-    FilterStyle filter_type = BOTTOM_LEFT_GRADIENT_FILTER;
-
-
-    Convolution c = Convolution(activation_type, height, width, filter);
-    c.k->setFilterType(filter_type);
-
     std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
-    
+    FilterDimensions filter = FIVExFIVE;
+    Activation activation_type = RELU_DERIVATIVE;
+    FilterStyle filter_type = BOTTOM_LEFT_GRADIENT_FILTER;
+    Convolution c = Convolution(activation_type, height, width, filter);
+
+    c.k->setFilterType(filter_type);
+    c.setStride(2);
+
     printf("test Convolution(%d, %d, %s)\n", height, width, filterString[filter].c_str());
     printf("c.stride: %d\n", c.stride);
     printf("c.input_h: %d\n", c.input_h);
@@ -101,9 +103,9 @@ void testConvolutions() {
     printf("\ninput vector - %d x %d\n", width, height);
     print2DVector(input_data, height, width);
 
-    convolve(&c, BOTTOM_LEFT_GRADIENT_FILTER, input_data, height, width);
-    convolve(&c, BALANCED_GAUSSIAN_FILTER, input_data, height, width);
-    convolve(&c, CONICAL_FILTER, input_data, height, width);
+    convolve(&c, INVERSE_GRADIENT_FILTER, input_data, height, width);
+    convolve(&c, VERTICAL_GRADIENT_FILTER, input_data, height, width);
+    convolve(&c, MODIFIED_GAUSSIAN_FILTER, input_data, height, width);
 
     return;
 }

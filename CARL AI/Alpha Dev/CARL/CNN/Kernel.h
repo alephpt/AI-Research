@@ -13,7 +13,8 @@ const std::string filterStyleString[] = { "Ascending",
                                           "Top Left Gradient", "Bottom_Left_Gradiant", 
                                           "Guassian", 
                                           "Balanced Gaussian",
-                                          "Negative Guassian", 
+                                          "Negative Guassian",
+                                          "Modified Guassian",
                                           "Conical" };
 
 typedef enum FilterDimensions {
@@ -40,6 +41,7 @@ typedef enum FilterStyle {
         GAUSSIAN_FILTER,
         BALANCED_GAUSSIAN_FILTER,
         NEGATIVE_GAUSSIAN_FILTER,
+        MODIFIED_GAUSSIAN_FILTER,
         CONICAL_FILTER
 } FilterStyle;
 
