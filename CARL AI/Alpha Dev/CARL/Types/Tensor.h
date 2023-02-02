@@ -1,5 +1,8 @@
 #pragma once
 #include <stdlib.h>
+#include "Matrix.h"
+
+typedef std::vector<matrix> tensor;
 
 typedef struct {
 	int rank;

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Types/Types.h"
 #include "../Types/Activation.h"
 #include <vector>
 #include <string>
@@ -46,7 +47,7 @@ typedef enum FilterStyle {
 } FilterStyle;
 
 typedef struct Filter {
-    std::vector<std::vector<float>> weights;
+    matrix weights;
     int rows = 0;
     int columns = 0;
 } Filter;
@@ -72,8 +73,8 @@ class Kernel {
         void print();
         int getRows();
         int getColumns();
+        matrix getWeights();
         FilterDimensions getDimensions();
-        std::vector<std::vector<float>> getWeights();
         Activation getActivationType();
         FilterStyle getFilterStyle();
         void setStride(int);
@@ -83,13 +84,13 @@ class Kernel {
         void setActivationType(Activation);
         void adjustDimensions(FilterDimensions);
         void adjustDimensions(FilterDimensions, int);
-        float getMax(std::vector<std::vector<float>>);
-        float getMaxMean(std::vector<std::vector<float>>);
-        float getProductSum(std::vector<std::vector<float>>);
-        float getSum(std::vector<std::vector<float>>);
-        float getSumMean(std::vector<std::vector<float>>);
-        float getMeanSum(std::vector<std::vector<float>>);
-        float getMean(std::vector<std::vector<float>>);
+        float getMax(matrix);
+        float getMaxMean(matrix);
+        float getProductSum(matrix);
+        float getSum(matrix);
+        float getSumMean(matrix);
+        float getMeanSum(matrix);
+        float getMean(matrix);
 
     private:
         void populateFilter(FilterStyle);

@@ -109,14 +109,14 @@ Kernel::~Kernel() { filter.weights.clear(); }
 void Kernel::setFilterDimensions(FilterDimensions f) { 
     dimensions = f; 
     lookupFilter[dimensions](&filter.rows, &filter.columns); 
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = matrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
 void Kernel::setFilterDimensions(FilterDimensions f, int n) { 
     dimensions = f; 
     lookupNFilter[dimensions](&filter.rows, &filter.columns, n); 
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = matrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
@@ -141,7 +141,7 @@ void Kernel::adjustDimensions(FilterDimensions f, int n)
 void Kernel::setStride(int s) { stride = s; }
 void Kernel::setActivationType(Activation a) { activation_type = a; }
 void Kernel::setFilterStyle(FilterStyle s) { style = s; populateFilter(style); }
-std::vector<std::vector<float>> Kernel::getWeights() { return filter.weights; }
+matrix Kernel::getWeights() { return filter.weights; }
 FilterDimensions Kernel::getDimensions() { return dimensions; }
 Activation Kernel::getActivationType() { return activation_type; }
 FilterStyle Kernel::getFilterStyle() { return style; }
@@ -149,11 +149,13 @@ int Kernel::getColumns() { return filter.columns; }
 int Kernel::getRows() { return filter.rows; }
 
 
-float Kernel::getProductSum(std::vector<std::vector<float>> input) {
+float Kernel::getProductSum(matrix input) {
+    int rows = input.size();
+    int cols = input[0].size();
     float sum = 0.0f;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             sum += input[y][x] * filter.weights[y][x];
         }
     }
@@ -161,12 +163,14 @@ float Kernel::getProductSum(std::vector<std::vector<float>> input) {
     return sum;
 }
 
-float Kernel::getMax(std::vector<std::vector<float>> input)
+float Kernel::getMax(matrix input)
 {
+    int rows = input.size();
+    int cols = input[0].size();
     float max = 0.0f;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             float newMax = input[y][x];
             
             if (newMax > max) { max = newMax; }
@@ -178,12 +182,14 @@ float Kernel::getMax(std::vector<std::vector<float>> input)
 
 
 
-float Kernel::getMaxMean(std::vector<std::vector<float>> input)
+float Kernel::getMaxMean(matrix input)
 {
+    int rows = input.size();
+    int cols = input[0].size();
     float max = 0.0f;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             float maxMean = input[y][x] + filter.weights[y][x] / 2;
             if (max < maxMean) { max = maxMean; }
         }
@@ -194,12 +200,14 @@ float Kernel::getMaxMean(std::vector<std::vector<float>> input)
 
 
 
-float Kernel::getSum(std::vector<std::vector<float>> input)
+float Kernel::getSum(matrix input)
 {
+    int rows = input.size();
+    int cols = input[0].size();
     float sum = 0.0f;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             sum += input[y][x] + filter.weights[y][x];
         }
     }
@@ -207,13 +215,15 @@ float Kernel::getSum(std::vector<std::vector<float>> input)
     return sum;
 }
 
-float Kernel::getSumMean(std::vector<std::vector<float>> input)
+float Kernel::getSumMean(matrix input)
 {
+    int rows = input.size();
+    int cols = input[0].size();
     float sum = 0.0f;
-    int total = filter.rows + filter.columns;
+    int total = rows * cols;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             sum += input[y][x] + filter.weights[y][x];
         }
     }
@@ -221,12 +231,14 @@ float Kernel::getSumMean(std::vector<std::vector<float>> input)
     return sum / total;
 }
 
-float Kernel::getMeanSum(std::vector<std::vector<float>> input)
+float Kernel::getMeanSum(matrix input)
 {
+    int rows = input.size();
+    int cols = input[0].size();
     float sum = 0.0f;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             sum += (input[y][x] + filter.weights[y][x]) / 2;
         }
     }
@@ -234,13 +246,15 @@ float Kernel::getMeanSum(std::vector<std::vector<float>> input)
     return sum;
 }
 
-float Kernel::getMean(std::vector<std::vector<float>> input)
+float Kernel::getMean(matrix input)
 {
+    int rows = input.size();
+    int cols = input[0].size();
     float sum = 0.0f;
-    int total = filter.rows + filter.columns;
+    int total = rows + cols;
 
-    for (int y = 0; y < filter.rows; y += 1 + stride) {
-        for (int x = 0; x < filter.columns; x += 1 + stride) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
             sum += (input[y][x] + filter.weights[y][x]) / 2;
         }
     }

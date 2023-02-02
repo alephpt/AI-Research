@@ -4,6 +4,7 @@
 // Convolution Tests
 void testConvolutionInit();
 void testConvolutionFilters();
+void testConvolutionInput();
 void testConvolutions();
 
 

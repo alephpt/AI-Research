@@ -14,6 +14,7 @@ void runTests() {
     // testAdjustKernelDims();
     // testConvolutionInit();
     // testConvolutionFilters();
+    // testConvolutionInput();
      testConvolutions();
 
         // SNN Tests //

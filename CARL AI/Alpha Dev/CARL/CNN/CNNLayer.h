@@ -10,9 +10,10 @@ typedef enum PoolType {
 } PoolType;
 
 typedef enum ConvolutionType {
-    STANDARD_CONVOLUTION,
+    VALID_CONVOLUTION,
     PADDED_CONVOLUTION,
-    DILATION_CONVOLUTION
+    DILATION_CONVOLUTION,
+    PADDED_DILATION_CONVOLUTION
 } ConvolutionType;
 
 class CNNLayer {
@@ -32,11 +33,12 @@ public:
 
     void setStride(int);
     void convolute(ConvolutionType);
+    CNNFeature* createNewFeature();
+    CNNFeature* getCurrentFeature();
+    CNNSample* getCurrentSample();
+    CNNSample* createNewSample();
 
     int stride;
-    int input_w;
-    int input_h;
-
     Kernel* k;
     CNNData* data;
 };

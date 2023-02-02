@@ -12,9 +12,9 @@ typedef struct CNNFeature {
     int index = 0;
     int width = 0;
     int height = 0;
-    FilterStyle filter_style;
-    std::vector<std::vector<float>> filter;
-    std::vector<std::vector<float>> values;
+    FilterStyle filter_style = GRADIENT_FILTER;
+    matrix filter;
+    matrix values;
 } CNNFeature;
 
 typedef struct CNNSample {
@@ -28,6 +28,6 @@ typedef struct CNNSample {
 typedef struct CNNData {
     CNNFeature input;
     CNNFeature output;
-    std::vector<CNNSample> layers;
+    std::vector<CNNSample*> layers;
     int n_layers = 0;
 } CNNData;

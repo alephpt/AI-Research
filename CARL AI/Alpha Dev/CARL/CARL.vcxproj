@@ -134,11 +134,10 @@
     </ClCompile>
     <ClCompile Include="CNN\Auxiliary.cpp" />
     <ClCompile Include="CNN\CNN.cpp" />
-    <ClCompile Include="CNN\Convolution.cpp" />
-    <ClCompile Include="CNN\CNNFeature.cpp" />
+    <ClCompile Include="CNN\CNNData.cpp" />
+    <ClCompile Include="CNN\CNNLayer.cpp" />
     <ClCompile Include="CNN\Kernel.cpp" />
     <ClCompile Include="CNN\CNNNeuron.c" />
-    <ClCompile Include="CNN\Pooling.cpp" />
     <ClCompile Include="Connectors\CA_Connectors.cpp" />
     <ClCompile Include="Connectors\ARL_Connectors.cpp" />
     <ClCompile Include="Connectors\RKC_Connectors.cpp" />
@@ -178,11 +177,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CNN\Auxiliary.h" />
-    <ClInclude Include="CNN\Convolution.h" />
-    <ClInclude Include="CNN\CNNFeature.h" />
+    <ClInclude Include="CNN\CNNData.h" />
+    <ClInclude Include="CNN\CNNLayer.h" />
+    <ClInclude Include="CNN\CNNLayer_Helper.h" />
     <ClInclude Include="CNN\Kernel.h" />
     <ClInclude Include="CNN\CNNNeuron.h" />
-    <ClInclude Include="CNN\Pooling.h" />
+    <ClInclude Include="CNN\KernelHelper.h" />
     <ClInclude Include="Connectors\CA_Connectors.h" />
     <ClInclude Include="Connectors\Protocol_Connectors.h" />
     <ClInclude Include="Connectors\ARL_Connectors.h" />
@@ -211,6 +211,7 @@
     <ClInclude Include="Tests\RL_Tests.h" />
     <ClInclude Include="Tests\Protocol_Tests.h" />
     <ClInclude Include="Tests\SNN_Tests.h" />
+    <ClInclude Include="Tests\TestData.h" />
     <ClInclude Include="Tests\Type_Tests.h" />
     <ClInclude Include="Tests\Tests.h" />
     <ClInclude Include="Types\Activation.h" />

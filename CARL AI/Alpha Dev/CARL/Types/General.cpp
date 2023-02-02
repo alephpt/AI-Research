@@ -32,45 +32,45 @@ std::vector<std::vector<float>> generate2dNoise(int rows, int cols)
 void printColor(float in) {
     if (in < -0.985f) {
         // magenta
-        printf("\033[0;35m[%.2lf] \033[0m", in);
+        printf("\033[0;35m[%07.3lf] \033[0m", in);
     }
     else
     if (in < -0.67f) {
         // red
-        printf("\033[0;31m[%.2lf] \033[0m", in);
+        printf("\033[0;31m[%07.3lf] \033[0m", in);
     }
     else
     if (in < -0.35f) {
         // bright red
-        printf("\033[0;91m[%.2lf] \033[0m", in);
+        printf("\033[0;91m[%07.3lf] \033[0m", in);
     }
     else
     if (in < -0.05f) {
         // dark yellow
-        printf("\033[0;33m[%.2lf] \033[0m", in);
+        printf("\033[0;33m[%07.3lf] \033[0m", in);
     }
     else
     if (in < 0.05) {
         // dark green
-        printf("\033[0;32m[%.2f] \033[0m", in);
+        printf("\033[0;32m[%07.3lf] \033[0m", in);
     }
     else
     if (in < 0.29f) {
         // dark blue
-        printf("\033[0;34m[%.2f] \033[0m", in);
+        printf("\033[0;34m[%07.3lf] \033[0m", in);
     }
     else
     if (in < 0.6f) {
         // bright blue
-        printf("\033[0;94m[%.2f] \033[0m", in);
+        printf("\033[0;94m[%07.3lf] \033[0m", in);
     }
     else
     if (in < 0.95f) {
         // bright cyan
-        printf("\033[0;96m[%.2f] \033[0m", in);
+        printf("\033[0;96m[%07.3lf] \033[0m", in);
     }
     else {
-        printf("[%.2f] ", in);
+        printf("[%07.3lf] ", in);
     }
 }
 

@@ -28,6 +28,4 @@ public:
 	int n_outputs;
 	float* weights;
 	float* biases;
-
-
 };

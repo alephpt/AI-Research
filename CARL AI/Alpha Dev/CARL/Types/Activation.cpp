@@ -89,7 +89,7 @@ static inline float gaussian_derivative(float x) {
 }
 
 // ACTIVATION FUNCTIONS //
-
+// TODO: *Activation[]
 float activation(Activation activation_type, float output) {
     if (activation_type == SIGMOID_DERIVATIVE) {
         return sigmoid_derivative(output);

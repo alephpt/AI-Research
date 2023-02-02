@@ -1,5 +1,8 @@
 #pragma once
 #include <stdlib.h>
+#include <vector>
+
+typedef std::vector<std::vector<float>> matrix;
 
 typedef struct {
     float* data;

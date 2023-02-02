@@ -117,16 +117,10 @@
     <ClCompile Include="Types\General.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\Convolution.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CNN\Kernel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CNN\CNNNeuron.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CNN\Pooling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GAN\Dataset.cpp">
@@ -141,10 +135,13 @@
     <ClCompile Include="GAN\GANNeuron.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNNFeature.cpp">
+    <ClCompile Include="CNN\Auxiliary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\Auxiliary.cpp">
+    <ClCompile Include="CNN\CNNData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\CNNLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,19 +242,10 @@
     <ClInclude Include="Types\General.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\Convolution.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CNN\CNNFeature.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CNN\Kernel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CNN\CNNNeuron.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CNN\Pooling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GAN\Dataset.h">
@@ -276,6 +264,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Additional_Notes.txt">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\KernelHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\TestData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\CNNData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\CNNLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\CNNLayer_Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
