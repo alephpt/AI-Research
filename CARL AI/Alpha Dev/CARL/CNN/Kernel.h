@@ -71,7 +71,7 @@ class Kernel {
 
         ~Kernel();
 
-        void print();
+        void printFilter();
         int getRows();
         int getColumns();
         matrix getWeights();

@@ -262,7 +262,7 @@ float Kernel::getMean(matrix input)
     return sum / total;
 }
 
-void Kernel::print()
+void Kernel::printFilter()
 {
     printf("%s %s Kernel\n", filterString[dimensions].c_str(), filterStyleString[style].c_str());
     for (int y = 0; y < filter.rows; y++) {

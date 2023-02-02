@@ -18,7 +18,7 @@ void testConvolutionInit() {
     printf("\tc.k->getFilterStyle: %s\n", filterStyleString[c.k->getFilterStyle()].c_str());
     printf("\tc.k->getActivationType: %s\n\n", activationString[c.k->getActivationType()].c_str());
 
-    c.k->print();   
+    c.k->printFilter();   
 }
 
 void testConvolutionInput() {
@@ -39,7 +39,7 @@ void testConvolutionInput() {
     printf("\ninput vector - %d x %d\n", input_width, input_height);
     print2DVector(c.data->input.values, c.data->input.height, c.data->input.width);
 
-    c.k->print();
+    c.k->printFilter();
 }
 
 
@@ -50,66 +50,62 @@ void testConvolutionFilters() {
 
     CNNLayer c = CNNLayer(0, 0, ELEVENxELEVEN);
 
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(NEGATIVE_ASCENDING_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(GRADIENT_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(INVERSE_GRADIENT_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(VERTICAL_GRADIENT_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(VERTICAL_INVERSE_GRADIENT_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(TOP_LEFT_GRADIENT_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(BOTTOM_LEFT_GRADIENT_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(GAUSSIAN_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(NEGATIVE_GAUSSIAN_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(BALANCED_GAUSSIAN_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     c.k->setFilterStyle(CONICAL_FILTER);
-    c.k->print();
+    c.k->printFilter();
 
     return;
 }
 
 void convolve(CNNLayer* c, FilterStyle filter_type, ConvolutionType convolution_type) {
-   
     printf("\n");
+
     c->k->setFilterStyle(filter_type);
-    c->k->print();
+    c->k->printFilter();
 
     c->convolute(convolution_type);
-
-    CNNFeature* feature = c->getCurrentFeature();
-
-    printf("\noutput vector - %d x %d\n", feature->height, feature->width);
-    print2DVector(feature->values, feature->height, feature->width);
+    c->printCurrentFeature();
 }
 
 void testConvolutions() {
     int input_width = (int)smiles[0].size();
     int input_height = (int)smiles.size();
 
-    CNNLayer c = CNNLayer(TANH, input_height, input_width, THREExTHREE);
+    CNNLayer c = CNNLayer(RELU, input_height, input_width, THREExTHREE);
 
     c.data->input.values = smiles;
-
+    
     printf("test CNNLayer(%d, %d)\n\n", input_height, input_width);
     printf("\tc.stride: %d\n", c.stride);
     printf("\tc.data->input.height: %d\n", c.data->input.height);

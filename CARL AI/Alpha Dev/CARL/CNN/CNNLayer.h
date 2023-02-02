@@ -33,6 +33,7 @@ public:
 
     void setStride(int);
     void convolute(ConvolutionType);
+    void printCurrentFeature();
     CNNFeature* createNewFeature();
     CNNFeature* getCurrentFeature();
     CNNSample* getCurrentSample();
