@@ -1,7 +1,6 @@
 #pragma once
-#include "Convolution.h"
+#include "CNNLayer.h"
 #include "Kernel.h"
-#include "Pooling.h"
 #include "Auxiliary.h"
 // #include "Neuron.h"
 

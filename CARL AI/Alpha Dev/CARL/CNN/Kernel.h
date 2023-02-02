@@ -55,21 +55,32 @@ typedef struct Filter {
 class Kernel {
     public:
         Kernel();
-        Kernel(FilterDimensions);
         Kernel(Activation);
-        Kernel(Activation, FilterDimensions);
+        Kernel(FilterStyle);
+        Kernel(Activation, FilterStyle);
+        Kernel(FilterDimensions);
+        Kernel(FilterDimensions, FilterStyle);
         Kernel(FilterDimensions, int);
+        Kernel(FilterDimensions, int, FilterStyle);
+        Kernel(Activation, FilterDimensions);
         Kernel(Activation, FilterDimensions, int);
+        Kernel(Activation, FilterDimensions, FilterStyle);
+        Kernel(Activation, FilterDimensions, int, FilterStyle);
 
         ~Kernel();
 
         void print();
         int getRows();
         int getColumns();
+        FilterDimensions getDimensions();
+        std::vector<std::vector<float>> getWeights();
         Activation getActivationType();
-        FilterStyle getFilterType();
+        FilterStyle getFilterStyle();
         void setStride(int);
-        void setFilterType(FilterStyle);
+        void setFilterStyle(FilterStyle);
+        void setFilterDimensions(FilterDimensions);
+        void setFilterDimensions(FilterDimensions, int);
+        void setActivationType(Activation);
         void adjustDimensions(FilterDimensions);
         void adjustDimensions(FilterDimensions, int);
         float getMax(std::vector<std::vector<float>>);
@@ -85,6 +96,6 @@ class Kernel {
         int stride = 0;
         Filter filter;
         FilterStyle style;
-        FilterDimensions dims;
+        FilterDimensions dimensions;
         Activation activation_type;
 };

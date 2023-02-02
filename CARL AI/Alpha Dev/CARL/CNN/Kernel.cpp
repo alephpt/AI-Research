@@ -32,62 +32,122 @@ static void (*lookupFilterStyle[])(Filter* filter) = {
 
     // Constructor / Destructor
 Kernel::Kernel() {
-    activation_type = SIGMOID;
-    dims = THREExTHREE;
-    lookupFilter[dims](&filter.rows, &filter.columns);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    populateFilter(ASCENDING_FILTER);
+    activation_type = RELU;
+    style = GRADIENT_FILTER;
+    setFilterDimensions(THREExTHREE);
 }
 
 Kernel::Kernel(Activation a) {
     activation_type = a;
-    dims = THREExTHREE;
-    lookupFilter[dims](&filter.rows, &filter.columns);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    populateFilter(ASCENDING_FILTER);
+    style = GRADIENT_FILTER;
+    setFilterDimensions(THREExTHREE);
 }
 
-Kernel::Kernel(FilterDimensions f) {
-    activation_type = SIGMOID;
-    dims = f;
-    lookupFilter[dims](&filter.rows, &filter.columns);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    populateFilter(ASCENDING_FILTER);
+Kernel::Kernel(FilterStyle fs) {
+    activation_type = RELU;
+    style = fs;
+    setFilterDimensions(THREExTHREE);
 }
 
-Kernel::Kernel(Activation a, FilterDimensions f) {
+Kernel::Kernel(FilterDimensions fd) {
+    activation_type = RELU;
+    style = GRADIENT_FILTER;
+    setFilterDimensions(fd);
+}
+
+Kernel::Kernel(Activation a, FilterStyle fs) {
     activation_type = a;
-    dims = f;
-    lookupFilter[dims](&filter.rows, &filter.columns);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    populateFilter(ASCENDING_FILTER);
+    style = fs;
+    setFilterDimensions(THREExTHREE);
 }
 
-Kernel::Kernel(FilterDimensions f, int n) {
-    activation_type = SIGMOID;
-    dims = f;
-    lookupNFilter[dims](&filter.rows, &filter.columns, n);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    populateFilter(ASCENDING_FILTER);
+Kernel::Kernel(FilterDimensions fd, FilterStyle fs) {
+    activation_type = RELU;
+    style = fs;
+    setFilterDimensions(fd);
 }
 
-Kernel::Kernel(Activation a, FilterDimensions f, int n) {
+Kernel::Kernel(Activation a, FilterDimensions fd) {
     activation_type = a;
-    dims = f;
-    lookupNFilter[dims](&filter.rows, &filter.columns, n);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    populateFilter(ASCENDING_FILTER);
+    style = GRADIENT_FILTER;
+    setFilterDimensions(fd);
 }
 
+Kernel::Kernel(Activation a, FilterDimensions fd, FilterStyle fs) {
+    activation_type = a;
+    style = fs;
+    setFilterDimensions(fd);
+}
+
+Kernel::Kernel(FilterDimensions fd, int n) {
+    activation_type = RELU;
+    style = GRADIENT_FILTER;
+    setFilterDimensions(fd, n);
+}
+
+Kernel::Kernel(FilterDimensions fd, int n, FilterStyle fs) {
+    activation_type = RELU;
+    style = fs;
+    setFilterDimensions(fd, n);
+}
+
+Kernel::Kernel(Activation a, FilterDimensions fd, int n) {
+    activation_type = a;
+    style = GRADIENT_FILTER;
+    setFilterDimensions(fd, n);
+}
+
+Kernel::Kernel(Activation a, FilterDimensions fd, int n, FilterStyle fs) {
+    activation_type = a;
+    style = fs;
+    setFilterDimensions(fd, n);
+}
 
 Kernel::~Kernel() { filter.weights.clear(); }
 
-
     // public functions
-int Kernel::getRows() { return filter.rows; }
-int Kernel::getColumns() { return filter.columns; }
+void Kernel::setFilterDimensions(FilterDimensions f) { 
+    dimensions = f; 
+    lookupFilter[dimensions](&filter.rows, &filter.columns); 
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(style); 
+}
+
+void Kernel::setFilterDimensions(FilterDimensions f, int n) { 
+    dimensions = f; 
+    lookupNFilter[dimensions](&filter.rows, &filter.columns, n); 
+    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    populateFilter(style); 
+}
+
+void Kernel::populateFilter(FilterStyle s) {
+    style = s;
+    lookupFilterStyle[style](&filter);
+    return;
+}
+
+void Kernel::adjustDimensions(FilterDimensions f)
+{
+    filter.weights.clear();
+    setFilterDimensions(f);
+}
+
+void Kernel::adjustDimensions(FilterDimensions f, int n)
+{
+    filter.weights.clear();
+    setFilterDimensions(f, n);
+}
+
+void Kernel::setStride(int s) { stride = s; }
+void Kernel::setActivationType(Activation a) { activation_type = a; }
+void Kernel::setFilterStyle(FilterStyle s) { style = s; populateFilter(style); }
+std::vector<std::vector<float>> Kernel::getWeights() { return filter.weights; }
+FilterDimensions Kernel::getDimensions() { return dimensions; }
 Activation Kernel::getActivationType() { return activation_type; }
-FilterStyle Kernel::getFilterType() { return style; }
+FilterStyle Kernel::getFilterStyle() { return style; }
+int Kernel::getColumns() { return filter.columns; }
+int Kernel::getRows() { return filter.rows; }
+
 
 float Kernel::getProductSum(std::vector<std::vector<float>> input) {
     float sum = 0.0f;
@@ -188,46 +248,9 @@ float Kernel::getMean(std::vector<std::vector<float>> input)
     return sum / total;
 }
 
-
-
-void Kernel::populateFilter(FilterStyle s) {
-    style = s;
-    lookupFilterStyle[style](&filter);
-    return;
-}
-
-void Kernel::adjustDimensions(FilterDimensions f)
-{
-    filter.weights.clear();
-    dims = f;
-    lookupFilter[f](&filter.rows, &filter.columns);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    return;
-}
-
-void Kernel::adjustDimensions(FilterDimensions f, int n)
-{
-    filter.weights.clear();
-    dims = f;
-    lookupNFilter[f](&filter.rows, &filter.columns, n);
-    filter.weights = std::vector<std::vector<float>>(filter.rows, std::vector<float>(filter.columns, 0.0f));
-    return;
-}
-
-void Kernel::setFilterType(FilterStyle s) {
-    style = s;
-    populateFilter(style);
-    return;
-}
-
-void Kernel::setStride(int s) {
-    stride = s;
-    return;
-}
-
 void Kernel::print()
 {
-    printf("%s %s Kernel\n", filterString[dims].c_str(), filterStyleString[style].c_str());
+    printf("%s %s Kernel\n", filterString[dimensions].c_str(), filterStyleString[style].c_str());
     for (int y = 0; y < filter.rows; y++) {
         printf("\t\t");
         for (int x = 0; x < filter.columns; x++) {

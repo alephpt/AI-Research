@@ -6,18 +6,19 @@
 
 // Convolution Tests
 void testConvolutionInit() {
-    int width = 10;
-    int height = 17;
-    FilterDimensions filter = FIVExFIVE;
+    int input_width = 10;
+    int input_height = 17;
 
-    Convolution c = Convolution(height, width, filter);
+    CNNLayer c = CNNLayer(input_height, input_width);
 
-    printf("test Convolution(%d, %d, %s) initialization\n", height, width, filterString[filter].c_str());
-    printf("c.stride: %d\n", c.stride);
-    printf("c.input_h: %d\n", c.input_h);
-    printf("c.input_w: %d\n", c.input_w);
-    c.k->print();
-    
+    printf("test CNNLayer(%d, %d)\n\n", input_height, input_width);
+    printf("\tc.stride: %d\n", c.stride);
+    printf("\tc.data->input.height: %d\n", c.data->input.height);
+    printf("\tc.data->input.width: %d\n", c.data->input.width);
+    printf("\tc.k->getFilterStyle: %s\n", filterStyleString[c.k->getFilterStyle()].c_str());
+    printf("\tc.k->getActivationType: %s\n\n", activationString[c.k->getActivationType()].c_str());
+
+    c.k->print();   
 }
 
 void testConvolutionFilters() {
@@ -25,87 +26,92 @@ void testConvolutionFilters() {
     int height = 7;
     FilterDimensions filter = ELEVENxELEVEN;
 
-    std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
-    Convolution c = Convolution(RELU, height, width, filter);
+    CNNLayer c = CNNLayer(0, 0, ELEVENxELEVEN);
 
     c.k->print();
 
-    c.k->setFilterType(NEGATIVE_ASCENDING_FILTER);
+    c.k->setFilterStyle(NEGATIVE_ASCENDING_FILTER);
     c.k->print();
 
-    c.k->setFilterType(GRADIENT_FILTER);
+    c.k->setFilterStyle(GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(INVERSE_GRADIENT_FILTER);
+    c.k->setFilterStyle(INVERSE_GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(VERTICAL_GRADIENT_FILTER);
+    c.k->setFilterStyle(VERTICAL_GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(VERTICAL_INVERSE_GRADIENT_FILTER);
+    c.k->setFilterStyle(VERTICAL_INVERSE_GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(TOP_LEFT_GRADIENT_FILTER);
+    c.k->setFilterStyle(TOP_LEFT_GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(BOTTOM_LEFT_GRADIENT_FILTER);
+    c.k->setFilterStyle(BOTTOM_LEFT_GRADIENT_FILTER);
     c.k->print();
 
-    c.k->setFilterType(GAUSSIAN_FILTER);
+    c.k->setFilterStyle(GAUSSIAN_FILTER);
     c.k->print();
 
-    c.k->setFilterType(NEGATIVE_GAUSSIAN_FILTER);
+    c.k->setFilterStyle(NEGATIVE_GAUSSIAN_FILTER);
     c.k->print();
 
-    c.k->setFilterType(BALANCED_GAUSSIAN_FILTER);
+    c.k->setFilterStyle(BALANCED_GAUSSIAN_FILTER);
     c.k->print();
 
-    c.k->setFilterType(CONICAL_FILTER);
+    c.k->setFilterStyle(CONICAL_FILTER);
     c.k->print();
 
     return;
 }
 
-void convolve(Convolution* c, FilterStyle filter_type, std::vector<std::vector<float>> input_data, int height, int width) {
+void convolve(CNNLayer* c, FilterStyle filter_type, ConvolutionType convolution_type) {
     int output_h = 0;
     int output_w = 0;
     
     printf("\n");
-    c->k->setFilterType(filter_type);
+    c->k->setFilterStyle(filter_type);
     c->k->print();
 
-    std::vector<std::vector<float>> output_data = c->convolute(input_data, height, width, &output_h, &output_w);
+    c->convolute(convolution_type);
+
+    CNNSample sample = c->data->layers[c->data->n_layers];
+    CNNFeature* feature = sample.features[sample.n_features];
 
     printf("\noutput vector - %d x %d\n", output_w, output_h);
-    print2DVector(output_data, output_h, output_w);
+    print2DVector(feature->values, feature->height, feature->width);
 }
 
 void testConvolutions() {
-    int width = 16;
-    int height = 20;
-    std::vector<std::vector<float>> input_data = generate2dNoise(height, width);
-    FilterDimensions filter = FIVExFIVE;
-    Activation activation_type = RELU_DERIVATIVE;
-    FilterStyle filter_type = BOTTOM_LEFT_GRADIENT_FILTER;
-    Convolution c = Convolution(activation_type, height, width, filter);
+    int input_width = 16;
+    int input_height = 20;
 
-    c.k->setFilterType(filter_type);
+    CNNLayer c = CNNLayer(TANH, input_height, input_width, FIVExFIVE);
+
+    c.data->input.values = generate2dNoise(input_height, input_width);
+    c.k->setFilterStyle(BOTTOM_LEFT_GRADIENT_FILTER);
     c.setStride(2);
 
-    printf("test Convolution(%d, %d, %s)\n", height, width, filterString[filter].c_str());
-    printf("c.stride: %d\n", c.stride);
-    printf("c.input_h: %d\n", c.input_h);
-    printf("c.input_w: %d\n", c.input_w);
-    printf("c.k.filter: %s\n", filterStyleString[c.k->getFilterType()].c_str());
-    printf("c.k.activation: %s\n", activationString[c.k->getActivationType()].c_str());
+    printf("test CNNLayer(%d, %d)\n\n", input_height, input_width);
+    printf("\tc.stride: %d\n", c.stride);
+    printf("\tc.data->input.height: %d\n", c.data->input.height);
+    printf("\tc.data->input.width: %d\n", c.data->input.width);
+    printf("\tc.k->getFilterStyle: %s\n", filterStyleString[c.k->getFilterStyle()].c_str());
+    printf("\tc.k->getActivationType: %s\n\n", activationString[c.k->getActivationType()].c_str());
 
+    printf("\ninput vector - %d x %d\n", input_width, input_height);
+    print2DVector(c.data->input.values, c.data->input.height, c.data->input.width);
 
-    printf("\ninput vector - %d x %d\n", width, height);
-    print2DVector(input_data, height, width);
-
-    convolve(&c, INVERSE_GRADIENT_FILTER, input_data, height, width);
-    convolve(&c, VERTICAL_GRADIENT_FILTER, input_data, height, width);
-    convolve(&c, MODIFIED_GAUSSIAN_FILTER, input_data, height, width);
+    convolve(&c, INVERSE_GRADIENT_FILTER, STANDARD_CONVOLUTION);
+    convolve(&c, VERTICAL_GRADIENT_FILTER, STANDARD_CONVOLUTION);
+    convolve(&c, MODIFIED_GAUSSIAN_FILTER, STANDARD_CONVOLUTION);
+    convolve(&c, INVERSE_GRADIENT_FILTER, PADDED_CONVOLUTION);
+    convolve(&c, VERTICAL_GRADIENT_FILTER, PADDED_CONVOLUTION);
+    convolve(&c, MODIFIED_GAUSSIAN_FILTER, PADDED_CONVOLUTION);
+    convolve(&c, INVERSE_GRADIENT_FILTER, DILATION_CONVOLUTION);
+    convolve(&c, VERTICAL_GRADIENT_FILTER, DILATION_CONVOLUTION);
+    convolve(&c, MODIFIED_GAUSSIAN_FILTER, DILATION_CONVOLUTION);
 
     return;
 }
