@@ -109,8 +109,6 @@ void testConvolutions() {
     CNNLayer c = CNNLayer(TANH, input_height, input_width, THREExTHREE);
 
     c.data->input.values = smiles;
-    c.k->setFilterStyle(BOTTOM_LEFT_GRADIENT_FILTER);
-    c.setStride(2);
 
     printf("test CNNLayer(%d, %d)\n\n", input_height, input_width);
     printf("\tc.stride: %d\n", c.stride);

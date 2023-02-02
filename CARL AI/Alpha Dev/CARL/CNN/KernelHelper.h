@@ -9,6 +9,7 @@ static const float pi = 3.1415926f;
 
     // FILTER DIMENSIONS //
 inline void oneXone(int* r, int* c) { *r = 1; *c = 1; }
+inline void twoXtwo(int* r, int* c) { *r = 2; *c = 2; }
 inline void oneXthree(int* r, int* c) { *r = 1; *c = 3; }
 inline void oneXn(int* r, int* c, int n) { *r = 1; *c = n; }
 inline void threeXone(int* r, int* c) { *r = 3; *c = 1; }

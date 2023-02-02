@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-const std::string filterString[] = { "ONExONE", "ONExTHREE", "ONExN", "THREExONE", "NxONE", "THREExTHREE", "FIVExFIVE", "SEVENxSEVEN", "ELEVENxELEVEN" };
+const std::string filterString[] = { "ONExONE", "TWOxTWO", "ONExTHREE", "ONExN", "THREExONE", "NxONE", "THREExTHREE", "FIVExFIVE", "SEVENxSEVEN", "ELEVENxELEVEN" };
 const std::string filterStyleString[] = { "Ascending", 
                                           "Negative Gradient", 
                                           "Gradient", 
@@ -20,6 +20,7 @@ const std::string filterStyleString[] = { "Ascending",
 
 typedef enum FilterDimensions {
         ONExONE,
+        TWOxTWO,
         ONExTHREE,
         ONExN,
         THREExONE,

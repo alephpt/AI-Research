@@ -6,7 +6,7 @@
 
 
 static void (*lookupFilter[])(int* r, int* c) = {
-    oneXone, oneXthree, invalidFilter, threeXone, invalidFilter, threeXthree, fiveXfive, sevenXseven, elevenXeleven
+    oneXone, twoXtwo, oneXthree, invalidFilter, threeXone, invalidFilter, threeXthree, fiveXfive, sevenXseven, elevenXeleven
 };
 
 static void (*lookupNFilter[])(int* r, int* c, int n) = {
