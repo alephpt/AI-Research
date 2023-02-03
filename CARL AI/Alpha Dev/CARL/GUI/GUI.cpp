@@ -48,7 +48,7 @@ static inline void queueEvents(Action event, sf::RenderWindow* display) {
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 				sf::View view{ display->getView() };
-				view.move(sf::Vector2f{ newMousePosition - prevMousePosition });
+				view.move(sf::Vector2f{ prevMousePosition - newMousePosition });
 				display->setView(view);
 			}
 
