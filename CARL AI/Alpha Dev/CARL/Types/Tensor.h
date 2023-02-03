@@ -1,16 +1,10 @@
 #pragma once
-#include <stdlib.h>
+#include "Types.h"
 #include "Matrix.h"
 
-typedef std::vector<matrix> tensor;
 
-typedef struct {
-	int rank;
-	int* shape;
-	float* data;
-} Tensor;
+typedef vector<fmatrix> tensorf;
 
-Tensor* initTensor(int rank, int* dims);
 // addTensors
 // subtractTensors
 // scalarMultiply
@@ -22,7 +16,7 @@ Tensor* initTensor(int rank, int* dims);
 // outerProduct
 // transpose
 // broadcast
-// determinant
+// determinant 
 // inverse
 // trace
 // contraction

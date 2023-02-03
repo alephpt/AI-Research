@@ -1,18 +1,17 @@
 #include "Matrix.h"
-#include <stdio.h>
+#include "General.h"
 
-Matrix* initMatrix(int rows, int cols) {
-    Matrix* newMatrix = new Matrix;
-    newMatrix->rows = rows;
-    newMatrix->cols = cols;
-    newMatrix->data = new float[rows * cols];
-    return newMatrix;
-}
+void printFMatrix(fmatrix values) {
+    size_t rows = values.size();
+    size_t cols = values[0].size();
 
-void printMatrix(float** data, int rows, int cols) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%f", data[i][j]);
+    for (int i = 0; i < rows; i++)
+    {
+        printf("\t\t");
+        for (int j = 0; j < cols; j++)
+        {
+            printColor(values[i][j]);
         }
+        printf("\n");
     }
 }

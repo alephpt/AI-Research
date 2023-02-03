@@ -17,12 +17,12 @@ struct SNNNeuron {
 	float bias = 0.0f;																	// can be added to the input before passing it through the activation function
 	float delta = 0.0f;																	// used for backpropagation
 	float membrane_potential = 0.0f;													// potential of a neuron firing
-	Membrane membrane;																	// used to determine the membrane potential
+	Membrane membrane = {};																// used to determine the membrane potential
 	int n_synapses = 0;																	// number of Synapses
 	Synapse** synapses = new Synapse*;													// connects Neurons to other Neurons to transmit spikes;
 	int n_spikes = 0;																	// number of neural spikes
 	Spike* spikes = new Spike;															// used to track neural activity over time
-	Activation activation_type;															// determins the activation type to calculate the weights and bias' of a Neuron
+	Activation activation_type = RELU;													// determins the activation type to calculate the weights and bias' of a Neuron
 };
 
 

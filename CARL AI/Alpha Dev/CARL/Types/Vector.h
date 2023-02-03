@@ -1,11 +1,11 @@
 #pragma once
+#include <vector>
 
-typedef struct Vector{
-    float* data;
-    int size;
-} Vector;
+template<typename T>
+using vector = std::vector<T>;
 
-Vector* initVector(int size);
+
+
 // addition
 // subtraction
 // chainAddition

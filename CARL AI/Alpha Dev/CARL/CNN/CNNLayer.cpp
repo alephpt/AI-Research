@@ -176,5 +176,5 @@ void CNNLayer::printCurrentFeature()
 	CNNFeature* feature = getCurrentFeature();
 
 	printf("\noutput vector - %d x %d\n", feature->height, feature->width);
-	print2DVector(feature->values, feature->height, feature->width);
+	printFMatrix(feature->values);
 }

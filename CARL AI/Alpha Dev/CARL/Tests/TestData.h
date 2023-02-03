@@ -1,7 +1,7 @@
 #pragma once
 #include "../Types/Types.h"
 
-const matrix smiles{
+const fmatrix smiles{
 	{ -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f },
 	{ -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f },
 	{ -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -0.4f, -0.4f, -0.4f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f },

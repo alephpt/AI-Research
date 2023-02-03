@@ -48,7 +48,7 @@ typedef enum FilterStyle {
 } FilterStyle;
 
 typedef struct Filter {
-    matrix weights;
+    fmatrix weights;
     int rows = 0;
     int columns = 0;
 } Filter;
@@ -74,7 +74,7 @@ class Kernel {
         void printFilter();
         int getRows();
         int getColumns();
-        matrix getWeights();
+        fmatrix getWeights();
         FilterDimensions getDimensions();
         Activation getActivationType();
         FilterStyle getFilterStyle();
@@ -85,13 +85,13 @@ class Kernel {
         void setActivationType(Activation);
         void adjustDimensions(FilterDimensions);
         void adjustDimensions(FilterDimensions, int);
-        float getMax(matrix);
-        float getMaxMean(matrix);
-        float getProductSum(matrix);
-        float getSum(matrix);
-        float getSumMean(matrix);
-        float getMeanSum(matrix);
-        float getMean(matrix);
+        float getMax(fmatrix);
+        float getMaxMean(fmatrix);
+        float getProductSum(fmatrix);
+        float getSum(fmatrix);
+        float getSumMean(fmatrix);
+        float getMeanSum(fmatrix);
+        float getMean(fmatrix);
 
     private:
         void populateFilter(FilterStyle);

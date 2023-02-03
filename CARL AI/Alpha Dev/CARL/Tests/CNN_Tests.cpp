@@ -37,7 +37,7 @@ void testConvolutionInput() {
     printf("\tc.k->getActivationType: %s\n\n", activationString[c.k->getActivationType()].c_str());
 
     printf("\ninput vector - %d x %d\n", input_width, input_height);
-    print2DVector(c.data->input.values, c.data->input.height, c.data->input.width);
+    printFMatrix(c.data->input.values);
 
     c.k->printFilter();
 }
@@ -114,7 +114,7 @@ void testConvolutions() {
     printf("\tc.k->getActivationType: %s\n\n", activationString[c.k->getActivationType()].c_str());
 
     printf("\ninput vector - %d x %d\n", input_width, input_height);
-    print2DVector(c.data->input.values, c.data->input.height, c.data->input.width);
+    printFMatrix(c.data->input.values);
 
     convolve(&c, INVERSE_GRADIENT_FILTER, VALID_CONVOLUTION);
     convolve(&c, VERTICAL_GRADIENT_FILTER, VALID_CONVOLUTION);
@@ -140,14 +140,14 @@ void testConvolutions() {
 
 static void testKernelFilter(FilterDimensions filter) {
     Kernel* k = new Kernel(filter);
-    k->print();
+    k->printFilter();
     delete k;
     return;
 }
 
 static void testKernelFilter(FilterDimensions filter, int n) {
     Kernel* k = new Kernel(filter, n);
-    k->print();
+    k->printFilter();
     delete k;
     return;
 }
@@ -167,13 +167,13 @@ void testKernelInit() {
 
 void testAdjustKernelDims() {
     Kernel* k = new Kernel(FIVExFIVE);
-    k->print();
+    k->printFilter();
     k->adjustDimensions(NxONE, 12);
-    k->print();
+    k->printFilter();
     k->adjustDimensions(ONExN, 7);
-    k->print();
+    k->printFilter();
     k->adjustDimensions(THREExTHREE);
-    k->print();
+    k->printFilter();
     delete k;
     return;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "GUI_Tests.h"
 #include "Type_Tests.h"
 #include "GAN_Tests.h"
 #include "CNN_Tests.h"

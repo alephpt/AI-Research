@@ -106,10 +106,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>C:\Users\aleph\.sfml\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\aleph\.sfml\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,6 +153,8 @@
     <ClCompile Include="GAN\GAN.cpp" />
     <ClCompile Include="GAN\Discriminator.cpp" />
     <ClCompile Include="GAN\Sample.cpp" />
+    <ClCompile Include="GUI\GUI.cpp" />
+    <ClCompile Include="Tests\GUI_Tests.cpp" />
     <ClCompile Include="Protocols\ARL_Protocol.cpp" />
     <ClCompile Include="Protocols\CA_Protocol.cpp" />
     <ClCompile Include="Protocols\RKC_Protocol.cpp" />
@@ -173,6 +178,7 @@
     <ClCompile Include="Types\General.cpp" />
     <ClCompile Include="Types\Matrix.cpp" />
     <ClCompile Include="Types\Tensor.cpp" />
+    <ClCompile Include="Types\Scalar.cpp" />
     <ClCompile Include="Types\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,7 @@
     <ClInclude Include="Connectors\Protocol_Connectors.h" />
     <ClInclude Include="Connectors\ARL_Connectors.h" />
     <ClInclude Include="Connectors\RKC_Connectors.h" />
+    <ClInclude Include="Data\Image\Samples\image_map.json" />
     <ClInclude Include="GAN\Dataset.h" />
     <ClInclude Include="GAN\Discriminator.h" />
     <ClInclude Include="GAN\GANFeature.h" />
@@ -195,6 +202,8 @@
     <ClInclude Include="GAN\GANNeuron.h" />
     <ClInclude Include="GAN\Optimizer.h" />
     <ClInclude Include="GAN\Sample.h" />
+    <ClInclude Include="GUI\GUI.h" />
+    <ClInclude Include="Tests\GUI_Tests.h" />
     <ClInclude Include="Protocols\ARL_Protocol.h" />
     <ClInclude Include="Protocols\CARL_Protocol.h" />
     <ClInclude Include="Protocols\CA_Protocol.h" />
@@ -219,8 +228,12 @@
     <ClInclude Include="Types\Matrix.h" />
     <ClInclude Include="Additional_Notes.txt" />
     <ClInclude Include="Types\Tensor.h" />
+    <ClInclude Include="Types\Scalar.h" />
     <ClInclude Include="Types\Types.h" />
     <ClInclude Include="Types\Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Image\Samples\sample_1.jpeg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

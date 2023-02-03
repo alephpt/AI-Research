@@ -12,9 +12,9 @@ double getTime()
 }
 
 
-std::vector<std::vector<float>> generate2dNoise(int rows, int cols)
+fmatrix generate2dNoise(size_t rows, size_t cols)
 {
-    std::vector<std::vector<float>>vals(rows, std::vector<float>(cols, 0.0f));
+    fmatrix vals = fmatrix(rows, std::vector<float>(cols, 0.0f));
     std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dis(0.0, 1.0);
 
@@ -71,18 +71,5 @@ void printColor(float in) {
     }
     else {
         printf("[%07.3lf] ", in);
-    }
-}
-
-void print2DVector(std::vector<std::vector<float>> values, int rows, int cols) 
-{
-    for (int i = 0; i < rows; i++)
-    {
-        printf("\t\t");
-        for (int j = 0; j < cols; j++)
-        {
-            printColor(values[i][j]);
-        }
-        printf("\n");
     }
 }

@@ -1,7 +1,6 @@
 #pragma once
-#include <vector>
+#include "Matrix.h"
 
 double getTime();
-std::vector<std::vector<float>> generate2dNoise(int, int);
+fmatrix generate2dNoise(size_t, size_t);
 void printColor(float);
-void print2DVector(std::vector<std::vector<float>>, int, int);

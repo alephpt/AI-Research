@@ -7,8 +7,8 @@ void validConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int stri
 	int kernel_cols = k->getColumns();
 	output->height = (input->height - kernel_rows) / stride + 1;
 	output->width = (input->width - kernel_cols) / stride + 1;
-	output->values = matrix(output->height, std::vector<float>(output->width, 0.0f));
-	matrix cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+	output->values = fmatrix(output->height, std::vector<float>(output->width, 0.0f));
+	fmatrix cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 
 	for (int i = 0; i < output->height; ++i) {
 		int i_step = i * stride;
@@ -21,7 +21,7 @@ void validConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int stri
 			}
 			output->values[i][j] = activation(k->getActivationType(), k->getProductSum(cached));
 		}
-		cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+		cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 	}
 }
 
@@ -32,8 +32,8 @@ void paddedConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int str
 	const int padding_x = kernel_cols / 2;
     output->height = input->height / stride + 1;
 	output->width = input->width / stride + 1;
-	output->values = matrix(output->height, std::vector<float>(output->width, 0.0f));
-	matrix cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+	output->values = fmatrix(output->height, std::vector<float>(output->width, 0.0f));
+	fmatrix cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 
 	for (int i = 0; i < output->height; ++i) {
 		int i_step = i * stride;
@@ -51,7 +51,7 @@ void paddedConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int str
 			}
 			output->values[i][j] = activation(k->getActivationType(), k->getProductSum(cached));
 		}
-		cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+		cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 	}
 }
 
@@ -60,8 +60,8 @@ void dilationConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int s
 	int kernel_cols = k->getColumns();
 	output->height = (input->height - kernel_rows) / stride + 1;
 	output->width = (input->width - kernel_cols) / stride + 1;
-	output->values = matrix(output->height, std::vector<float>(output->width, 0.0f));
-	matrix cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+	output->values = fmatrix(output->height, std::vector<float>(output->width, 0.0f));
+	fmatrix cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 
 	for (int i = 0; i < output->height; ++i) {
 		int i_step = i * stride;
@@ -74,7 +74,7 @@ void dilationConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int s
 			}
 			output->values[i][j] = activation(k->getActivationType(), k->getProductSum(cached));
 		}
-		cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+		cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 	}
 }
 
@@ -85,8 +85,8 @@ void paddedDilationConvolution(CNNFeature* output, CNNFeature* input, Kernel* k,
 	const int padding_x = kernel_cols / 2;
 	output->height = input->height / stride + 1;
 	output->width = input->width / stride + 1;
-	output->values = matrix(output->height, std::vector<float>(output->width, 0.0f));
-	matrix cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+	output->values = fmatrix(output->height, std::vector<float>(output->width, 0.0f));
+	fmatrix cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 
 	for (int i = 0; i < output->height; ++i) {
 		int i_step = i * stride;
@@ -105,6 +105,6 @@ void paddedDilationConvolution(CNNFeature* output, CNNFeature* input, Kernel* k,
 			}
 			output->values[i][j] = activation(k->getActivationType(), k->getProductSum(cached));
 		}
-		cached = matrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
+		cached = fmatrix(kernel_rows, std::vector<float>(kernel_cols, 0.0f));
 	}
 }

@@ -38,6 +38,6 @@ void testConnectivityMatrix() {
 
 	float** conn_matrix = createConnectivityMatrix(snn);
 
-	printMatrix(conn_matrix, snn->n_neurons, snn->n_neurons);
+	//printMatrix(conn_matrix, snn->n_neurons, snn->n_neurons);
 	return;
 }

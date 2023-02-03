@@ -30,8 +30,8 @@ inline void invalidNFilter(int* r, int* c, int n) {
 
     // FILTER PATTERNS
 inline void populateGradientFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -41,8 +41,8 @@ inline void populateGradientFilter(Filter* filter) {
 }
 
 inline void populateInverseGradientFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -52,8 +52,8 @@ inline void populateInverseGradientFilter(Filter* filter) {
 }
 
 inline void populateVerticalGradientFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -63,8 +63,8 @@ inline void populateVerticalGradientFilter(Filter* filter) {
 }
 
 inline void populateInverseVerticalGradientFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -74,9 +74,9 @@ inline void populateInverseVerticalGradientFilter(Filter* filter) {
 }
 
 inline void populateAscendingFilter(Filter* filter) {
-    int cols = filter->columns;
-    int rows = filter->rows;
-    int units = rows * cols;
+    size_t cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t units = rows * cols;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -86,9 +86,9 @@ inline void populateAscendingFilter(Filter* filter) {
 }
 
 inline void populateNegativeAscendingFilter(Filter* filter) {
-    int cols = filter->columns;
-    int rows = filter->rows;
-    int units = rows * cols;
+    size_t cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t units = rows * cols;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -99,8 +99,8 @@ inline void populateNegativeAscendingFilter(Filter* filter) {
 
 
 inline void populateTLBRGradientFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -110,8 +110,8 @@ inline void populateTLBRGradientFilter(Filter* filter) {
 }
 
 inline void populateBLTRGradientFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -121,8 +121,8 @@ inline void populateBLTRGradientFilter(Filter* filter) {
 }
 
 inline void populateGaussianFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
     float y_mean = (float)rows / 2.0f;
     float x_mean = (float)cols / 2.0f;
     float y_sigma = (float)rows / 6.0f;
@@ -141,8 +141,8 @@ inline void populateGaussianFilter(Filter* filter) {
 }
 
 inline void populateBalancedGaussianFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
     float y_mean = (float)rows / 2.0f;
     float x_mean = (float)cols / 2.0f;
     float y_sigma = (float)rows / 6.0f;
@@ -161,8 +161,8 @@ inline void populateBalancedGaussianFilter(Filter* filter) {
 }
 
 inline void populateNegativeGaussianFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
     float y_mean = (float)rows / 2.0f;
     float x_mean = (float)cols / 2.0f;
     float y_sigma = (float)rows / 6.0f;
@@ -181,8 +181,8 @@ inline void populateNegativeGaussianFilter(Filter* filter) {
 }
 
 inline void populateModifiedGaussianFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
     float y_mean = (float)rows / 2.0f;
     float x_mean = (float)cols / 2.0f;
     float y_sigma = (float)rows / 6.0f;
@@ -201,8 +201,8 @@ inline void populateModifiedGaussianFilter(Filter* filter) {
 }
 
 inline void populateConicalFilter(Filter* filter) {
-    int rows = filter->rows;
-    int cols = filter->columns;
+    size_t rows = filter->rows;
+    size_t cols = filter->columns;
     float y_mean = (float)rows / 2.0f;
     float x_mean = (float)cols / 2.0f;
 

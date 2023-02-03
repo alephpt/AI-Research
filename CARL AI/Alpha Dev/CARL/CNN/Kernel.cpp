@@ -109,14 +109,14 @@ Kernel::~Kernel() { filter.weights.clear(); }
 void Kernel::setFilterDimensions(FilterDimensions f) { 
     dimensions = f; 
     lookupFilter[dimensions](&filter.rows, &filter.columns); 
-    filter.weights = matrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = fmatrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
 void Kernel::setFilterDimensions(FilterDimensions f, int n) { 
     dimensions = f; 
     lookupNFilter[dimensions](&filter.rows, &filter.columns, n); 
-    filter.weights = matrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = fmatrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
@@ -141,7 +141,7 @@ void Kernel::adjustDimensions(FilterDimensions f, int n)
 void Kernel::setStride(int s) { stride = s; }
 void Kernel::setActivationType(Activation a) { activation_type = a; }
 void Kernel::setFilterStyle(FilterStyle s) { style = s; populateFilter(style); }
-matrix Kernel::getWeights() { return filter.weights; }
+fmatrix Kernel::getWeights() { return filter.weights; }
 FilterDimensions Kernel::getDimensions() { return dimensions; }
 Activation Kernel::getActivationType() { return activation_type; }
 FilterStyle Kernel::getFilterStyle() { return style; }
@@ -149,9 +149,9 @@ int Kernel::getColumns() { return filter.columns; }
 int Kernel::getRows() { return filter.rows; }
 
 
-float Kernel::getProductSum(matrix input) {
-    int rows = input.size();
-    int cols = input[0].size();
+float Kernel::getProductSum(fmatrix input) {
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float sum = 0.0f;
 
     for (int y = 0; y < rows; y++) {
@@ -163,10 +163,10 @@ float Kernel::getProductSum(matrix input) {
     return sum;
 }
 
-float Kernel::getMax(matrix input)
+float Kernel::getMax(fmatrix input)
 {
-    int rows = input.size();
-    int cols = input[0].size();
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float max = 0.0f;
 
     for (int y = 0; y < rows; y++) {
@@ -182,10 +182,10 @@ float Kernel::getMax(matrix input)
 
 
 
-float Kernel::getMaxMean(matrix input)
+float Kernel::getMaxMean(fmatrix input)
 {
-    int rows = input.size();
-    int cols = input[0].size();
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float max = 0.0f;
 
     for (int y = 0; y < rows; y++) {
@@ -200,10 +200,10 @@ float Kernel::getMaxMean(matrix input)
 
 
 
-float Kernel::getSum(matrix input)
+float Kernel::getSum(fmatrix input)
 {
-    int rows = input.size();
-    int cols = input[0].size();
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float sum = 0.0f;
 
     for (int y = 0; y < rows; y++) {
@@ -215,12 +215,12 @@ float Kernel::getSum(matrix input)
     return sum;
 }
 
-float Kernel::getSumMean(matrix input)
+float Kernel::getSumMean(fmatrix input)
 {
-    int rows = input.size();
-    int cols = input[0].size();
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float sum = 0.0f;
-    int total = rows * cols;
+    size_t total = rows * cols;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -231,10 +231,10 @@ float Kernel::getSumMean(matrix input)
     return sum / total;
 }
 
-float Kernel::getMeanSum(matrix input)
+float Kernel::getMeanSum(fmatrix input)
 {
-    int rows = input.size();
-    int cols = input[0].size();
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float sum = 0.0f;
 
     for (int y = 0; y < rows; y++) {
@@ -246,12 +246,12 @@ float Kernel::getMeanSum(matrix input)
     return sum;
 }
 
-float Kernel::getMean(matrix input)
+float Kernel::getMean(fmatrix input)
 {
-    int rows = input.size();
-    int cols = input[0].size();
+    size_t rows = input.size();
+    size_t cols = input[0].size();
     float sum = 0.0f;
-    int total = rows + cols;
+    size_t total = rows + cols;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {

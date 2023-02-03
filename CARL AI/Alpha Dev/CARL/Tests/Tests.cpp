@@ -1,12 +1,12 @@
 #include "Tests.h"
 
 void runTests() {
+    // GUI Tests ///
+    testinitGUI();
+
         // Primitive Tests //
     // testRandomNumbers();
-    // testVector();
-    // testMatrix();
-    // test3DTensor();
-    // test4DTensor();
+    
     // testActivationType();
 
         // CNN Tests //
@@ -15,7 +15,7 @@ void runTests() {
     // testConvolutionInit();
     // testConvolutionFilters();
     // testConvolutionInput();
-     testConvolutions();
+    // testConvolutions();
 
         // SNN Tests //
     // testinitSNN();

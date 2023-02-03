@@ -1,17 +1,11 @@
 #pragma once
-#include <stdlib.h>
-#include <vector>
+#include "Vector.h"
+#include "Scalar.h"
 
-typedef std::vector<std::vector<float>> matrix;
+using fmatrix = vector<vector<scalarf>>;
 
-typedef struct {
-    float* data;
-    int rows;
-    int cols;
-} Matrix;
+void printFMatrix(fmatrix);
 
-Matrix* initMatrix(int rows, int cols);
-void printMatrix(float** data, int rows, int cols);
 // add
 // subtract
 // scalarMultiply
