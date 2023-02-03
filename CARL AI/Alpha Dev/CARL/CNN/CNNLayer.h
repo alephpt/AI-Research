@@ -32,7 +32,7 @@ public:
     CNNLayer(Activation, int, int, int, FilterDimensions, int);
 
     void setStride(int);
-    void convolute(ConvolutionType);
+    void convolute(ConvolutionType, CNNFeature*);
     void printCurrentFeature();
     CNNFeature* createNewFeature();
     CNNFeature* getCurrentFeature();

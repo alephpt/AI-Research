@@ -94,7 +94,7 @@ void convolve(CNNLayer* c, FilterStyle filter_type, ConvolutionType convolution_
     c->k->setFilterStyle(filter_type);
     c->k->printFilter();
 
-    c->convolute(convolution_type);
+    c->convolute(convolution_type, &c->data->input);
     c->printCurrentFeature();
 }
 

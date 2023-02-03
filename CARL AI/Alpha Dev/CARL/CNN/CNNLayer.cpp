@@ -152,10 +152,10 @@ void (*ConvolutionFn[])(CNNFeature*, CNNFeature*, Kernel*, int) = {
 	validConvolution, paddedConvolution, dilationConvolution, paddedDilationConvolution
 };
 
-void CNNLayer::convolute(ConvolutionType convolution_type) {
+void CNNLayer::convolute(ConvolutionType convolution_type, CNNFeature* input) {
 	CNNSample* sample = getCurrentSample();
 	CNNFeature* newFeature = createNewFeature();
-	ConvolutionFn[convolution_type](newFeature, &data->input, k, stride);
+	ConvolutionFn[convolution_type](newFeature, input, k, stride);
 	newFeature->filter_style = k->getFilterStyle();
 	newFeature->filter = k->getWeights();
 	sample->features.push_back(newFeature);
