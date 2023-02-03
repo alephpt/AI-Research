@@ -12,8 +12,8 @@ public:
 		this->n_inputs = n_inputs;
 		this->n_hidden = n_hidden;
 		this->n_outputs = n_outputs;
-		this->weights = new float[(size_t)((n_inputs + 1) * n_hidden + (n_hidden + 1) * n_outputs)];
-		this->biases = new float[(size_t)(n_hidden * n_outputs)];
+		this->weights = new float[((n_inputs + 1) * n_hidden + (n_hidden + 1) * n_outputs)];
+		this->biases = new float[(n_hidden * n_outputs)];
 	}
 
 	~Generator() {

@@ -46,7 +46,7 @@ void initSNN(SNN* snn, int n_in, int nn, int n_syn, int n_sp, Activation activat
         snn->neurons[ni].index = ni;
         snn->neurons[ni].synapses = new Synapse*[nn - 1];
         initNeuron(activation_type, &snn->neurons[ni], new Membrane, new Spike[n_sp], n_sp,
-                new float[(size_t)(nn - 1)], 0.0f, nn - 1, new float[(size_t)(nn - 1)], nn - 1, new float[(size_t)(nn - 1)], 0.0f, 0.0f);
+                new float[(nn - 1)], 0.0f, nn - 1, new float[(nn - 1)], nn - 1, new float[(nn - 1)], 0.0f, 0.0f);
         snn->n_neurons++;
     }
 
