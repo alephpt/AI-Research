@@ -302,6 +302,15 @@
     <ClInclude Include="Tests\GUI_Tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Entities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp.cpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Image\Samples\sample_1.jpeg">

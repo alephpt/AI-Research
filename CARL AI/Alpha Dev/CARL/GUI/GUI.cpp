@@ -1,22 +1,36 @@
 #include "GUI.h"
+#include "Entities.h"
 #include <map>
 #include <stdio.h>
 
+	///////////////////////////
+	// Variable Declarations //
+	///////////////////////////
 
 
-typedef struct {
-	vector<sf::CircleShape> Circles;
-} RenderObjects;
-
-	// Local Variables
 typedef sf::Event Action;
+static sf::Vector2i prevMousePosition;
+
 static const int window_w = 800;
 static const int window_h = 600;
-float centerX = (float)(window_w / 2);
-float centerY = (float)(window_h / 2);
-static float circle_r = 100.0f;
-sf::Vector2i prevMousePosition;
-static RenderObjects* Objects(new RenderObjects);
+static const float centerX = (float)(window_w / 2);
+static const float centerY = (float)(window_h / 2);
+
+static const float RL_REGION_X = (float)(window_w / 5);
+static const float RL_REGION_Y = (float)(window_h / 2);
+
+static const float GAN_REGION_X = (float)(window_w / 2);
+static const float GAN_REGION_Y = (float)(window_h / 3);
+
+static const float CNN_REGION_X = (float)(window_w / 1.5);
+static const float CNN_REGION_Y = (float)(window_h / 2);
+
+static const float RNN_REGION_X = (float)(window_w / 1.125);
+static const float RNN_REGION_Y = (float)(window_w / 2);
+
+static const float SNN_REGION_X = (float)(window_w / 2);
+static const float SNN_REGION_Y = (float)(window_h / 1.5);
+
 
 
 	///////////////////////
@@ -63,6 +77,25 @@ static inline void queueEvents(Action event, sf::RenderWindow* display) {
 	}
 }
 
+void drawObjects(sf::RenderWindow* display) {
+	for (sf::CircleShape Node : Objects->Nodes) {
+		display->draw(Node);
+	}
+
+	for (sf::RectangleShape Line : Objects->Connections) {
+		display->draw(Line);
+	}
+
+	for (sf::RectangleShape System : Objects->Systems) {
+		display->draw(System);
+	}
+
+	for (sf::CircleShape Data : Objects->Data) {
+		display->draw(Data);
+	}
+}
+
+
 	// Main Render Loop //
 static inline void runRenderLoop(sf::RenderWindow* display) {
 	while (display->isOpen()) {
@@ -73,23 +106,26 @@ static inline void runRenderLoop(sf::RenderWindow* display) {
 		}
 
 		display->clear();
-		display->draw(Objects->Circles[0]);
+		drawObjects(display);
 		display->display();
 	}
+}
+
+void prepareEnvironment() {
+	createSystem(50.0f, 50.0f, RL_REGION_X, RL_REGION_Y, colors::Red);
+	createSystem(50.0f, 50.0f, GAN_REGION_X, GAN_REGION_Y, colors::Green);
+	createSystem(50.0f, 50.0f, CNN_REGION_X, CNN_REGION_Y, colors::Blue);
+	createSystem(50.0f, 50.0f, RNN_REGION_X, RNN_REGION_Y, colors::Magenta);
+	createSystem(50.0f, 50.0f, SNN_REGION_X, SNN_REGION_Y, colors::Yellow);
 }
 
 	// Entry Point //
 void initGUI() {
 	sf::RenderWindow display(sf::VideoMode(window_w, window_h), "CARL!");
-
-	sf::CircleShape N1(circle_r);
-	N1.setFillColor(sf::Color::Blue);
-	N1.setOrigin(circle_r, circle_r);
-	N1.setPosition(centerX, centerY);
-	Objects->Circles.push_back(N1);
-
 	sf::View view(sf::FloatRect(0.0f, 0.0f, (float)window_w, (float)window_h));
 	display.setView(view);
+
+	prepareEnvironment();
 
 	runRenderLoop(&display);
 }
