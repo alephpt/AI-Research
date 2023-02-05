@@ -11,25 +11,25 @@
 typedef sf::Event Action;
 static sf::Vector2i prevMousePosition;
 
-static const int window_w = 800;
-static const int window_h = 600;
+static const int window_w = 1000;
+static const int window_h = 800;
 static const float centerX = (float)(window_w / 2);
 static const float centerY = (float)(window_h / 2);
 
 static const float RL_REGION_X = (float)(window_w / 5);
 static const float RL_REGION_Y = (float)(window_h / 2);
 
-static const float GAN_REGION_X = (float)(window_w / 2);
-static const float GAN_REGION_Y = (float)(window_h / 3);
+static const float GAN_REGION_X = (float)(window_w / 2.25);
+static const float GAN_REGION_Y = (float)(window_h / 5);
 
 static const float CNN_REGION_X = (float)(window_w / 1.5);
 static const float CNN_REGION_Y = (float)(window_h / 2);
 
-static const float RNN_REGION_X = (float)(window_w / 1.125);
-static const float RNN_REGION_Y = (float)(window_w / 2);
+static const float RNN_REGION_X = (float)(window_w / 1.175);
+static const float RNN_REGION_Y = (float)(window_h / 2);
 
-static const float SNN_REGION_X = (float)(window_w / 2);
-static const float SNN_REGION_Y = (float)(window_h / 1.5);
+static const float SNN_REGION_X = (float)(window_w / 2.25);
+static const float SNN_REGION_Y = (float)(window_h / 1.25);
 
 
 
@@ -78,20 +78,28 @@ static inline void queueEvents(Action event, sf::RenderWindow* display) {
 }
 
 void drawObjects(sf::RenderWindow* display) {
-	for (sf::CircleShape Node : Objects->Nodes) {
-		display->draw(Node);
+	sf::Vertex line[] = {
+		sf::Vertex(sf::Vector2f(10, 10)),
+		sf::Vertex(sf::Vector2f(150, 150)),
+		sf::Vertex(sf::Vector2f(150, 200))
+	};
+
+	display->draw(line, 3, sf::Lines);
+
+	for (sf::RectangleShape System : Objects->Systems) {
+		display->draw(System);
 	}
 
 	for (sf::RectangleShape Line : Objects->Connections) {
 		display->draw(Line);
 	}
 
-	for (sf::RectangleShape System : Objects->Systems) {
-		display->draw(System);
-	}
-
 	for (sf::CircleShape Data : Objects->Data) {
 		display->draw(Data);
+	}
+
+	for (sf::CircleShape Node : Objects->Nodes) {
+		display->draw(Node);
 	}
 }
 
@@ -112,11 +120,11 @@ static inline void runRenderLoop(sf::RenderWindow* display) {
 }
 
 void prepareEnvironment() {
-	createSystem(50.0f, 50.0f, RL_REGION_X, RL_REGION_Y, colors::Red);
-	createSystem(50.0f, 50.0f, GAN_REGION_X, GAN_REGION_Y, colors::Green);
-	createSystem(50.0f, 50.0f, CNN_REGION_X, CNN_REGION_Y, colors::Blue);
-	createSystem(50.0f, 50.0f, RNN_REGION_X, RNN_REGION_Y, colors::Magenta);
-	createSystem(50.0f, 50.0f, SNN_REGION_X, SNN_REGION_Y, colors::Yellow);
+	createSystem(100.0f, 100.0f, RL_REGION_X, RL_REGION_Y, colors::Red);
+	createSystem(100.0f, 100.0f, GAN_REGION_X, GAN_REGION_Y, colors::Green);
+	createSystem(100.0f, 100.0f, CNN_REGION_X, CNN_REGION_Y, colors::Blue);
+	createSystem(100.0f, 100.0f, RNN_REGION_X, RNN_REGION_Y, colors::Magenta);
+	createSystem(100.0f, 100.0f, SNN_REGION_X, SNN_REGION_Y, colors::Yellow);
 }
 
 	// Entry Point //
