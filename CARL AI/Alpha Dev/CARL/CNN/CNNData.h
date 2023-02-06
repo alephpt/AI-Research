@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "Kernel.h"
-#include "../types/Activation.h"
+#include "../Types/Activation.h"
 
 typedef enum {
     POOL_LAYER,

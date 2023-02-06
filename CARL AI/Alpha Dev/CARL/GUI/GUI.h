@@ -1,15 +1,13 @@
 #pragma once
-#include "../Types/Vector.h"
 #include <SFML/Graphics.hpp>
 
+typedef sf::Color colors;
 
-typedef enum GuiSystemTypes {
-	RL_GUI_SYSTEM,
-	GAN_GUI_SYSTEM,
-	CNN_GUI_SYSTEM,
-	RNN_GUI_SYSTEM,
-	SNN_GUI_SYSTEM
-} GuiSystemTypes;
+
+const int window_w = 1000;
+const int window_h = 800;
+const float centerX = (float)(window_w / 2);
+const float centerY = (float)(window_h / 2);
 
 void initGUI();
 

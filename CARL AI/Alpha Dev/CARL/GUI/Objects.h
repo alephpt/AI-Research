@@ -1,7 +1,8 @@
 #pragma once
+#include "../Types/Vector.h"
+#include "Systems.h"
 #include "GUI.h"
 
-typedef sf::Color colors;
 
 typedef struct RenderObjects{
 	int n_nodes = 0;
@@ -25,11 +26,11 @@ void createNode(float radius, float location_x, float location_y, colors color) 
 	Objects->n_nodes++;
 }
 
-void createSystem(float width, float height, float location_x, float location_y, colors color) {
-	sf::RectangleShape S(sf::Vector2f(width, height));
-	S.setFillColor(color);
-	S.setOrigin(width / 2.0f, width / 2.0f);
-	S.setPosition(location_x, location_y);
+void createSystem(GUISystem* System) {
+	sf::RectangleShape S(System->dimensions);
+	S.setFillColor(System->color);
+	S.setOrigin(System->dimensions.x / 2.0f, System->dimensions.y / 2.0f);
+	S.setPosition(System->region);
 	Objects->Systems.push_back(S);
 	Objects->n_systems++;
 }
