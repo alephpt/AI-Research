@@ -2,9 +2,10 @@
 
 void runTests() {
     // GUI Tests ///
-    testinitGUI();
+    // testinitGUI();
 
         // Primitive Tests //
+    testGradientDescent();
     // testRandomNumbers();
     
     // testActivationType();

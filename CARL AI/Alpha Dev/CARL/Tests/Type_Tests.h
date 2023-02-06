@@ -1,5 +1,5 @@
  #pragma once
-#include "../Types/Types.h"
 
+void testGradientDescent();
 void testRandomNumbers();
 void testActivationType();

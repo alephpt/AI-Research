@@ -3,7 +3,6 @@
 #include "Systems.h"
 #include "GUI.h"
 
-
 typedef struct RenderObjects{
 	int n_nodes = 0;
 	vector<sf::CircleShape> Nodes;
@@ -14,6 +13,7 @@ typedef struct RenderObjects{
 	int n_data = 0;
 	vector<sf::CircleShape> Data;
 } RenderObjects;
+
 
 static RenderObjects* Objects(new RenderObjects);
 

@@ -206,8 +206,9 @@
     <ClInclude Include="GAN\Optimizer.h" />
     <ClInclude Include="GAN\Sample.h" />
     <ClInclude Include="GUI\GUI.h" />
-    <ClInclude Include="GUI\Entities.h" />
     <ClInclude Include="cpp.cpp" />
+    <ClInclude Include="GUI\Objects.h" />
+    <ClInclude Include="GUI\Systems.h" />
     <ClInclude Include="h.h" />
     <ClInclude Include="Tests\GUI_Tests.h" />
     <ClInclude Include="Protocols\ARL_Protocol.h" />

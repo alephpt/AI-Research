@@ -59,19 +59,6 @@ static inline void queueEvents(Action event, sf::RenderWindow* display) {
 }
 
 void drawObjects(sf::RenderWindow* display) {
-	sf::Vertex line1[] = {
-		sf::Vertex(sf::Vector2f(10, 10)),
-		sf::Vertex(sf::Vector2f(150, 150)),
-	};
-
-	sf::Vertex line2[] = {
-		sf::Vertex(sf::Vector2f(150, 150)),
-		sf::Vertex(sf::Vector2f(150, 200)),
-	};
-
-	display->draw(line1, 2, sf::Lines);
-	display->draw(line2, 2, sf::Lines);
-
 	for (sf::RectangleShape System : Objects->Systems) {
 		display->draw(System);
 	}
