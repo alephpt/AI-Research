@@ -109,14 +109,14 @@ Kernel::~Kernel() { filter.weights.clear(); }
 void Kernel::setFilterDimensions(FilterDimensions f) { 
     dimensions = f; 
     lookupFilter[dimensions](&filter.rows, &filter.columns); 
-    filter.weights = fmatrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = fmatrix(filter.rows, vector<float>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
 void Kernel::setFilterDimensions(FilterDimensions f, int n) { 
     dimensions = f; 
     lookupNFilter[dimensions](&filter.rows, &filter.columns, n); 
-    filter.weights = fmatrix(filter.rows, std::vector<float>(filter.columns, 0.0f));
+    filter.weights = fmatrix(filter.rows, vector<float>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 

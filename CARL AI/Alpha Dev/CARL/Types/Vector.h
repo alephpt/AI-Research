@@ -2,7 +2,7 @@
 #include <vector>
 
 template<typename T>
-using vector = std::vector<T>;
+using vector = vector<T>;
 
 
 

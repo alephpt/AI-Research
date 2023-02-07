@@ -22,12 +22,12 @@ typedef struct CNNSample {
     LayerType layer;
     FilterDimensions kernel_dimensions;
     Activation activation_type;
-    std::vector<CNNFeature*> features;
+    vector<CNNFeature*> features;
 } CNNSample;
 
 typedef struct CNNData {
     CNNFeature input;
     CNNFeature output;
-    std::vector<CNNSample*> layers;
+    vector<CNNSample*> layers;
     int n_layers = 0;
 } CNNData;

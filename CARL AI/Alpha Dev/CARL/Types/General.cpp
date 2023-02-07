@@ -14,7 +14,7 @@ double getTime()
 
 fmatrix generate2dNoise(size_t rows, size_t cols)
 {
-    fmatrix vals = fmatrix(rows, std::vector<float>(cols, 0.0f));
+    fmatrix vals = fmatrix(rows, vector<float>(cols, 0.0f));
     std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dis(0.0, 1.0);
 

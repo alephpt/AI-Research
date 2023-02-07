@@ -5,10 +5,14 @@ void runTests() {
     // testinitGUI();
 
         // Primitive Tests //
-    testGradientDescent();
+    // testGradientDescent();
     // testRandomNumbers();
     
     // testActivationType();
+
+        // RL Tests //
+    testRLQLearning();
+
 
         // CNN Tests //
     // testKernelInit();              // TODO: Fix 1x1, Nx1 and 1xN
