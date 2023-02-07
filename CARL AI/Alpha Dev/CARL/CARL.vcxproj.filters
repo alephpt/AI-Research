@@ -153,6 +153,21 @@
     <ClCompile Include="Tests\GUI_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RL\State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RL\Action.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RL\Environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RL\Policy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RL\Q.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RL\RL.h">
@@ -312,6 +327,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Systems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RL\State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RL\Action.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RL\Environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RL\Policy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RL\Q.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

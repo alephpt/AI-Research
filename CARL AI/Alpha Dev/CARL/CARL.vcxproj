@@ -157,6 +157,11 @@
     <ClCompile Include="GAN\Discriminator.cpp" />
     <ClCompile Include="GAN\Sample.cpp" />
     <ClCompile Include="GUI\GUI.cpp" />
+    <ClCompile Include="RL\Action.cpp" />
+    <ClCompile Include="RL\Q.cpp" />
+    <ClCompile Include="RL\Policy.cpp" />
+    <ClCompile Include="RL\Environment.cpp" />
+    <ClCompile Include="RL\State.cpp" />
     <ClCompile Include="Tests\GUI_Tests.cpp" />
     <ClCompile Include="Protocols\ARL_Protocol.cpp" />
     <ClCompile Include="Protocols\CA_Protocol.cpp" />
@@ -210,6 +215,11 @@
     <ClInclude Include="GUI\Objects.h" />
     <ClInclude Include="GUI\Systems.h" />
     <ClInclude Include="h.h" />
+    <ClInclude Include="RL\Action.h" />
+    <ClInclude Include="RL\Environment.h" />
+    <ClInclude Include="RL\Q.h" />
+    <ClInclude Include="RL\Policy.h" />
+    <ClInclude Include="RL\State.h" />
     <ClInclude Include="Tests\GUI_Tests.h" />
     <ClInclude Include="Protocols\ARL_Protocol.h" />
     <ClInclude Include="Protocols\CARL_Protocol.h" />
