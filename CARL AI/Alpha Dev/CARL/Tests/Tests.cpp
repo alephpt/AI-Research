@@ -1,17 +1,17 @@
 #include "Tests.h"
 
 void runTests() {
-    // GUI Tests ///
+        // GUI Tests ///
     // testinitGUI();
 
         // Primitive Tests //
+    // testLoadImage();
     // testGradientDescent();
     // testRandomNumbers();
-    
     // testActivationType();
 
         // RL Tests //
-    testRLQLearning();
+    // testRLQLearning();
 
 
         // CNN Tests //
@@ -20,7 +20,7 @@ void runTests() {
     // testConvolutionInit();
     // testConvolutionFilters();
     // testConvolutionInput();
-    // testConvolutions();
+     testConvolutions();
 
         // SNN Tests //
     // testinitSNN();

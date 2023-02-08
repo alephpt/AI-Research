@@ -1,8 +1,8 @@
 #include "CNN_Tests.h"
 #include <vector>
 #include <stdio.h>
-#include "../Types/General.h"
 #include "../Tests/TestData.h"
+#include "../Data/Load_Data.h"
 
 // Convolution Tests
 void testConvolutionInit() {
@@ -99,12 +99,14 @@ void convolve(CNNLayer* c, FilterStyle filter_type, ConvolutionType convolution_
 }
 
 void testConvolutions() {
-    int input_width = (int)smiles[0].size();
-    int input_height = (int)smiles.size();
+    Image img = Image("Data/Image/Samples/sample_4.png");
+    int input_width = img.getWidth();
+    int input_height = img.getHeight();
+    tensorf3d img_data = img.getTensor();
 
     CNNLayer c = CNNLayer(RELU, input_height, input_width, THREExTHREE);
 
-    c.data->input.values = smiles;
+    c.data->input.values = img_data[4];
     
     printf("test CNNLayer(%d, %d)\n\n", input_height, input_width);
     printf("\tc.stride: %d\n", c.stride);
@@ -117,18 +119,18 @@ void testConvolutions() {
     printFMatrix(c.data->input.values);
 
     convolve(&c, INVERSE_GRADIENT_FILTER, VALID_CONVOLUTION);
-    convolve(&c, VERTICAL_GRADIENT_FILTER, VALID_CONVOLUTION);
-    convolve(&c, MODIFIED_GAUSSIAN_FILTER, VALID_CONVOLUTION);
-    convolve(&c, INVERSE_GRADIENT_FILTER, PADDED_CONVOLUTION);
-    convolve(&c, VERTICAL_GRADIENT_FILTER, PADDED_CONVOLUTION);
-    convolve(&c, MODIFIED_GAUSSIAN_FILTER, PADDED_CONVOLUTION);
+    // convolve(&c, VERTICAL_GRADIENT_FILTER, VALID_CONVOLUTION);
+    // convolve(&c, MODIFIED_GAUSSIAN_FILTER, VALID_CONVOLUTION);
+    // convolve(&c, INVERSE_GRADIENT_FILTER, PADDED_CONVOLUTION);
+    // convolve(&c, VERTICAL_GRADIENT_FILTER, PADDED_CONVOLUTION);
+    // convolve(&c, MODIFIED_GAUSSIAN_FILTER, PADDED_CONVOLUTION);
 
-    convolve(&c, INVERSE_GRADIENT_FILTER, DILATION_CONVOLUTION);
-    convolve(&c, VERTICAL_GRADIENT_FILTER, DILATION_CONVOLUTION);
-    convolve(&c, MODIFIED_GAUSSIAN_FILTER, DILATION_CONVOLUTION);
-    convolve(&c, INVERSE_GRADIENT_FILTER, PADDED_DILATION_CONVOLUTION);
-    convolve(&c, VERTICAL_GRADIENT_FILTER, PADDED_DILATION_CONVOLUTION);
-    convolve(&c, MODIFIED_GAUSSIAN_FILTER, PADDED_DILATION_CONVOLUTION);
+    // convolve(&c, INVERSE_GRADIENT_FILTER, DILATION_CONVOLUTION);
+    // convolve(&c, VERTICAL_GRADIENT_FILTER, DILATION_CONVOLUTION);
+    // convolve(&c, MODIFIED_GAUSSIAN_FILTER, DILATION_CONVOLUTION);
+    // convolve(&c, INVERSE_GRADIENT_FILTER, PADDED_DILATION_CONVOLUTION);
+    // convolve(&c, VERTICAL_GRADIENT_FILTER, PADDED_DILATION_CONVOLUTION);
+    // convolve(&c, MODIFIED_GAUSSIAN_FILTER, PADDED_DILATION_CONVOLUTION);
 
     return;
 }
