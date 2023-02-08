@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../Types/Types.h"
 
 typedef struct {
 	fscalar capacitance;																	// the ability to store a charge

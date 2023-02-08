@@ -1,4 +1,5 @@
 #include "Environment.h"
+#include "../Types/Types.h"
 #include <algorithm>
 
 Environment::Environment(int x_size_, int y_size_, State* state) :

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Types/General.h"
+#include "../Types/Types.h"
 
 struct Spike{
 	bool fired;																			// determines if a Spike has been fired

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Types/Types.h"
 #include "CNNData.h"
 #include "Kernel.h"
 

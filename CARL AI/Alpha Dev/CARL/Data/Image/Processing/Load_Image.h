@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Types/Types.h"
 #include <SFML/Graphics.hpp>
+#include "../../../Types/Types.h"
 #include <string>
 
 class Image {
@@ -8,12 +8,12 @@ public:
     Image(std::string);
     ~Image();
 
-    tensorf3d getTensor();
+    ftensor3d getTensor();
     int getWidth();
     int getHeight();
 private:
-    int width;
-    int height;
+    int width = 0;
+    int height = 0;
     sf::Image image;
-    tensorf3d image_properties;
+    ftensor3d image_properties;
 };

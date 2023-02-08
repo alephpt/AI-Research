@@ -1,5 +1,5 @@
 #pragma once
-#include "../Types/Activation.h"
+#include "../Types/Types.h"
 #include "Spike.h"
 #include "Synapse.h"
 #include "Membrane.h"

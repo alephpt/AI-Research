@@ -1,4 +1,5 @@
 #include "Policy.h"
+#include "../Types/Types.h"
 #include <cstdlib>
 
 Policy::Policy(ftensor3d q_values_) { q_values = q_values_; }

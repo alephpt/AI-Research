@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "GUI.h"
+#include "../Types/Types.h"
 
 typedef enum {
 	RL_GUI_SYSTEM,

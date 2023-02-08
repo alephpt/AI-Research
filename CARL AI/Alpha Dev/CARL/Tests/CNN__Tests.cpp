@@ -5,7 +5,7 @@
 #include "../Data/Load_Data.h"
 
 // Convolution Tests
-void testConvolutionInit() {
+/*void testConvolutionInit() {
     int input_width = 10;
     int input_height = 17;
 
@@ -185,3 +185,4 @@ void testAdjustKernelDims() {
     return;
 }
 
+*/

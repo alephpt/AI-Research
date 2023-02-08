@@ -103,7 +103,7 @@ void prepareEnvironment() {
 	// Entry Point //
 void initGUI() {
 	sf::RenderWindow display(sf::VideoMode(window_w, window_h), "CARL!");
-	sf::View view(sf::fscalarRect(0.0f, 0.0f, (fscalar)window_w, (fscalar)window_h));
+	sf::View view(sf::FloatRect(0.0f, 0.0f, (fscalar)window_w, (fscalar)window_h));
 	display.setView(view);
 
 	prepareEnvironment();

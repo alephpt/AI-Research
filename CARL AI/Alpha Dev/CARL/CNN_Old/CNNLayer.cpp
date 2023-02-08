@@ -1,7 +1,8 @@
 #include "CNNLayer.h"
 #include "CNNLayer_Helper.h"
+#include "../Types/Types.h"
 
-CNNLayer::CNNLayer(int h, int w, int d) {
+CNNLayer::CNNLayer(int h, int w) {
 	stride = 1;
 	k = new Kernel();
 	data = new CNNData;
@@ -176,5 +177,8 @@ void CNNLayer::printCurrentFeature()
 	CNNFeature* feature = getCurrentFeature();
 
 	printf("\noutput vector - %d x %d\n", feature->height, feature->width);
-	printFMatrix(feature->values);
+	
+	for (int i = 0; i < feature->values[i].size(); i++) {
+		printFMatrix(feature->values[i]);
+	}
 }

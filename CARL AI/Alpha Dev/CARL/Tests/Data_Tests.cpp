@@ -2,8 +2,9 @@
 #include <stdio.h>
 
 void testLoadImage() {
-    Image img = Image("Data/Image/Samples/sample_4.pngc");
-    tensorf3d img_data = img.getTensor();
+    //system("dir");
+    Image img = Image("Data/Image/Samples/sample_4.png");
+    ftensor3d img_data = img.getTensor();
 
     printf("Printing Red:\n");
     printFMatrix(img_data[0]);

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Types/Types.h"
 
 typedef struct GANFeature {
 	fscalar value;			// to track actual value						- actual value read, generated, or determined

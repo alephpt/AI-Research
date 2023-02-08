@@ -18,12 +18,6 @@
     <ClCompile Include="Alpha Dev.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Vector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Types\Tensor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Types\Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,9 +42,6 @@
     <ClCompile Include="GAN\GAN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNN.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GAN\Optimizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,7 +51,7 @@
     <ClCompile Include="Tests\GAN_Tests.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\CNN_Tests.cpp">
+    <ClCompile Include="Tests\CNN__Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tests\Connectors_Tests.cpp">
@@ -117,10 +108,10 @@
     <ClCompile Include="Types\General.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\Kernel.cpp">
+    <ClCompile Include="CNN_Old\Kernel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNNNeuron.c">
+    <ClCompile Include="CNN_Old\CNNNeuron.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GAN\Dataset.cpp">
@@ -135,16 +126,13 @@
     <ClCompile Include="GAN\GANNeuron.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\Auxiliary.cpp">
+    <ClCompile Include="CNN_Old\Auxiliary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNNData.cpp">
+    <ClCompile Include="CNN_Old\CNNData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN\CNNLayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Types\Scalar.cpp">
+    <ClCompile Include="CNN_Old\CNNLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\GUI.cpp">
@@ -168,12 +156,18 @@
     <ClCompile Include="RL\Q.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CNN\CNN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Data_Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\Image\Processing\Load_Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RL\RL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CNN\CNN.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GAN\GAN.h">
@@ -266,10 +260,10 @@
     <ClInclude Include="Types\General.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\Kernel.h">
+    <ClInclude Include="CNN_Old\Kernel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\CNNNeuron.h">
+    <ClInclude Include="CNN_Old\CNNNeuron.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GAN\Dataset.h">
@@ -284,25 +278,25 @@
     <ClInclude Include="GAN\GANNeuron.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\Auxiliary.h">
+    <ClInclude Include="CNN_Old\Auxiliary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Additional_Notes.txt">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\KernelHelper.h">
+    <ClInclude Include="CNN_Old\KernelHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tests\TestData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\CNNData.h">
+    <ClInclude Include="CNN_Old\CNNData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\CNNLayer.h">
+    <ClInclude Include="CNN_Old\CNNLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN\CNNLayer_Helper.h">
+    <ClInclude Include="CNN_Old\CNNLayer_Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Types\Scalar.h">
@@ -344,9 +338,30 @@
     <ClInclude Include="RL\Q.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CNN\CNN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\Data_Tests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\Image\Processing\Load_Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\Load_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Image\Samples\sample_1.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Data\Image\Samples\sample_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Data\Image\Samples\sample_2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Data\Image\Samples\sample_3.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

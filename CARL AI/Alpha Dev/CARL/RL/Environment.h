@@ -1,4 +1,5 @@
 #pragma once
+#include "../Types/Types.h"
 #include "State.h"
 #include <math.h>
 #include "Action.h"

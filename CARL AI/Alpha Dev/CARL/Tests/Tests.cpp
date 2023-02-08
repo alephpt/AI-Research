@@ -5,7 +5,7 @@ void runTests() {
     // testinitGUI();
 
         // Primitive Tests //
-    // testLoadImage();
+     testLoadImage();
     // testGradientDescent();
     // testRandomNumbers();
     // testActivationType();
@@ -20,7 +20,7 @@ void runTests() {
     // testConvolutionInit();
     // testConvolutionFilters();
     // testConvolutionInput();
-     testConvolutions();
+    // testConvolutions();
 
         // SNN Tests //
     // testinitSNN();

@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+#include "Scalar.h"
 #include <string>
 
 const std::string activationString[] = { 

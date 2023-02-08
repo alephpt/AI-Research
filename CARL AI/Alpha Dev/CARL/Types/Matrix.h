@@ -2,9 +2,10 @@
 #include "Vector.h"
 #include "Scalar.h"
 
-using fmatrix = vector<vector<fscalar>>;
+using fmatrix = vector<fvector>;
 
 void printFMatrix(fmatrix);
+
 
 // add
 // subtract

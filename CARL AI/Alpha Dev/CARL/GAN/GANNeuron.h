@@ -1,4 +1,4 @@
-
+#include "../Types/Types.h"
 
 typedef struct GANNeuron {
     int n_inputs;

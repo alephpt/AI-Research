@@ -1,8 +1,11 @@
 #pragma once
 #include <vector>
+#include "Scalar.h"
 
 template<typename T>
 using vector = std::vector<T>;
+
+typedef vector<fscalar> fvector;
 
 
 

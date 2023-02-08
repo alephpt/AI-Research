@@ -1,4 +1,5 @@
 #pragma once
+#include "../Types/Types.h"
 
 // need to implement an variational auto-encoder 
 // use the adversarial loss of GANs in addition to the reconstruction loss of Autoencoders
@@ -9,16 +10,16 @@
 class Generator {
 public:
 	Generator(int n_inputs, int n_hidden, int n_outputs) {
-		this->n_inputs = n_inputs;
-		this->n_hidden = n_hidden;
-		this->n_outputs = n_outputs;
-		this->weights = new fscalar[((n_inputs + 1) * n_hidden + (n_hidden + 1) * n_outputs)];
-		this->biases = new fscalar[(n_hidden * n_outputs)];
+		n_inputs = n_inputs;
+		n_hidden = n_hidden;
+		n_outputs = n_outputs;
+		weights = new fscalar[((n_inputs + 1) * n_hidden + (n_hidden + 1) * n_outputs)];
+		biases = new fscalar[(n_hidden * n_outputs)];
 	}
 
 	~Generator() {
-		delete[] this->weights;
-		delete[] this->biases;
+		delete[] weights;
+		delete[] biases;
 	}
 
 

@@ -4,7 +4,7 @@
 
 static const fscalar pi = 3.1415926f;
 
-// SIGMOIDS //
+    // SIGMOIDS //
 static inline fscalar sigmoid(fscalar x) {
     return 1.0f / (1.0f + expf(-x));
 }
@@ -15,8 +15,7 @@ static inline fscalar sigmoid_derivative(fscalar x) {
 }
 
 
-// TANH //
-
+    // TANH //
 static inline fscalar tanh_activation(fscalar x) {
     return (expf(x) - expf(-x)) / (expf(x) + expf(-x));
 }
@@ -26,7 +25,7 @@ static inline fscalar tanh_derivative(fscalar x) {
 }
 
 
-// RELU //
+    // RELU //
 static inline fscalar relu(fscalar x) {
     if (x < 0) { return 0.0f; }
     return x;
@@ -38,8 +37,7 @@ static inline fscalar relu_derivative(fscalar x) {
 }
 
 
-// LEAKY_RELU //
-
+    // LEAKY_RELU //
 static inline fscalar leaky_relu(fscalar x, fscalar alpha) {
     if (x > 0) { return x; }
     else { return alpha * x; }
@@ -50,20 +48,16 @@ static inline fscalar leaky_relu_derivative(fscalar x, fscalar alpha) {
     else { return alpha; }
 }
 
-
-
- // SOFTPLUS //
+    // SOFTPLUS //
 static inline fscalar softplus(fscalar x) {
     return logf(1.0f + expf(x));
 }
-
 
 static inline fscalar softplus_derivative(fscalar x) {
     return 1.0f / (1.0f + expf(-x));
 }
 
-// SOFTMAX //
-
+    // SOFTMAX //
 static inline fscalar softmax(fscalar x) {
     return expf(x) / (expf(x) + 1.0f);
 }
@@ -73,10 +67,7 @@ static inline fscalar softmax_derivative(fscalar x) {
     return s * (1.0f - s);
 }
 
-
-
- // GAUSSIAN //
-
+    // GAUSSIAN //
 static inline fscalar gaussian(fscalar x) {
     fscalar mean = 0.0f;
     fscalar standard_deviation = 1.0f;
