@@ -6,7 +6,7 @@
 int n_inputs = 3;
 int n_neurons = 7;
 int n_spikes = 2;
-float density = 1.0f;
+fscalar density = 1.0f;
 
 
 void testinitSNN() {
@@ -36,7 +36,7 @@ void testConnectivityMatrix() {
 	initSNN(snn, n_inputs, n_neurons, n_synapses, n_spikes, activation_type);
 
 
-	float** conn_matrix = createConnectivityMatrix(snn);
+	fscalar** conn_matrix = createConnectivityMatrix(snn);
 
 	//printMatrix(conn_matrix, snn->n_neurons, snn->n_neurons);
 	return;

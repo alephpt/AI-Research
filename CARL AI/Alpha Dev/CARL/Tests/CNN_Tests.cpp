@@ -27,7 +27,7 @@ void testConvolutionInput() {
 
     CNNLayer c = CNNLayer(input_height, input_width);
     
-    c.data->input.values = smiles;
+    c.data->input.values = ftensor3d(4, smiles);
 
     printf("test CNNLayer(%d, %d)\n\n", input_height, input_width);
     printf("\tc.stride: %d\n", c.stride);
@@ -107,7 +107,7 @@ void testConvolutions() {
     Image img = Image("Data/Image/Samples/sample_1.jpeg");
     int input_width = img.getWidth();
     int input_height = img.getHeight();
-    tensorf3d img_data = img.getTensor();
+    ftensor3d img_data = img.getTensor();
 
     CNNLayer c = CNNLayer(RELU, input_height, input_width, THREExTHREE);
 

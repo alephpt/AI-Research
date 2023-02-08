@@ -2,37 +2,37 @@
 #include <math.h>
 #include <stdio.h>
 
-static const float pi = 3.1415926f;
+static const fscalar pi = 3.1415926f;
 
 // SIGMOIDS //
-static inline float sigmoid(float x) {
+static inline fscalar sigmoid(fscalar x) {
     return 1.0f / (1.0f + expf(-x));
 }
 
-static inline float sigmoid_derivative(float x) {
-    float s = sigmoid(x);
+static inline fscalar sigmoid_derivative(fscalar x) {
+    fscalar s = sigmoid(x);
     return s * (1.0f - s);
 }
 
 
 // TANH //
 
-static inline float tanh_activation(float x) {
+static inline fscalar tanh_activation(fscalar x) {
     return (expf(x) - expf(-x)) / (expf(x) + expf(-x));
 }
 
-static inline float tanh_derivative(float x) {
+static inline fscalar tanh_derivative(fscalar x) {
     return 1.0f - powf(tanh_activation(x), 2.0f);
 }
 
 
 // RELU //
-static inline float relu(float x) {
+static inline fscalar relu(fscalar x) {
     if (x < 0) { return 0.0f; }
     return x;
 }
 
-static inline float relu_derivative(float x) {
+static inline fscalar relu_derivative(fscalar x) {
     if (x < 0) { return 0.0f; }
     return 1.0f;
 }
@@ -40,12 +40,12 @@ static inline float relu_derivative(float x) {
 
 // LEAKY_RELU //
 
-static inline float leaky_relu(float x, float alpha) {
+static inline fscalar leaky_relu(fscalar x, fscalar alpha) {
     if (x > 0) { return x; }
     else { return alpha * x; }
 }
 
-static inline float leaky_relu_derivative(float x, float alpha) {
+static inline fscalar leaky_relu_derivative(fscalar x, fscalar alpha) {
     if (x > 0) { return 1.0f; }
     else { return alpha; }
 }
@@ -53,23 +53,23 @@ static inline float leaky_relu_derivative(float x, float alpha) {
 
 
  // SOFTPLUS //
-static inline float softplus(float x) {
+static inline fscalar softplus(fscalar x) {
     return logf(1.0f + expf(x));
 }
 
 
-static inline float softplus_derivative(float x) {
+static inline fscalar softplus_derivative(fscalar x) {
     return 1.0f / (1.0f + expf(-x));
 }
 
 // SOFTMAX //
 
-static inline float softmax(float x) {
+static inline fscalar softmax(fscalar x) {
     return expf(x) / (expf(x) + 1.0f);
 }
 
-static inline float softmax_derivative(float x) {
-    float s = softmax(x);
+static inline fscalar softmax_derivative(fscalar x) {
+    fscalar s = softmax(x);
     return s * (1.0f - s);
 }
 
@@ -77,20 +77,20 @@ static inline float softmax_derivative(float x) {
 
  // GAUSSIAN //
 
-static inline float gaussian(float x) {
-    float mean = 0.0f;
-    float standard_deviation = 1.0f;
+static inline fscalar gaussian(fscalar x) {
+    fscalar mean = 0.0f;
+    fscalar standard_deviation = 1.0f;
 
     return (1.0f / (standard_deviation * sqrtf(2.0f * pi))) * expf(-0.5f * powf((x - mean) / standard_deviation, 2.0f));
 }
 
-static inline float gaussian_derivative(float x) {
+static inline fscalar gaussian_derivative(fscalar x) {
     return -x * expf(-x * x / 2.0f) / sqrtf(2.0f * pi);
 }
 
 // ACTIVATION FUNCTIONS //
 // TODO: *Activation[]
-float activation(Activation activation_type, float output) {
+fscalar activation(Activation activation_type, fscalar output) {
     if (activation_type == SIGMOID_DERIVATIVE) {
         return sigmoid_derivative(output);
     }

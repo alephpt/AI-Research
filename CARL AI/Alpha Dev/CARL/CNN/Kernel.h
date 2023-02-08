@@ -85,13 +85,13 @@ class Kernel {
         void setActivationType(Activation);
         void adjustDimensions(FilterDimensions);
         void adjustDimensions(FilterDimensions, int);
-        float getMax(fmatrix);
-        float getMaxMean(fmatrix);
-        float getProductSum(fmatrix);
-        float getSum(fmatrix);
-        float getSumMean(fmatrix);
-        float getMeanSum(fmatrix);
-        float getMean(fmatrix);
+        fscalar getMax(fmatrix);
+        fscalar getMaxMean(fmatrix);
+        fscalar getProductSum(fmatrix);
+        fscalar getSum(fmatrix);
+        fscalar getSumMean(fmatrix);
+        fscalar getMeanSum(fmatrix);
+        fscalar getMean(fmatrix);
 
     private:
         void populateFilter(FilterStyle);

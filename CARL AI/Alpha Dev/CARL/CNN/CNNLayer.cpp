@@ -1,7 +1,7 @@
 #include "CNNLayer.h"
 #include "CNNLayer_Helper.h"
 
-CNNLayer::CNNLayer(int h, int w) {
+CNNLayer::CNNLayer(int h, int w, int d) {
 	stride = 1;
 	k = new Kernel();
 	data = new CNNData;

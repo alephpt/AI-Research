@@ -1,10 +1,10 @@
 #pragma once
 
 typedef struct GANFeature {
-	float value;			// to track actual value						- actual value read, generated, or determined
-	float range;			// to determine limits							- used to narrow scope based on quality and deviation
-	float deviation;		// to determine offset of the value in a range	- used to adjust the range of target values
-	float quality;			// to determine the integrity					- target goal of 1
+	fscalar value;			// to track actual value						- actual value read, generated, or determined
+	fscalar range;			// to determine limits							- used to narrow scope based on quality and deviation
+	fscalar deviation;		// to determine offset of the value in a range	- used to adjust the range of target values
+	fscalar quality;			// to determine the integrity					- target goal of 1
 	int index;
 } GANFeature;
 

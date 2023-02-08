@@ -9,12 +9,12 @@ public:
 	~QLearning();
 
 	Environment* getEnvironment();
-	tensorf3d getQValues();
-	void Train(int, float, float, float);
+	ftensor3d getQValues();
+	void Train(int, fscalar, fscalar, fscalar);
 
 private:
 	Environment env;
-	tensorf3d q_values;
+	ftensor3d q_values;
 	int x_size;
 	int y_size;
 };

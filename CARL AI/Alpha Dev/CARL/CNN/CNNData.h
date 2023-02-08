@@ -14,7 +14,7 @@ typedef struct CNNFeature {
     int height = 0;
     FilterStyle filter_style = GRADIENT_FILTER;
     fmatrix filter;
-    fmatrix values;
+    ftensor3d values;
 } CNNFeature;
 
 typedef struct CNNSample {

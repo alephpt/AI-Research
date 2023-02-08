@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-void initMembrane(Membrane* m, float capacitance, float resistance, float V_rest, float V_threshold) {
+void initMembrane(Membrane* m, fscalar capacitance, fscalar resistance, fscalar V_rest, fscalar V_threshold) {
     m->capacitance = capacitance;
     m->resistance = resistance;
     m->V_rest = V_rest;
@@ -11,7 +11,7 @@ void initMembrane(Membrane* m, float capacitance, float resistance, float V_rest
     m->t = getTime();
 }
 
-extern Membrane* createNewMembrane(Membrane* m, float c, float r, float V_rest, float V_thresh) {
+extern Membrane* createNewMembrane(Membrane* m, fscalar c, fscalar r, fscalar V_rest, fscalar V_thresh) {
     initMembrane(m, c, r, V_rest, V_thresh);
     return m;
 }

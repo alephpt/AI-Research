@@ -3,12 +3,12 @@
 #include "../Types/General.h"
 #include <math.h>
 
- float membranePotential(Membrane m) {
-    return m.V_rest + (m.V_threshold - m.V_rest) * (1.0f - expf((float)(- m.t) / (m.resistance * m.capacitance)));
+ fscalar membranePotential(Membrane m) {
+    return m.V_rest + (m.V_threshold - m.V_rest) * (1.0f - expf((fscalar)(- m.t) / (m.resistance * m.capacitance)));
 }
 
 SNNNeuron* initNeuron(Activation activation_type, SNNNeuron* n, Membrane* m, Spike* sp, int n_sp, 
-                    float* w, float b, int n_in, float* in, int n_out, float* out, float d, float mem_p) {
+                    fscalar* w, fscalar b, int n_in, fscalar* in, int n_out, fscalar* out, fscalar d, fscalar mem_p) {
     n->weights = w;
     n->bias = b;
     n->n_inputs = n_in;

@@ -17,7 +17,7 @@ typedef struct RenderObjects{
 
 static RenderObjects* Objects(new RenderObjects);
 
-void createNode(float radius, float location_x, float location_y, colors color) {
+void createNode(fscalar radius, fscalar location_x, fscalar location_y, colors color) {
 	sf::CircleShape N1(radius);
 	N1.setFillColor(color);
 	N1.setOrigin(radius, radius);

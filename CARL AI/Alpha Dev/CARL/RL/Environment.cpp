@@ -41,8 +41,8 @@ State Environment::getNextState(const State* current_state, const Action* action
 // need to maintain feasibility so learning is easier
 // rewards need consistency
 // need clear objective
-float Environment::GetReward(const State* current_state, const State* next_state) {
-	float x_diff = (float)(next_state->x - current_state->x);
-	float y_diff = (float)(next_state->y - current_state->y);
+fscalar Environment::GetReward(const State* current_state, const State* next_state) {
+	fscalar x_diff = (fscalar)(next_state->x - current_state->x);
+	fscalar y_diff = (fscalar)(next_state->y - current_state->y);
 	return -sqrtf(x_diff * x_diff + y_diff * y_diff);
 }

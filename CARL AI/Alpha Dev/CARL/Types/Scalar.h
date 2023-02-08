@@ -1,3 +1,3 @@
 #pragma once
 
-typedef float scalarf;
+typedef float fscalar;

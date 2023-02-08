@@ -16,8 +16,8 @@ struct SNN {
 };
 
 
-float** createConnectivityMatrix(SNN* snn);
-int synapseLimit(int n_neurons, float density);
+fscalar** createConnectivityMatrix(SNN* snn);
+int synapseLimit(int n_neurons, fscalar density);
 
 void initSNN(SNN* snn, int n_in, int n_n, int n_syn, int n_sp, Activation activation_type);
 SNNNeuron* getNeuron(SNN* snn, int idx);

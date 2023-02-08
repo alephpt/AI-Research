@@ -14,9 +14,9 @@ double getTime()
 
 fmatrix generate2dNoise(size_t rows, size_t cols)
 {
-    fmatrix vals = fmatrix(rows, vector<float>(cols, 0.0f));
+    fmatrix vals = fmatrix(rows, vector<fscalar>(cols, 0.0f));
     std::mt19937 gen(std::random_device{}());
-    std::uniform_real_distribution<float> dis(0.0, 1.0);
+    std::uniform_real_distribution<fscalar> dis(0.0, 1.0);
 
     for (int i = 0; i < rows; i++) 
     {
@@ -29,7 +29,7 @@ fmatrix generate2dNoise(size_t rows, size_t cols)
     return vals;
 }
 
-void printColor(float in) {
+void printColor(fscalar in) {
     if (in < -0.985f) {
         // magenta
         printf("\033[0;35m[%07.3lf] \033[0m", in);

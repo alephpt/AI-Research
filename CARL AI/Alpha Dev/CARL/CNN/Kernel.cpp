@@ -109,14 +109,14 @@ Kernel::~Kernel() { filter.weights.clear(); }
 void Kernel::setFilterDimensions(FilterDimensions f) { 
     dimensions = f; 
     lookupFilter[dimensions](&filter.rows, &filter.columns); 
-    filter.weights = fmatrix(filter.rows, vector<float>(filter.columns, 0.0f));
+    filter.weights = fmatrix(filter.rows, vector<fscalar>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
 void Kernel::setFilterDimensions(FilterDimensions f, int n) { 
     dimensions = f; 
     lookupNFilter[dimensions](&filter.rows, &filter.columns, n); 
-    filter.weights = fmatrix(filter.rows, vector<float>(filter.columns, 0.0f));
+    filter.weights = fmatrix(filter.rows, vector<fscalar>(filter.columns, 0.0f));
     populateFilter(style); 
 }
 
@@ -149,10 +149,10 @@ int Kernel::getColumns() { return filter.columns; }
 int Kernel::getRows() { return filter.rows; }
 
 
-float Kernel::getProductSum(fmatrix input) {
+fscalar Kernel::getProductSum(fmatrix input) {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float sum = 0.0f;
+    fscalar sum = 0.0f;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -163,15 +163,15 @@ float Kernel::getProductSum(fmatrix input) {
     return sum;
 }
 
-float Kernel::getMax(fmatrix input)
+fscalar Kernel::getMax(fmatrix input)
 {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float max = 0.0f;
+    fscalar max = 0.0f;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
-            float newMax = input[y][x];
+            fscalar newMax = input[y][x];
             
             if (newMax > max) { max = newMax; }
         }
@@ -182,15 +182,15 @@ float Kernel::getMax(fmatrix input)
 
 
 
-float Kernel::getMaxMean(fmatrix input)
+fscalar Kernel::getMaxMean(fmatrix input)
 {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float max = 0.0f;
+    fscalar max = 0.0f;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
-            float maxMean = input[y][x] + filter.weights[y][x] / 2;
+            fscalar maxMean = input[y][x] + filter.weights[y][x] / 2;
             if (max < maxMean) { max = maxMean; }
         }
     }
@@ -200,11 +200,11 @@ float Kernel::getMaxMean(fmatrix input)
 
 
 
-float Kernel::getSum(fmatrix input)
+fscalar Kernel::getSum(fmatrix input)
 {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float sum = 0.0f;
+    fscalar sum = 0.0f;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -215,11 +215,11 @@ float Kernel::getSum(fmatrix input)
     return sum;
 }
 
-float Kernel::getSumMean(fmatrix input)
+fscalar Kernel::getSumMean(fmatrix input)
 {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float sum = 0.0f;
+    fscalar sum = 0.0f;
     size_t total = rows * cols;
 
     for (int y = 0; y < rows; y++) {
@@ -231,11 +231,11 @@ float Kernel::getSumMean(fmatrix input)
     return sum / total;
 }
 
-float Kernel::getMeanSum(fmatrix input)
+fscalar Kernel::getMeanSum(fmatrix input)
 {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float sum = 0.0f;
+    fscalar sum = 0.0f;
 
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
@@ -246,11 +246,11 @@ float Kernel::getMeanSum(fmatrix input)
     return sum;
 }
 
-float Kernel::getMean(fmatrix input)
+fscalar Kernel::getMean(fmatrix input)
 {
     size_t rows = input.size();
     size_t cols = input[0].size();
-    float sum = 0.0f;
+    fscalar sum = 0.0f;
     size_t total = rows + cols;
 
     for (int y = 0; y < rows; y++) {

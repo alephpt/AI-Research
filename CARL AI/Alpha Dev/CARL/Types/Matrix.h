@@ -2,7 +2,7 @@
 #include "Vector.h"
 #include "Scalar.h"
 
-using fmatrix = vector<vector<scalarf>>;
+using fmatrix = vector<vector<fscalar>>;
 
 void printFMatrix(fmatrix);
 

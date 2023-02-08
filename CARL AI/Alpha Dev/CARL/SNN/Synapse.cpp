@@ -2,7 +2,7 @@
 #include "../Types/General.h"
 #include "SNN.h"
 
-void initSynapse(Synapse* s, float weight, float delay, float decay, SNNNeuron* pre_neuron, SNNNeuron* post_neuron) {
+void initSynapse(Synapse* s, fscalar weight, fscalar delay, fscalar decay, SNNNeuron* pre_neuron, SNNNeuron* post_neuron) {
     s->weight = weight;
     s->delay = delay;
     s->decay = decay;
@@ -13,7 +13,7 @@ void initSynapse(Synapse* s, float weight, float delay, float decay, SNNNeuron* 
     s->post_neuron = post_neuron;
 }
 
-Synapse* createNewSynapse(Synapse* s, int idx, float w, float del, float dec, SNNNeuron* pre, SNNNeuron* post) {
+Synapse* createNewSynapse(Synapse* s, int idx, fscalar w, fscalar del, fscalar dec, SNNNeuron* pre, SNNNeuron* post) {
     initSynapse(s, w, del, dec, pre, post);
     s->index = idx;
     return s;

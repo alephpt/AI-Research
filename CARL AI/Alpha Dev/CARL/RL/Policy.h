@@ -6,11 +6,11 @@
 
 class Policy {
 public:
-	Policy(tensorf3d);
+	Policy(ftensor3d);
 	
-	Action ChooseAction(const State*, float);
-	void Rollout(int, Environment*, float);
+	Action ChooseAction(const State*, fscalar);
+	void Rollout(int, Environment*, fscalar);
 
 private:
-	tensorf3d q_values;
+	ftensor3d q_values;
 };

@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-void initSpike(Spike* s, float a) {
+void initSpike(Spike* s, fscalar a) {
     s->fired = false;
     s->amplitude = a;
     s->timestamp = getTime();
@@ -16,7 +16,7 @@ void printSpike(Spike* s, int n) {
     printf("\ttime: \t%.9lf\n", s->timestamp);
 }
 
-Spike* createNewSpike(Spike* s, float a) {
+Spike* createNewSpike(Spike* s, fscalar a) {
     initSpike(s, a);
     return s;
 }

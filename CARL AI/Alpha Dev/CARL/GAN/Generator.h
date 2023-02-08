@@ -12,8 +12,8 @@ public:
 		this->n_inputs = n_inputs;
 		this->n_hidden = n_hidden;
 		this->n_outputs = n_outputs;
-		this->weights = new float[((n_inputs + 1) * n_hidden + (n_hidden + 1) * n_outputs)];
-		this->biases = new float[(n_hidden * n_outputs)];
+		this->weights = new fscalar[((n_inputs + 1) * n_hidden + (n_hidden + 1) * n_outputs)];
+		this->biases = new fscalar[(n_hidden * n_outputs)];
 	}
 
 	~Generator() {
@@ -26,6 +26,6 @@ public:
 	int n_inputs;
 	int n_hidden;
 	int n_outputs;
-	float* weights;
-	float* biases;
+	fscalar* weights;
+	fscalar* biases;
 };

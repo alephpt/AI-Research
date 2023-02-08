@@ -23,7 +23,7 @@ static inline void queueEvents(Action event, sf::RenderWindow* display) {
 		case Action::MouseWheelMoved: 
 		{
 			sf::View view{ display->getView() };
-			view.zoom((-(float)event.mouseWheel.delta * 0.05f + 1.0f));
+			view.zoom((-(fscalar)event.mouseWheel.delta * 0.05f + 1.0f));
 			display->setView(view);
 			break;
 		}
@@ -103,7 +103,7 @@ void prepareEnvironment() {
 	// Entry Point //
 void initGUI() {
 	sf::RenderWindow display(sf::VideoMode(window_w, window_h), "CARL!");
-	sf::View view(sf::FloatRect(0.0f, 0.0f, (float)window_w, (float)window_h));
+	sf::View view(sf::fscalarRect(0.0f, 0.0f, (fscalar)window_w, (fscalar)window_h));
 	display.setView(view);
 
 	prepareEnvironment();

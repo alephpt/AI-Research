@@ -3,7 +3,7 @@
 #include "Matrix.h"
 
 
-typedef vector<fmatrix> tensorf3d;
+typedef vector<fmatrix> ftensor3d;
 
 // addTensors
 // subtractTensors

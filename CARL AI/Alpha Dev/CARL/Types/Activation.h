@@ -39,4 +39,4 @@ typedef enum Activation {
 
 
 
-float activation(Activation activation_type, float output);
+fscalar activation(Activation activation_type, fscalar output);

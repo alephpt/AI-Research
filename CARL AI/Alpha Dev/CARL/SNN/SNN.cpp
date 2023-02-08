@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-float** createConnectivityMatrix(SNN* snn) {
+fscalar** createConnectivityMatrix(SNN* snn) {
     printf("hit createConnectivityMatrix()");
-    float** connectivity_matrix = new float*[snn->n_neurons];
+    fscalar** connectivity_matrix = new fscalar*[snn->n_neurons];
     printf("connectivity_matrix initialized");
 
     for (int i = 0; i < snn->n_neurons; i++) {                              // for the number of neurons
@@ -28,7 +28,7 @@ float** createConnectivityMatrix(SNN* snn) {
     return connectivity_matrix;
 }
 
-int synapseLimit(int n_neurons, float density) {
+int synapseLimit(int n_neurons, fscalar density) {
     return (n_neurons * (n_neurons - 1) / 2) * (int)density;
 }
 
@@ -46,7 +46,7 @@ void initSNN(SNN* snn, int n_in, int nn, int n_syn, int n_sp, Activation activat
         snn->neurons[ni].index = ni;
         snn->neurons[ni].synapses = new Synapse*[nn - 1];
         initNeuron(activation_type, &snn->neurons[ni], new Membrane, new Spike[n_sp], n_sp,
-                new float[(nn - 1)], 0.0f, nn - 1, new float[(nn - 1)], nn - 1, new float[(nn - 1)], 0.0f, 0.0f);
+                new fscalar[(nn - 1)], 0.0f, nn - 1, new fscalar[(nn - 1)], nn - 1, new fscalar[(nn - 1)], 0.0f, 0.0f);
         snn->n_neurons++;
     }
 

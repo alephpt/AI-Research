@@ -3,4 +3,4 @@
 
 double getTime();
 fmatrix generate2dNoise(size_t, size_t);
-void printColor(float);
+void printColor(fscalar);

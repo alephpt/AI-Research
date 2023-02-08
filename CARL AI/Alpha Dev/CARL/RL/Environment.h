@@ -10,7 +10,7 @@ public:
 	State* getStartState();
 	void setStartState(State*);
 	State getNextState(const State* current_state, const Action* action);
-	float GetReward(const State* current_state, const State* next_state);
+	fscalar GetReward(const State* current_state, const State* next_state);
 
 private:
 	State* start_state;
