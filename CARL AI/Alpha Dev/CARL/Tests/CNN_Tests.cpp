@@ -95,11 +95,16 @@ void convolve(CNNLayer* c, FilterStyle filter_type, ConvolutionType convolution_
     c->k->printFilter();
 
     c->convolute(convolution_type, &c->data->input);
+    c->convolute(convolution_type, c->getCurrentFeature());
+    c->convolute(convolution_type, c->getCurrentFeature());
+    c->convolute(convolution_type, c->getCurrentFeature());
+    c->convolute(convolution_type, c->getCurrentFeature());
+    c->convolute(convolution_type, c->getCurrentFeature());
     c->printCurrentFeature();
 }
 
 void testConvolutions() {
-    Image img = Image("Data/Image/Samples/sample_4.png");
+    Image img = Image("Data/Image/Samples/sample_1.jpeg");
     int input_width = img.getWidth();
     int input_height = img.getHeight();
     tensorf3d img_data = img.getTensor();
@@ -115,10 +120,10 @@ void testConvolutions() {
     printf("\tc.k->getFilterStyle: %s\n", filterStyleString[c.k->getFilterStyle()].c_str());
     printf("\tc.k->getActivationType: %s\n\n", activationString[c.k->getActivationType()].c_str());
 
-    printf("\ninput vector - %d x %d\n", input_width, input_height);
-    printFMatrix(c.data->input.values);
+//    printf("\ninput vector - %d x %d\n", input_width, input_height);
+//    printFMatrix(c.data->input.values);
 
-    convolve(&c, INVERSE_GRADIENT_FILTER, VALID_CONVOLUTION);
+    convolve(&c, GRADIENT_FILTER, DILATION_CONVOLUTION);
     // convolve(&c, VERTICAL_GRADIENT_FILTER, VALID_CONVOLUTION);
     // convolve(&c, MODIFIED_GAUSSIAN_FILTER, VALID_CONVOLUTION);
     // convolve(&c, INVERSE_GRADIENT_FILTER, PADDED_CONVOLUTION);
