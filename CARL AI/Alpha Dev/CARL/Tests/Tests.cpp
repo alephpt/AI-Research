@@ -5,7 +5,7 @@ void runTests() {
     // testinitGUI();
 
         // Primitive Tests //
-     testLoadImage();
+    // testLoadImage();
     // testGradientDescent();
     // testRandomNumbers();
     // testActivationType();
@@ -15,7 +15,7 @@ void runTests() {
 
 
         // CNN Tests //
-    // testKernelInit();              // TODO: Fix 1x1, Nx1 and 1xN
+     testKernelInit();              // TODO: Fix 1x1, Nx1 and 1xN
     // testAdjustKernelDims();
     // testConvolutionInit();
     // testConvolutionFilters();
