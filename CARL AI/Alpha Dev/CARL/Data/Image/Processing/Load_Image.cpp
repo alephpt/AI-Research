@@ -1,5 +1,7 @@
 #include "Load_Image.h"
+#ifdef _win32
 #include "windows.h"
+#endif
 
 Image::Image(std::string image_path) {
     if (!image.loadFromFile(image_path)) 
