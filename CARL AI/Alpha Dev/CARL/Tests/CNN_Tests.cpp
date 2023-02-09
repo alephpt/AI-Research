@@ -5,5 +5,5 @@
 #include "../Data/Load_Data.h"
 
 void testKernelInit() {
-    printf("hello test");
+    printf("%s\n", filterString.at(ONExN).c_str());
 }

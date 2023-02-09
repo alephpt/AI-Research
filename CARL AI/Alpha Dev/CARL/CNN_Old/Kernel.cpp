@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 
-
+/*
 static void (*lookupFilter[])(int* r, int* c) = {
     oneXone, twoXtwo, oneXthree, invalidFilter, threeXone, invalidFilter, threeXthree, fiveXfive, sevenXseven, elevenXeleven
 };
@@ -276,3 +276,4 @@ void Kernel::printFilter()
     return;
 }
 
+*/
