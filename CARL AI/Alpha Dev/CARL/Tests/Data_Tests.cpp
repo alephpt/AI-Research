@@ -3,7 +3,7 @@
 
 void testLoadImage() {
     //system("dir");
-    Image img = Image("Data/Image/Samples/sample_4.png");
+    Image img = Image("sample_4.png");
     ftensor3d img_data = img.getTensor();
 
     printf("Printing Red:\n");
