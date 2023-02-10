@@ -1,3 +1,3 @@
 # AI_Generated
 
-A Collection of Projects inspired by AI
+A Collection of Projects inspired by AI/ML/DL 
