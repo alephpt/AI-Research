@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{aeefdb85-6703-44c0-8309-db2983bb9ab8}</ProjectGuid>
+    <RootNamespace>CARL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Alpha Dev</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)\CARL\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)\CARL\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>C:\Users\aleph\.sfml\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\aleph\.sfml\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-main.lib; sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\aleph\.sfml\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\aleph\.sfml\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-main.lib; sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Alpha Dev.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="CNN\Kernel.cpp" />
+    <ClCompile Include="CNN_Old\CNNLayer.cpp" />
+    <ClCompile Include="CNN_Old\Old_Kernel.cpp" />
+    <ClCompile Include="CNN\CNN.cpp" />
+    <ClCompile Include="Connectors\CA_Connectors.cpp" />
+    <ClCompile Include="Connectors\ARL_Connectors.cpp" />
+    <ClCompile Include="Connectors\RKC_Connectors.cpp" />
+    <ClCompile Include="Connectors\Protocol_Connectors.cpp" />
+    <ClCompile Include="Data\Image\Processing\Load_Image.cpp" />
+    <ClCompile Include="GAN\Dataset.cpp" />
+    <ClCompile Include="GAN\GANFeature.cpp" />
+    <ClCompile Include="GAN\Generator.cpp" />
+    <ClCompile Include="GAN\GANNeuron.c" />
+    <ClCompile Include="GAN\Optimizer.cpp" />
+    <ClCompile Include="GAN\GAN.cpp" />
+    <ClCompile Include="GAN\Discriminator.cpp" />
+    <ClCompile Include="GAN\Sample.cpp" />
+    <ClCompile Include="GUI\GUI.cpp" />
+    <ClCompile Include="RL\Action.cpp" />
+    <ClCompile Include="RL\Q.cpp" />
+    <ClCompile Include="RL\Policy.cpp" />
+    <ClCompile Include="RL\Environment.cpp" />
+    <ClCompile Include="RL\State.cpp" />
+    <ClCompile Include="Tests\CNN_Tests.cpp" />
+    <ClCompile Include="Tests\Data_Tests.cpp" />
+    <ClCompile Include="Tests\GUI_Tests.cpp" />
+    <ClCompile Include="Protocols\ARL_Protocol.cpp" />
+    <ClCompile Include="Protocols\CA_Protocol.cpp" />
+    <ClCompile Include="Protocols\RKC_Protocol.cpp" />
+    <ClCompile Include="Protocols\CARL_Protocol.cpp" />
+    <ClCompile Include="RL\RL.cpp" />
+    <ClCompile Include="SNN\Membrane.cpp" />
+    <ClCompile Include="SNN\SNNNeuron.cpp" />
+    <ClCompile Include="SNN\Spike.cpp" />
+    <ClCompile Include="SNN\SNN.cpp" />
+    <ClCompile Include="SNN\Synapse.cpp" />
+    <ClCompile Include="Tests\SNN_Tests.cpp" />
+    <ClCompile Include="Tests\Type_Tests.cpp" />
+    <ClCompile Include="Tests\Tests.cpp" />
+    <ClCompile Include="Tests\RL_Tests.cpp" />
+    <ClCompile Include="Tests\Protocol_Tests.cpp" />
+    <ClCompile Include="Tests\GAN_Tests.cpp" />
+    <ClCompile Include="Tests\Connectors_Tests.cpp" />
+    <ClCompile Include="Tests\GAN_Tests.h" />
+    <ClCompile Include="Types\Activation.cpp" />
+    <ClCompile Include="Types\General.cpp" />
+    <ClCompile Include="Types\Matrix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CNN\Filters.h" />
+    <ClInclude Include="CNN\Kernel.h" />
+    <ClInclude Include="CNN_Old\CNNData.h" />
+    <ClInclude Include="CNN_Old\CNNLayer.h" />
+    <ClInclude Include="CNN_Old\CNNLayer_Helper.h" />
+    <ClInclude Include="CNN_Old\Old_Kernel.h" />
+    <ClInclude Include="CNN_Old\CNNNeuron.h" />
+    <ClInclude Include="CNN_Old\KernelHelper.h" />
+    <ClInclude Include="CNN\CNN.h" />
+    <ClInclude Include="Connectors\CA_Connectors.h" />
+    <ClInclude Include="Connectors\Protocol_Connectors.h" />
+    <ClInclude Include="Connectors\ARL_Connectors.h" />
+    <ClInclude Include="Connectors\RKC_Connectors.h" />
+    <ClInclude Include="Data\Image\Processing\Load_Image.h" />
+    <ClInclude Include="Data\Image\Samples\image_map.json" />
+    <ClInclude Include="Data\Load_Data.h" />
+    <ClInclude Include="GAN\Dataset.h" />
+    <ClInclude Include="GAN\Discriminator.h" />
+    <ClInclude Include="GAN\GANFeature.h" />
+    <ClInclude Include="GAN\GAN.h" />
+    <ClInclude Include="GAN\Generator.h" />
+    <ClInclude Include="GAN\GANNeuron.h" />
+    <ClInclude Include="GAN\Optimizer.h" />
+    <ClInclude Include="GAN\Sample.h" />
+    <ClInclude Include="GUI\GUI.h" />
+    <ClInclude Include="cpp.cpp" />
+    <ClInclude Include="GUI\Objects.h" />
+    <ClInclude Include="GUI\Systems.h" />
+    <ClInclude Include="h.h" />
+    <ClInclude Include="RL\Action.h" />
+    <ClInclude Include="RL\Environment.h" />
+    <ClInclude Include="RL\Q.h" />
+    <ClInclude Include="RL\Policy.h" />
+    <ClInclude Include="RL\State.h" />
+    <ClInclude Include="Tests\Data_Tests.h" />
+    <ClInclude Include="Tests\GUI_Tests.h" />
+    <ClInclude Include="Protocols\ARL_Protocol.h" />
+    <ClInclude Include="Protocols\CARL_Protocol.h" />
+    <ClInclude Include="Protocols\CA_Protocol.h" />
+    <ClInclude Include="Protocols\RKC_Protocol.h" />
+    <ClInclude Include="RL\RL.h" />
+    <ClInclude Include="SNN\Membrane.h" />
+    <ClInclude Include="SNN\SNNNeuron.h" />
+    <ClInclude Include="SNN\Spike.h" />
+    <ClInclude Include="SNN\SNN.h" />
+    <ClInclude Include="SNN\Synapse.h" />
+    <ClInclude Include="Tests\Connectors_Tests.h" />
+    <ClInclude Include="Tests\CNN_Tests.h" />
+    <ClInclude Include="Tests\RL_Tests.h" />
+    <ClInclude Include="Tests\Protocol_Tests.h" />
+    <ClInclude Include="Tests\SNN_Tests.h" />
+    <ClInclude Include="Tests\TestData.h" />
+    <ClInclude Include="Tests\Type_Tests.h" />
+    <ClInclude Include="Tests\Tests.h" />
+    <ClInclude Include="Types\Activation.h" />
+    <ClInclude Include="Types\General.h" />
+    <ClInclude Include="Types\Matrix.h" />
+    <ClInclude Include="Additional_Notes.txt" />
+    <ClInclude Include="Types\Tensor.h" />
+    <ClInclude Include="Types\Scalar.h" />
+    <ClInclude Include="Types\Types.h" />
+    <ClInclude Include="Types\Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Image\Samples\sample_1.jpeg" />
+    <Image Include="Data\Image\Samples\sample_2.jpg" />
+    <Image Include="Data\Image\Samples\sample_3.png" />
+    <Image Include="Data\Image\Samples\sample_4.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

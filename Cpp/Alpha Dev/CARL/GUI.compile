@@ -1,0 +1,1 @@
+g++ Alpha\ Dev.cpp -lsfml-graphics -lsfml-window -lsfml-system Tests/Tests.cpp Tests/GUI_Tests.cpp GUI/GUI.cpp

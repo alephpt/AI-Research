@@ -1,0 +1,193 @@
+There are a few general steps that could be taken to test the network:
+
+    Unit Testing: Test each component of the network (GAN, CNN, and RL) separately using unit tests. This will 
+    ensure that each component is working correctly on its own before moving on to testing the entire network.
+
+    Integration Testing: Once each component has been tested and is working correctly, test the integration of
+    the components. This can be done by sending fake data through the pipeline and checking that the output of
+    each component is as expected.
+
+    Functional Testing: Test the network in a functional manner, by evaluating the network's performance on a 
+    specific task. This could include generating realistic images, classifying images correctly, or making good 
+    decisions in a simulated environment.
+
+    Evaluation Metrics: Define evaluation metrics to measure how well the network is working. These metrics could 
+    include the quality of the generated images, the accuracy of the classifier, or the performance of the agent 
+    in the simulated environment.
+
+    Comparison to Baseline: Compare the network's performance to a baseline or a set of reference results, to 
+    ensure that the network is working better than a simple model.
+
+    Continuous Monitoring: Continuously monitor the network's performance and check that it is not degrading over 
+    time.
+
+It's also important to consider the real-world conditions, the network should be tested in realistic conditions 
+where the data is not perfect, and the network should be robust to this kind of situation.
+
+There are several types of integration tests that can be used to test the entire network, which includes GAN, CNN 
+and RL. Here are a few examples:
+
+    End-to-end tests: These tests check the behavior of the system as a whole by simulating real-world scenarios 
+    and ensuring that the output of the system is as expected.
+
+    Functional tests: These tests check that the different components of the network work together correctly by 
+    testing the interactions between them.
+
+    Performance tests: These tests check that the network can handle the expected load and that the response time 
+    and throughput are within acceptable limits.
+
+    Stress tests: These tests check the behavior of the network when it is subjected to high loads or extreme 
+    conditions, such as a large number of concurrent users or high input data size.
+
+    Regression tests: These tests check that changes made to the network do not introduce new bugs or break existing 
+    functionality.
+
+    Acceptance tests: These tests check that the network meets the requirements and specifications, and that it is 
+    ready for release.
+
+It's also important to note that the testing process should be automated as much as possible, to ensure that the tests 
+can be run quickly and easily, and that the results can be recorded and analyzed.
+
+
+
+
+        /// TESTS ///
+
+
+
+// CARL TESTS //
+
+// TEST 1: void test_initCNN_Disc_Protocol()
+
+This test simply initializes the CA side of the protocol and asserts that it was created properly.
+
+
+// TEST 2: 
+
+This test simply test the ARL side of the protocol and asserts that it was created properly.
+
+
+// TEST 3:
+
+This test initializes the CNN, Discriminator, GAN and RL, creates instances of the CNN_Disc_Protocol and 
+GAN_RL_Protocol, trains them for multiple epochs, and compares the initial and final losses and rewards to 
+ensure that the protocols are evolving.
+
+
+// TEST 4:
+
+This function takes in a GAN, an RL, the number of epochs to train for, and the batch size. It starts by 
+generating initial fake data using the generator. It then trains the discriminator on real and fake data for 
+the specified number of epochs. In each epoch, it calculates the error of the discriminator and trains the 
+generator based on that error. Then it updates the policy using the generator's weights and biases and updates 
+the generator using the new policy. Finally, it prints the current error at each epoch.
+
+
+// TEST 5:
+
+This unit test initializes the RLC_protocol using the initRLC function, then trains it using the trainRLC 
+function on a set of input and expected output data. It then evaluates the trained RLC_protocol on a new set 
+of test input data and compares the test output to the expected output. If the test output and expected output 
+are similar within a certain tolerance (determined by the value of epsilon), the test will pass.
+
+// TEST 6: testEvaluateCNN_GAN_Protocol
+
+
+// TEST 7: trainCA_Protocol
+
+
+// TEST 8: test_trainGAN_RL_Protocol_Finished
+
+
+// TEST 9: test_trainGAN_RL_Protocol_LossAndError
+
+
+
+// TEST ???:
+
+This test is to determine if the CNN_Disc_Protocol and the GAN_RL_Protocol types are communicating with one another: 
+-- Still In Development --
+
+
+
+
+// FUNCTIONAL TESTS //
+
+// TEST 1: test_GAN_to_CNN
+
+A functional test for a GAN to ensure that it is generating new data that can be used to train other AI models would 
+involve the following steps:
+
+    Create a GAN using the createGAN function.
+
+    Generate a batch of data using the GAN's generateData function.
+
+    Compare the generated data to a set of known "good" data to ensure that it is similar in terms of structure and 
+    content.
+
+    Use the generated data to train another AI model, such as a CNN, and evaluate its performance.
+
+    Compare the performance of the model trained on the generated data to a model trained on the known "good" data to 
+    ensure that it is similar.
+
+    Repeat steps 2-5 multiple times to ensure that the GAN is consistently generating useful data.
+
+The functional test would need to be tailored to the specific data and task that the GAN is being used for.
+
+
+
+// TEST 2: test_GAN_CNN_integration
+
+One way to test the GAN's ability to use the output of the CNN would be to first train a CNN on a dataset of labeled 
+images. Then, use the GAN to generate new images. Pass these generated images through the trained CNN and compare the 
+CNN's predicted labels for the generated images to the actual labels. If the GAN is generating new images that are 
+similar enough to the training data, the CNN should correctly predict the labels for the majority of the generated 
+images.
+
+Note that the above test function is just one of the ways to test the GAN's ability to generate new data that can be 
+used to train a CNN and it might need to be adapted to suit the specific requirements of the project.
+
+
+
+// TEST 3: test_GAN_with_CNN_output
+
+In this test, a GAN and CNN are first created and the CNN is trained on some "good data" with known labels. The GAN is 
+then used to generate new data using the output of the CNN. The generated data is then compared to the good data to 
+ensure that it is similar and the CNN is used to classify the generated data to ensure that it is of similar quality to 
+the good data. The test would pass if similarity and accuracy are both greater than certain threshold values.
+
+
+
+// TEST 4: test_RL_CNN
+
+In this functional test, we first create the RL model by calling the createRL function with the necessary input parameters. 
+These parameters include the number of inputs, states, actions, and outputs for the RL model, as well as the number of 
+layers and the sizes of each layer in the CNN that the RL will use for its input. We also pass in a value for the gamma 
+parameter which is used for discounting future rewards in the RL algorithm. After the RL model is created, we generate some 
+data for the CNN to train on using the GAN. We then train the CNN on this data and use the trained CNN to predict on some 
+test data. We compare the predictions of the CNN to the true labels of the test data and calculate the accuracy of the CNN. 
+
+We then use the trained CNN to generate input for the RL, and run the RL algorithm on this input to make decisions and update 
+its policy and value estimates. We repeat this process several times, each time using the updated policy and value estimates 
+to make new decisions and update the estimates again. We check that the value estimates converge to a stable solution over 
+time, and that the policy is updated in a way that maximizes the expected reward.
+
+
+
+// TEST 5: test_selectRLAction_A && test_selectRLAction_B
+
+This test function creates an RL struct and fills it with test data, then calls selectRLAction 3 times, each time passing a 
+different state. After each call, it checks that the policy array has the expected values. It uses the assert macro to check 
+if the policy array has the expected values, so it will stop the program if any of the assertions fail.
+
+
+
+// TEST 6: test_trainRL
+
+This is an example of a unit test for the trainRL function, where I am testing the case when cnn_output is greater than 
+gan_output. This means that the RL would train the CNN and the test case checks that the weights, q-value and policy are 
+updated accordingly.
+
+
+
+// TEST 7: test_rlDecisionMaking
