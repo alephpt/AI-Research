@@ -1,5 +1,6 @@
 #pragma once
 #include "../Types/Types.h"
+#include <cmath>
 
 typedef struct Filter {
     fmatrix weights;
@@ -253,21 +254,92 @@ inline void createBottomLeftToTopRightGradientFilter(Filter* f) {
 }
 
 inline void createGaussianFilter(Filter* f) {
+    float y_center = (float)f->height / 2.0f;
+    float x_center = (float)f->width / 2.0f;
+    float y_sigma = y_center / 3.0f;
+    float x_sigma = y_center / 3.0f;
 
+    for (int y = 0; y < f->height; y++) {
+        for (int x = 0; x < f->width; x++) {
+            float dx = (float)x + 0.5f - x_center;
+            float dy = (float)y + 0.5f - y_center;
+            float radial = sqrtf(dx * dx + dy * dy);
+            f->weights[y][x] = (float)expf(-radial * radial / (2 * x_sigma * y_sigma));
+        }
+    }
 }
 
 inline void createBalancedGaussianFilter(Filter* f) {
+    float y_center = (float)f->height / 2.0f;
+    float x_center = (float)f->width / 2.0f;
+    float y_sigma = y_center / 2.0f;
+    float x_sigma = y_center / 2.0f;
 
+    for (int y = 0; y < f->height; y++) {
+        for (int x = 0; x < f->width; x++) {
+            float dx = (float)x + 0.5f - x_center;
+            float dy = (float)y + 0.5f - y_center;
+            float radial = sqrtf(dx * dx + dy * dy);
+            f->weights[y][x] = 2.0f * ((float)expf(-radial * radial / (2 * x_sigma * y_sigma)) - 0.5f);
+        }
+    }
 }
 
 inline void createInverseGaussianFilter(Filter* f) {
+    float y_center = (float)f->height / 2.0f;
+    float x_center = (float)f->width / 2.0f;
+    float y_sigma = y_center / 2.0f;
+    float x_sigma = y_center / 2.0f;
 
+    for (int y = 0; y < f->height; y++) {
+        for (int x = 0; x < f->width; x++) {
+            float dx = (float)x + 0.5f - x_center;
+            float dy = (float)y + 0.5f - y_center;
+            float radial = sqrtf(dx * dx + dy * dy);
+            f->weights[y][x] = 2.0f * (-(float)expf(-radial * radial / (2 * x_sigma * y_sigma)) + 0.5f);
+        }
+    }
 }
 
 inline void createModifiedGaussianFilter(Filter* f) {
+    float y_center = (float)f->height / 2.0f;
+    float x_center = (float)f->width / 2.0f;
+    float y_sigma = y_center / 2.0f;
+    float x_sigma = y_center / 2.0f;
 
+    for (int y = 0; y < f->height; y++) {
+        for (int x = 0; x < f->width; x++) {
+            float dx = (float)x + 0.5f - x_center;
+            float dy = (float)y + 0.5f - y_center;
+            float radial = sqrtf(dx * dx + dy * dy);
+            f->weights[y][x] = 1.55f * ((float)expf(-radial * radial / (2 * x_sigma * y_sigma)) - 0.366f);
+        }
+    }
 }
 
 inline void createConicalFilter(Filter* f) {
+    float y_center = (float)f->height / 2.0f;
+    float x_center = (float)f->width / 2.0f;
 
+    for (int y = 0; y < f->height; y++) {
+        for (int x = 0; x < f->width; x++) {
+            float theta = std::atan2f(y - y_center, x - x_center);
+            theta = (theta >= 0) ? theta : 2.0f * (float)M_PI + theta;
+            f->weights[y][x] = (2.0f * theta / (2.0f * (float)M_PI) - 1.0f);
+        }
+    }
 }
+
+inline void createInverseConicalFilter(Filter* f) {
+    float y_center = (float)f->height / 2.0f;
+    float x_center = (float)f->width / 2.0f;
+
+    for (int y = 0; y < f->height; y++) {
+        for (int x = 0; x < f->width; x++) {
+            float theta = std::atan2f(y - y_center, x - x_center);
+            theta = (theta >= 0) ? theta : 2.0f * (float)M_PI + theta;
+            f->weights[y][x] = (2.0f * theta / (2.0f * (float)M_PI) - 1.0f) * -1.0f;
+        }
+    }
+}
+

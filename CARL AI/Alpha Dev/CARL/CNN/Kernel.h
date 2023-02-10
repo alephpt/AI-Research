@@ -56,13 +56,14 @@ typedef enum FilterStyle {
         RtoL_GRADIENT_FILTER,
         TtoB_GRADIENT_FILTER,
         BtoT_GRADIENT_FILTER,
-        TOP_LEFT_GRADIENT_FILTER,
-        BOTTOM_LEFT_GRADIENT_FILTER,
+        TLtoBR_GRADIENT_FILTER,
+        BLtoTR_GRADIENT_FILTER,
         GAUSSIAN_FILTER,
         BALANCED_GAUSSIAN_FILTER,
         NEGATIVE_GAUSSIAN_FILTER,
         MODIFIED_GAUSSIAN_FILTER,
-        CONICAL_FILTER
+        CONICAL_FILTER,
+        INVERSE_CONICAL_FILTER
 } FilterStyle;
 
 const std::string filterStyleString[] = {   
@@ -82,13 +83,14 @@ const std::string filterStyleString[] = {
     "Right-To-Left Gradient",
     "Top-To-Bottom Gradient", 
     "Bottom-To-Top Gradient", 
-    "Top Left Gradient", 
-    "Bottom Left Gradiant", 
+    "Top Left to Bottom Right Gradient", 
+    "Bottom Left to Top Right Gradiant", 
     "Guassian", 
     "Balanced Gaussian",
     "Negative Guassian",
     "Modified Guassian",
     "Conical",
+    "Inverse Conical",
 };
 
 class Kernel {

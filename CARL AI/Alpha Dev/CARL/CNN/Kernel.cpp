@@ -31,7 +31,8 @@ static void (*populateFilterStyle[])(Filter* f) = {
     createBalancedGaussianFilter,
     createInverseGaussianFilter,
     createModifiedGaussianFilter,
-    createConicalFilter
+    createConicalFilter,
+    createInverseConicalFilter
 };
 
 Kernel::Kernel() 

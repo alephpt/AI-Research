@@ -12,13 +12,13 @@ void testKernelParameters() {
     k.setFilterParameters(THREExN, 7, TOP_EDGE_FILTER);
     k.printFilter();
 
-    k.setFilterParameters(NxTWO, 3, LEFT_EDGE_FILTER);
+    k.setFilterParameters(NxTHREE, 4, LEFT_EDGE_FILTER);
     k.printFilter();
 
     k.setFilterParameters(TWOxTWO, BOTTOM_EDGE_FILTER);
     k.printFilter();
 
-    k.setFilterParameters(TWOxN, 4, TOP_RIGHT_CORNER_FILTER);
+    k.setFilterParameters(THREExN, 4, TOP_RIGHT_CORNER_FILTER);
     k.printFilter();
 
     k.setFilterStyle(BOTTOM_RIGHT_CORNER_FILTER);
@@ -54,14 +54,13 @@ void testKernelParameters() {
     k.setFilterStyle(BtoT_GRADIENT_FILTER);
     k.printFilter();
 
-    k.setFilterStyle(TOP_LEFT_GRADIENT_FILTER);
+    k.setFilterParameters(FIVExFIVE,TLtoBR_GRADIENT_FILTER);
     k.printFilter();
     
-    k.setFilterStyle(BOTTOM_LEFT_GRADIENT_FILTER);
+    k.setFilterStyle(BLtoTR_GRADIENT_FILTER);
     k.printFilter();
-    /*
 
-    k.setFilterStyle(GAUSSIAN_FILTER);
+    k.setFilterParameters(SEVENxSEVEN, GAUSSIAN_FILTER);
     k.printFilter();
     
     k.setFilterStyle(BALANCED_GAUSSIAN_FILTER);
@@ -75,5 +74,7 @@ void testKernelParameters() {
  
     k.setFilterStyle(CONICAL_FILTER);
     k.printFilter();
-*/
+     
+    k.setFilterStyle(INVERSE_CONICAL_FILTER);
+    k.printFilter();
 }
