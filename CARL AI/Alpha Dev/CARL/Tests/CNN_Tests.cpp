@@ -60,7 +60,7 @@ void testKernelParameters() {
     k.setFilterStyle(BLtoTR_GRADIENT_FILTER);
     k.printFilter();
 
-    k.setFilterParameters(SEVENxSEVEN, GAUSSIAN_FILTER);
+    k.setFilterParameters(THREExN, 2, GAUSSIAN_FILTER);
     k.printFilter();
     
     k.setFilterStyle(BALANCED_GAUSSIAN_FILTER);
