@@ -1,7 +1,5 @@
-#include "CNNLayer.h"
-#include "CNNLayer_Helper.h"
-#include "../Types/Types.h"
 
+/*
 CNNLayer::CNNLayer(int h, int w) {
 	stride = 1;
 	k = new Kernel();
@@ -182,3 +180,4 @@ void CNNLayer::printCurrentFeature()
 		printFMatrix(feature->values[i]);
 	}
 }
+*/

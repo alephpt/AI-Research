@@ -51,9 +51,6 @@
     <ClCompile Include="Tests\GAN_Tests.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\CNN__Tests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tests\Connectors_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -108,10 +105,7 @@
     <ClCompile Include="Types\General.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CNN_Old\Kernel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CNN_Old\CNNNeuron.c">
+    <ClCompile Include="CNN_Old\Old_Kernel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GAN\Dataset.cpp">
@@ -124,12 +118,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GAN\GANNeuron.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CNN_Old\Auxiliary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CNN_Old\CNNData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CNN_Old\CNNLayer.cpp">
@@ -163,6 +151,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Data\Image\Processing\Load_Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CNN\Kernel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\CNN_Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,7 +254,7 @@
     <ClInclude Include="Types\General.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CNN_Old\Kernel.h">
+    <ClInclude Include="CNN_Old\Old_Kernel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CNN_Old\CNNNeuron.h">
@@ -276,9 +270,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GAN\GANNeuron.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CNN_Old\Auxiliary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Additional_Notes.txt">
@@ -348,6 +339,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Data\Load_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Filters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Kernel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,8 +1,5 @@
-#pragma once
-#include <vector>
-#include "Kernel.h"
-#include "../Types/Activation.h"
 
+/*
 typedef enum {
     POOL_LAYER,
     CONVOLUTION_LAYER,
@@ -31,3 +28,4 @@ typedef struct CNNData {
     vector<CNNSample*> layers;
     int n_layers = 0;
 } CNNData;
+*/

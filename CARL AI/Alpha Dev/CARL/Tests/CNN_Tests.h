@@ -2,6 +2,6 @@
 #include "../CNN/CNN.h"
 
 // Kernel Tests
-void testKernelInit();
+void testKernelParameters();
 
 // Convolution Tests

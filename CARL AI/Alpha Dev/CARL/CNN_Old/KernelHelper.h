@@ -1,9 +1,6 @@
 #pragma once
-#include <vector>
-#include "Kernel.h"
-#include "../Types/General.h"
-#include <math.h>
 
+/*
 static const fscalar pi = 3.1415926f;
 
 
@@ -217,3 +214,4 @@ inline void populateConicalFilter(Filter* filter) {
 
     return;
 }
+*/

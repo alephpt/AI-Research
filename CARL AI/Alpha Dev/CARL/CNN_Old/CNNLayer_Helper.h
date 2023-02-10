@@ -1,8 +1,5 @@
-#pragma once
-#include "../Types/Types.h"
-#include "CNNData.h"
-#include "Kernel.h"
 
+/*
 void validConvolution(CNNFeature* output, CNNFeature* input, Kernel* k, int stride) {
 	int kernel_rows = k->getRows();
 	int kernel_cols = k->getColumns();
@@ -122,3 +119,4 @@ void paddedDilationConvolution(CNNFeature* output, CNNFeature* input, Kernel* k,
 		}
 	}
 }
+*/

@@ -45,22 +45,22 @@ void printColor(fscalar in) {
         printf("\033[0;91m[%07.3lf] \033[0m", in);
     }
     else
-    if (in < -0.05f) {
+    if (in < -0.09f) {
         // dark yellow
         printf("\033[0;33m[%07.3lf] \033[0m", in);
     }
     else
-    if (in < 0.05) {
+    if (in < 0.09) {
         // dark green
         printf("\033[0;32m[%07.3lf] \033[0m", in);
     }
     else
-    if (in < 0.29f) {
+    if (in < 0.35f) {
         // dark blue
         printf("\033[0;34m[%07.3lf] \033[0m", in);
     }
     else
-    if (in < 0.6f) {
+    if (in < 0.67f) {
         // bright blue
         printf("\033[0;94m[%07.3lf] \033[0m", in);
     }

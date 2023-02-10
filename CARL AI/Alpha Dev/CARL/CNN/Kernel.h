@@ -1,10 +1,10 @@
 #pragma once
-#include "../Types/Types.h"
 #include "Filters.h"
+#include "../Types/Types.h"
 #include <map>
 #include <variant>
 
-typedef enum DynamicFilterDimensions {
+typedef enum {
         ONExN,
         TWOxN,
         THREExN,
@@ -13,7 +13,7 @@ typedef enum DynamicFilterDimensions {
         NxONE,
 } DynamicFilterDimensions;
 
-typedef enum FixedFilterDimensions {
+typedef enum  {
         ONExONE,
         TWOxTWO,
         THREExTHREE,
@@ -22,7 +22,9 @@ typedef enum FixedFilterDimensions {
         ELEVENxELEVEN
 } FixedFilterDimensions;
 
-const std::map<std::variant<DynamicFilterDimensions, FixedFilterDimensions>, std::string> filterString = { 
+typedef std::variant<DynamicFilterDimensions, FixedFilterDimensions> FilterDimensions;
+
+const std::map<FilterDimensions, std::string> filterDimensionsString = { 
     {ONExONE, "ONExONE"}, 
     {TWOxTWO, "TWOxTWO"},
     {THREExTHREE, "THREExTHREE"}, 
@@ -37,14 +39,6 @@ const std::map<std::variant<DynamicFilterDimensions, FixedFilterDimensions>, std
     {ELEVENxELEVEN, "ELEVENxELEVEN"} 
 };
 
-static void (*lookupFixedFilter[])(int* r, int* c) = {
-    oneXone, twoXtwo, threeXthree, fiveXfive, sevenXseven, elevenXeleven
-};
-
-static void (*lookupNFilter[])(int* r, int* c, int n) = {
-    oneXn, twoXn, threeXn, nXthree, nXtwo, nXone
-};
-
 typedef enum FilterStyle {
         RIGHT_EDGE_FILTER,
         LEFT_EDGE_FILTER,
@@ -55,11 +49,13 @@ typedef enum FilterStyle {
         BOTTOM_LEFT_CORNER_FILTER,
         TOP_LEFT_CORNER_FILTER,
         ASCENDING_FILTER,
-        NEGATIVE_ASCENDING_FILTER,
-        GRADIENT_FILTER,
-        VERTICAL_GRADIENT_FILTER,
-        INVERSE_GRADIENT_FILTER,
-        VERTICAL_INVERSE_GRADIENT_FILTER,
+        DESCENDING_FILTER,
+        VERTICAL_ASCENDING_FILTER,
+        VERTICAL_DESCENDING_FILTER,
+        LtoR_GRADIENT_FILTER,
+        RtoL_GRADIENT_FILTER,
+        TtoB_GRADIENT_FILTER,
+        BtoT_GRADIENT_FILTER,
         TOP_LEFT_GRADIENT_FILTER,
         BOTTOM_LEFT_GRADIENT_FILTER,
         GAUSSIAN_FILTER,
@@ -79,13 +75,15 @@ const std::string filterStyleString[] = {
     "Bottom Left Corner",
     "Top Left Corner",
     "Ascending", 
-    "Negative Gradient", 
-    "Gradient", 
-    "Vertical Gradient", 
-    "Inverse Gradient", 
-    "Vertical Inverse Gradient", 
+    "Descending",
+    "Vertical Ascending",
+    "Vertical Descending",
+    "Left-To-Right Gradient", 
+    "Right-To-Left Gradient",
+    "Top-To-Bottom Gradient", 
+    "Bottom-To-Top Gradient", 
     "Top Left Gradient", 
-    "Bottom_Left_Gradiant", 
+    "Bottom Left Gradiant", 
     "Guassian", 
     "Balanced Gaussian",
     "Negative Guassian",
@@ -93,18 +91,26 @@ const std::string filterStyleString[] = {
     "Conical",
 };
 
-typedef struct Filter {
-    fmatrix weights;
-    int width;
-    int height;
-} Filter;
-
 class Kernel {
 public:
     Kernel();
-
+    Kernel(FilterStyle);
+    Kernel(FixedFilterDimensions);
+    Kernel(FixedFilterDimensions, FilterStyle);
+    Kernel(DynamicFilterDimensions, int);
+    Kernel(DynamicFilterDimensions, int, FilterStyle);
     ~Kernel();
 
+    void setFilterParameters(FixedFilterDimensions, FilterStyle);
+    void setFilterParameters(DynamicFilterDimensions, int, FilterStyle);
+    void setFilterDimensions(FixedFilterDimensions);
+    void setFilterDimensions(DynamicFilterDimensions, int);
+    void setFilterStyle(FilterStyle);
+    void printFilter();
 private:
-    Filter filter;
+    Filter* filter;
+    FilterDimensions filter_dimensions;
+    FilterStyle filter_style;
+
+    void populateFilter();
 };

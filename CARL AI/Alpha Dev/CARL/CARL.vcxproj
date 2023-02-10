@@ -113,12 +113,13 @@
       <ConformanceMode>true</ConformanceMode>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>C:\Users\aleph\.sfml\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\aleph\.sfml\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-main-d.lib; sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-main.lib; sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,6 +131,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\aleph\.sfml\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,11 +146,9 @@
     <ClCompile Include="Alpha Dev.cpp">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
     </ClCompile>
-    <ClCompile Include="CNN_Old\Auxiliary.cpp" />
-    <ClCompile Include="CNN_Old\CNNData.cpp" />
+    <ClCompile Include="CNN\Kernel.cpp" />
     <ClCompile Include="CNN_Old\CNNLayer.cpp" />
-    <ClCompile Include="CNN_Old\Kernel.cpp" />
-    <ClCompile Include="CNN_Old\CNNNeuron.c" />
+    <ClCompile Include="CNN_Old\Old_Kernel.cpp" />
     <ClCompile Include="CNN\CNN.cpp" />
     <ClCompile Include="Connectors\CA_Connectors.cpp" />
     <ClCompile Include="Connectors\ARL_Connectors.cpp" />
@@ -169,6 +169,7 @@
     <ClCompile Include="RL\Policy.cpp" />
     <ClCompile Include="RL\Environment.cpp" />
     <ClCompile Include="RL\State.cpp" />
+    <ClCompile Include="Tests\CNN_Tests.cpp" />
     <ClCompile Include="Tests\Data_Tests.cpp" />
     <ClCompile Include="Tests\GUI_Tests.cpp" />
     <ClCompile Include="Protocols\ARL_Protocol.cpp" />
@@ -188,18 +189,18 @@
     <ClCompile Include="Tests\Protocol_Tests.cpp" />
     <ClCompile Include="Tests\GAN_Tests.cpp" />
     <ClCompile Include="Tests\Connectors_Tests.cpp" />
-    <ClCompile Include="Tests\CNN__Tests.cpp" />
     <ClCompile Include="Tests\GAN_Tests.h" />
     <ClCompile Include="Types\Activation.cpp" />
     <ClCompile Include="Types\General.cpp" />
     <ClCompile Include="Types\Matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CNN_Old\Auxiliary.h" />
+    <ClInclude Include="CNN\Filters.h" />
+    <ClInclude Include="CNN\Kernel.h" />
     <ClInclude Include="CNN_Old\CNNData.h" />
     <ClInclude Include="CNN_Old\CNNLayer.h" />
     <ClInclude Include="CNN_Old\CNNLayer_Helper.h" />
-    <ClInclude Include="CNN_Old\Kernel.h" />
+    <ClInclude Include="CNN_Old\Old_Kernel.h" />
     <ClInclude Include="CNN_Old\CNNNeuron.h" />
     <ClInclude Include="CNN_Old\KernelHelper.h" />
     <ClInclude Include="CNN\CNN.h" />

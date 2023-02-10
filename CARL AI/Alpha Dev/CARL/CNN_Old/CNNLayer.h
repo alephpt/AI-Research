@@ -1,7 +1,5 @@
-#pragma once
-#include "Kernel.h"
-#include "CNNData.h"
 
+/*
 typedef enum PoolType {
     MAX_POOLING,
     AVG_POOLING,
@@ -43,3 +41,4 @@ public:
     Kernel* k;
     CNNData* data;
 };
+*/
