@@ -3,11 +3,5 @@
 .*/.vs/
 .*/.vs/*
 .*/package*
-CARL\ AI/packages/
-CARL\ AI/x64/
-CARL\ AI/Alpha\ Dev/CARL/x64/
-CARL\ AI/Alpha\ Dev/CARL/x64/*
-CARL AI/Alpha Dev/CARL/x64/Debug/*
-CARL AI/Alpha Dev/CARL/x64/Debug/
-'.\CARL AI\Alpha Dev\x64\*'
-CARL\ AI/Alpha\ Dev/x64/*
+'.\Cpp\CARL\Alpha Dev\x64\*'
+Cpp/CARL/Alpha\ Dev/x64/*
