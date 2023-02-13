@@ -3,5 +3,6 @@
 
 // Kernel Tests
 void testKernelParameters();
+void testCNNinit();
 
 // Convolution Tests

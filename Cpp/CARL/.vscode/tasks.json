@@ -12,9 +12,9 @@
                 "-lsfml-window",
                 "-lsfml-graphics",
                 "-lsfml-audio",
-                "Alpha_Dev.cpp",
-                "*/*.cpp",
-                "Data/*/Processing/*.cpp",
+                "/Users/sister/repos/personal/AI_Generated/Cpp/CARL/Alpha_Dev/Alpha_Dev.cpp",
+                "/Users/sister/repos/personal/AI_Generated/Cpp/CARL/Alpha_Dev/*/*.cpp",
+                "/Users/sister/repos/personal/AI_Generated/Cpp/CARL/Alpha_Dev/Data/*/Processing/*.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
