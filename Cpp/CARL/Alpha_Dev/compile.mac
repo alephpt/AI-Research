@@ -1,0 +1,1 @@
+g++ -std=c++17 Alpha_Dev.cpp -L/usr/local/lib -I/usr/local/include/ -lsfml-graphics -lsfml-window -lsfml-system */*.cpp Data/Image/Processing/Load_Image.cpp -o Alpha_Dev 

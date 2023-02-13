@@ -15,7 +15,8 @@ void runTests() {
 
 
         // CNN Tests //
-     testKernelParameters();              // TODO: Fix 1x1, Nx1 and 1xN
+    testCNNinit();
+    // testKernelParameters();              // TODO: Fix 1x1, Nx1 and 1xN
     // testConvolutionInit();
     // testConvolutionFilters();
     // testConvolutionInput();
