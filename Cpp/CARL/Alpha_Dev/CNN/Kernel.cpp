@@ -1,44 +1,9 @@
 #include "Kernel.h"
 
-static void (*setFixedFilter[])(int* r, int* c) = {
-    oneXone, twoXtwo, threeXthree, fiveXfive, sevenXseven, elevenXeleven
-};
-
-static void (*setDynamicFilter[])(int* r, int* c, int n) = {
-    oneXn, twoXn, threeXn, nXthree, nXtwo, nXone
-};
-
-static void (*populateFilterStyle[])(Filter* f) = {
-    createRightEdgeFilter,
-    createLeftEdgeFilter,
-    createTopEdgeFilter,
-    createBottomEdgeFilter,
-    createTopRightCornerFilter,
-    createBottomRightCornerFilter,
-    createBottomLeftCornerFilter,
-    createTopLeftCornerFilter,
-    createAscendingFilter,
-    createDescendingFilter,
-    createVerticalAscendingFilter,
-    createVerticalDescendingFilter,
-    createLeftToRightGradientFilter,
-    createRightToLeftGradientFilter,
-    createTopToBottomGradientFilter,
-    createBottomToTopGradientFilter,
-    createTopLeftToBottomRightGradientFilter,
-    createBottomLeftToTopRightGradientFilter,
-    createGaussianFilter,
-    createBalancedGaussianFilter,
-    createInverseGaussianFilter,
-    createModifiedGaussianFilter,
-    createConicalFilter,
-    createInverseConicalFilter
-};
-
 Kernel::Kernel() 
 {
     filter = new Filter();
-    filter_style = RIGHT_EDGE_FILTER;
+    filter_style = NON_DISCRIMINATORY_FILTER;
     setFilterDimensions(THREExTHREE);
 }
 
@@ -52,7 +17,7 @@ Kernel::Kernel(FilterStyle s)
 Kernel::Kernel(FixedFilterDimensions d)
 {
     filter = new Filter();
-    filter_style = RIGHT_EDGE_FILTER;
+    filter_style = NON_DISCRIMINATORY_FILTER;
     setFilterDimensions(d);
 }
 
@@ -66,7 +31,7 @@ Kernel::Kernel(FixedFilterDimensions d, FilterStyle s)
 Kernel::Kernel(DynamicFilterDimensions d, int n)
 {
     filter = new Filter();
-    filter_style = RIGHT_EDGE_FILTER;
+    filter_style = NON_DISCRIMINATORY_FILTER;
     setFilterDimensions(d, n);
 }
 
@@ -113,11 +78,13 @@ void Kernel::setFilterStyle(FilterStyle s) {
 
 Filter* Kernel::getFilter() { return filter; }
 float Kernel::getBias() { return bias; }
+int Kernel::getStride() { return stride; }
 FilterStyle Kernel::getFilterStyle() { return filter_style; }
 std::string Kernel::getFilterStyleString() { return filterStyleString[filter_style]; }
 FilterDimensions Kernel::getFilterDimensions() { return filter_dimensions; }
 std::string Kernel::getFilterDimensionsString() { return filterDimensionsString.at(filter_dimensions); }
 void Kernel::setBias(float b) { bias = b; }
+void Kernel::setStride(int s) { stride = s; }
 int Kernel::getFilterWidth() { return filter->width; }
 int Kernel::getFilterHeight() { return filter->height; }
 fmatrix Kernel::getFilterWeights() { return filter->weights; }

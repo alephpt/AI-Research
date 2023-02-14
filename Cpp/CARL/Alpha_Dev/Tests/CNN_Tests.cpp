@@ -9,6 +9,9 @@ void testKernelParameters() {
     Kernel k = Kernel();
     k.printFilter();
 
+    k.setFilterStyle(RIGHT_EDGE_FILTER);
+    k.printFilter();
+
     k.setFilterParameters(NxTHREE, 4, TOP_EDGE_FILTER);
     k.printFilter();
 
@@ -81,14 +84,16 @@ void testKernelParameters() {
 
 void testCNNinit() {
     printf("Initializing CNN...\n\n");
+    
     CNN* cnn = new CNN();
-
+    
+    cnn->addNewLayer(CNN_CONVOLUTION_LAYER);
     cnn->addNewKernel(THREExN, 1, TOP_EDGE_FILTER);
     cnn->addNewKernel(NxTHREE, 1, RIGHT_EDGE_FILTER);
     cnn->addNewKernel(THREExTHREE, TLtoBR_GRADIENT_FILTER);
     cnn->addNewKernel(THREExTHREE, BLtoTR_GRADIENT_FILTER);
     
-    cnn->addNewLayer(CNN_POOLING_LAYER);
+    cnn->addNewLayer(CNN_POOLING_LAYER);                            // TODO: Make Sure We Don't Add Kernels to a Pooling Layer
 
     cnn->addNewLayer(CNN_CONVOLUTION_LAYER);
     cnn->addNewKernel(THREExTHREE, GAUSSIAN_FILTER);
@@ -97,6 +102,7 @@ void testCNNinit() {
     cnn->addNewKernel(NxTHREE, 1, TtoB_GRADIENT_FILTER);
 
     cnn->addNewLayer(CNN_POOLING_LAYER);
+    cnn->setPoolType(L2_POOLING);
 
     cnn->addNewLayer(CNN_FLATTENING_LAYER);
 

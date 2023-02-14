@@ -1,8 +1,57 @@
 ﻿  Alpha_Dev.cpp
+  Kernel.cpp
+  Pool.cpp
+  Filters.cpp
+  CNNLayer.cpp
+  Old_Kernel.cpp
   CNN.cpp
   CA_Connectors.cpp
+  ARL_Connectors.cpp
   RKC_Connectors.cpp
-  CNN_Tests.cpp
-  Tests.cpp
+  Protocol_Connectors.cpp
+  Load_Image.cpp
+  Dataset.cpp
+  GANFeature.cpp
+  Generator.cpp
+  GANNeuron.c
+  Optimizer.cpp
+  GAN.cpp
+  Discriminator.cpp
+  Sample.cpp
   Generating Code...
+  Compiling...
+  GUI.cpp
+  Action.cpp
+  Q.cpp
+  Policy.cpp
+  Environment.cpp
+  State.cpp
+  CNN_Tests.cpp
+  Data_Tests.cpp
+  GUI_Tests.cpp
+  ARL_Protocol.cpp
+  CA_Protocol.cpp
+  RKC_Protocol.cpp
+  CARL_Protocol.cpp
+  RL.cpp
+  Membrane.cpp
+  SNNNeuron.cpp
+  Spike.cpp
+  SNN.cpp
+  Synapse.cpp
+  SNN_Tests.cpp
+  Generating Code...
+  Compiling...
+  Type_Tests.cpp
+  Tests.cpp
+  RL_Tests.cpp
+  Protocol_Tests.cpp
+  GAN_Tests.cpp
+  Connectors_Tests.cpp
+  GAN_Tests.h
+  Activation.cpp
+  General.cpp
+  Matrix.cpp
+  Generating Code...
+x64\Debug\GAN_Tests.obj : warning LNK4042: object specified more than once; extras ignored
   CARL.vcxproj -> C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\CARL\Alpha Dev.exe
