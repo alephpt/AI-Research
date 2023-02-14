@@ -16,7 +16,7 @@
                 "/Users/sister/repos/personal/AI_Generated/Cpp/CARL/Alpha_Dev/*/*.cpp",
                 "/Users/sister/repos/personal/AI_Generated/Cpp/CARL/Alpha_Dev/Data/*/Processing/*.cpp",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "/Users/sister/repos/personal/AI_Generated/Cpp/CARL/Alpha_Dev/Alpha.out"
             ],
             "options": {
                 "cwd": "${fileDirname}"
