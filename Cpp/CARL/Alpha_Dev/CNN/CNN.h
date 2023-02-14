@@ -10,7 +10,6 @@ public:
     ~CNN();
 
     void printCNN();
-    int getLayerCount();
 
     void addNewLayer(CNNLayerType);
     void addNewKernel(FilterStyle);
@@ -18,9 +17,6 @@ public:
     void addNewKernel(FixedFilterDimensions, FilterStyle);
     void addNewKernel(DynamicFilterDimensions, int);
     void addNewKernel(DynamicFilterDimensions, int, FilterStyle);
-
-    CNNLayer* getCurrentLayer();
-    CNNLayer* getPreviousLayer();
 
 
 private:
@@ -40,4 +36,12 @@ private:
     Kernel* createNewKernel(FixedFilterDimensions, FilterStyle);
     Kernel* createNewKernel(DynamicFilterDimensions, int);
     Kernel* createNewKernel(DynamicFilterDimensions, int, FilterStyle);
+
+    inline ConvolutionLayer* getConvolutionalData(CNNLayer* layer); 
+    inline PoolingLayer* getPoolingData(CNNLayer* layer);
+
+    CNNLayer* getCurrentLayer();
+    CNNLayer* getPreviousLayer();
+    CNNLayerType getCurrentLayerType();
+    CNNLayerType getPreviousLayerType();
 };

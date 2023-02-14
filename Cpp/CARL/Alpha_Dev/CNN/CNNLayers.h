@@ -1,6 +1,8 @@
 #pragma once
 #include "../Types/Types.h"
 #include "Kernel.h"
+#include "Pool.h"
+#include <variant>
 
 const std::string CNNLayerStrings[] = { "Convolutional Layer", "Pooling Layer", "Flattening Layer", "Fully Connected Neural Network" };
 
@@ -11,11 +13,19 @@ typedef enum {
     CNN_FULLY_CONNECTED
 } CNNLayerType;
 
+typedef struct ConvolutionLayer {
+    int n_kernels;
+    vector<Kernel*> kernels;
+} ConvolutionLayer;
+
+typedef std::variant<ConvolutionLayer*, PoolingLayer*> LayerData;
+
 typedef struct CNNLayer {
-    int n_kernels = 0;
-    union {
-        vector<Kernel*> kernels;
-        vector<Pool*> pools;
-    }
-    CNNLayerType layer_type;
+    LayerData data;
+    CNNLayerType type;
+    CNNLayer(){};
 } CNNLayer;
+
+
+inline ConvolutionLayer* getConvolutionLayer(LayerData data) { return std::get<ConvolutionLayer*>(data); }
+inline PoolingLayer* getPoolingLayer(LayerData data) { return std::get<PoolingLayer*>(data); }

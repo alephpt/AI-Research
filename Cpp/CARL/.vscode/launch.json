@@ -9,9 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "Alpha_Dev",
-            "args": [
-
-            ],
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
