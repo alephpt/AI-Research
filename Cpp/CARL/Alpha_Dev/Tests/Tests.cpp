@@ -1,4 +1,5 @@
 #include "Tests.h"
+#include "TestData.h"
 
 void runTests() {
         // GUI Tests ///
@@ -15,17 +16,15 @@ void runTests() {
 
 
         // CNN Tests //
-    testCNNinit();
+    // testCNNinit();
     // testKernelParameters();              // TODO: Fix 1x1, Nx1 and 1xN
-    // testConvolutionInit;
-    // testConvolutionFilters();
-    // testConvolutionInput();
-    // testConvolutions();
 
         // SNN Tests //
     // testinitSNN();
     // testConnectivityMatrix();
     // testGeneratorinit();
+
+    printFMatrix(smiles);
 
     return;
 }

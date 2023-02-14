@@ -13,19 +13,23 @@ typedef enum {
     CNN_FULLY_CONNECTED
 } CNNLayerType;
 
-typedef struct ConvolutionLayer {
-    int n_kernels;
-    vector<Kernel*> kernels;
-} ConvolutionLayer;
-
-typedef std::variant<ConvolutionLayer*, PoolingLayer*> LayerData;
+typedef std::variant<Convolution*, Pool*> LayerData;
 
 typedef struct CNNLayer {
+    CNNLayer(CNNLayerType layer_type) {
+        type = layer_type;
+        switch (layer_type) {
+            case CNN_CONVOLUTION_LAYER: {
+                data = new Convolution;
+                break;
+            }
+            case CNN_POOLING_LAYER: {
+                data = new Pool;
+                break;
+            }
+        }
+    };
+
     LayerData data;
     CNNLayerType type;
-    CNNLayer(){};
 } CNNLayer;
-
-
-inline ConvolutionLayer* getConvolutionLayer(LayerData data) { return std::get<ConvolutionLayer*>(data); }
-inline PoolingLayer* getPoolingLayer(LayerData data) { return std::get<PoolingLayer*>(data); }
