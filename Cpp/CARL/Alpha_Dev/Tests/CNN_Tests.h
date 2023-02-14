@@ -6,3 +6,7 @@ void testKernelParameters();
 void testCNNinit();
 
 // Convolution Tests
+void testConvolutions();
+
+// Pooling Tests
+void testPooling();

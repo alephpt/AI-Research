@@ -17,14 +17,16 @@ void runTests() {
 
         // CNN Tests //
     // testCNNinit();
-    // testKernelParameters();              // TODO: Fix 1x1, Nx1 and 1xN
+    // testKernelParameters();              
+    // testConvolutions();
+    testPooling();
 
         // SNN Tests //
     // testinitSNN();
     // testConnectivityMatrix();
     // testGeneratorinit();
 
-    printFMatrix(smiles);
+//    printFMatrix(smiles);
 
     return;
 }
