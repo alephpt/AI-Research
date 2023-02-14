@@ -1,6 +1,101 @@
 #include "Pool.h"
 #include "Filters.h"
 
+
+static inline void maxPool(fmatrix* input, int stride) {
+    fmatrix data = *input;
+    int input_h = data.size();
+    int input_w = data[0].size();
+    fmatrix cache = fmatrix((input_h + 1) / stride, fvector((input_w + 1) / stride, 0.0f));
+
+    for (int y = 0; y < input_h; y += stride) {
+        for (int x = 0; x < input_w; x += stride) {
+            float max = -1.0f;
+            for (int ys = y; ys < y + stride && ys < (input_h); ++ys) {
+                for (int xs = x; xs < x + stride && xs < (input_w); ++xs) {
+                    float value = data[ys][xs];
+                    if (max < value) { max = value; }
+                }
+            }
+            cache[y / stride][x / stride] = max;
+        }
+        
+    }
+
+    *input = cache;
+}
+
+static inline void avgPool(fmatrix* input, int stride) {
+    fmatrix data = *input;
+    int input_h = data.size();
+    int input_w = data[0].size();
+    fmatrix cache = fmatrix((input_h + 1) / stride, fvector((input_w + 1) / stride, 0.0f));
+
+    for (int y = 0; y < input_h; y += stride) {
+        for (int x = 0; x < input_w; x += stride) {
+            float avg = 0.0f;
+            int avg_counter = 0;
+            for (int ys = y; ys < y + stride && ys < (input_h); ++ys) {
+                for (int xs = x; xs < x + stride && xs < (input_w); ++xs) {
+                    avg += data[ys][xs];
+                    avg_counter++;
+                }
+            }
+            cache[y / stride][x / stride] = avg / avg_counter;
+        }
+
+    }
+
+    *input = cache;
+}
+
+static inline void l2Pool(fmatrix* input, int stride) {
+    fmatrix data = *input;
+    fmatrix cache = fmatrix(data.size() / stride + 1, fvector(data[0].size() / stride + 1, 0.0f));
+
+    for (int y = 0; y < input->size(); y += stride) {
+        for (int x = 0; x < input[0].size(); x += stride) {
+            float l2 = 0.0f;
+            for (int ys = 0; ys < stride; ys++) {
+                for (int xs = 0; xs < stride; xs++) {
+                    float value = data[y + ys][x + xs];
+                    l2 += (value * value);
+                }
+            }
+            cache[y][x] = sqrtf(l2);
+        }
+
+    }
+
+    *input = cache;
+}
+
+static inline void maxGlobalPool(fmatrix* input, int stride) {
+
+}
+
+static inline void avgGlobalPool(fmatrix* input, int stride) {
+
+}
+
+static inline void stochasticPool(fmatrix* input, int stride) {
+
+}
+
+static inline void roiPool(fmatrix* input, int stride) {
+
+}
+
+static inline void adaptivePool(fmatrix* input, int stride) {
+
+}
+
+
+inline void (*runPoolingFunction[])(fmatrix*, int) = {
+    maxPool, avgPool, l2Pool, maxGlobalPool, avgGlobalPool, stochasticPool, roiPool, adaptivePool
+};
+
+
 Pool::Pool() {
     filter = new Filter();
     pooling_style = MAX_POOLING;
@@ -133,4 +228,11 @@ void Pool::setFilterParameters(DynamicFilterDimensions fd, int n, FilterStyle fs
     dimensions = fd;
     setDynamicFilter[fd](&filter->height, &filter->width, n);
     populateFilter();
+}
+
+fmatrix Pool::poolingFunction(fmatrix input)
+{
+    fmatrix sample = input;
+    runPoolingFunction[pooling_style](&sample, stride);
+    return sample;
 }

@@ -1,7 +1,6 @@
 #include "CNN.h"
 
-
-CNN::CNN() : n_inputs(0), n_input_layers(0), n_layers(0) {}
+CNN::CNN() : n_input_samples(0), n_sample_layers(0), n_layers(0) {}
 
 CNN::~CNN() {
     for (int l = 0; l < n_layers; l++) {
@@ -93,11 +92,16 @@ void CNN::setPoolType(FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(crea
 void CNN::setPoolType(FixedFilterDimensions fd, FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(createNewPool(ps, fd, fs)); }
 void CNN::setPoolType(DynamicFilterDimensions fd, int n, FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(createNewPool(ps, fd, n, fs)); }
 
+fmatrix CNN::Pooling()
+{
+    return getPoolingData(layers[0])->poolingFunction(inputs[0]);
+}
+
 void CNN::printCNN() {
     printf("Convolutional Neural Network: \n");
-    printf("Number of Inputs: \t\t%d\n", n_inputs);
-    printf("Number of Layers per Input: \t%d\n", n_input_layers);
-    printf("Number of CNN Layers: \t%d\n", n_layers);
+    printf("Number of Input Samples: \t%d\n", n_input_samples);
+    printf("Number of Layers per Sample: \t%d\n", n_sample_layers);
+    printf("Number of CNN Layers: \t\t%d\n", n_layers);
     
     for (int l = 0; l < n_layers; l++) {
         int layer = l + 1;
@@ -134,4 +138,26 @@ void CNN::printCNN() {
             }
         }
     }
+}
+
+        /////////////////////
+        // Input Functions //
+        /////////////////////
+
+void CNN::addNewInputSample(ftensor3d input)
+{
+    if (n_input_samples == 0) {
+        n_sample_layers = input.size();
+    } else
+    if (n_sample_layers != input.size()) {
+        printf("[ERROR]: addNewInputSample(ftensor3d) received ismatched sample sizes.\n");
+        printf("Hint: Check the number of layers of your input data.");
+        return;
+    }
+
+    for (int sample = 0; sample < n_sample_layers; sample++) {
+        inputs.push_back(input[sample]);
+    }
+
+    n_input_samples++;
 }

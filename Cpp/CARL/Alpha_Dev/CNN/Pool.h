@@ -23,6 +23,8 @@ typedef enum {
     ADAPTIVE_POOLING            // dynamically computes the pooling size
 } PoolingStyle;
 
+
+
 class Pool{
 public:
     Pool();
@@ -58,6 +60,7 @@ public:
     void setFilterParameters(FixedFilterDimensions, FilterStyle);
     void setFilterParameters(DynamicFilterDimensions, int, FilterStyle);
 
+    fmatrix poolingFunction(fmatrix);
 private:
     Filter* filter = new Filter;                     // matrix of values between -1.0 and 1.0
     FilterDimensions dimensions = TWOxTWO;        // store the constant e.g THREExTHREE
@@ -67,3 +70,6 @@ private:
 
     void populateFilter();
 };
+
+
+

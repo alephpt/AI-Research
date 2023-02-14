@@ -110,3 +110,26 @@ void testCNNinit() {
 
     cnn->printCNN();
 }
+
+void testConvolutions() {
+    CNN* cnn = new CNN();
+    cnn->addNewLayer(CNN_CONVOLUTION_LAYER);
+    printf("Convolution Test Started.\n");
+
+    cnn->addNewInputSample(ftensor3d(1, smiles));
+    cnn->printCNN();
+
+    // cnn->Pool();
+}
+
+void testPooling() {
+    CNN* cnn = new CNN();
+    cnn->addNewLayer(CNN_POOLING_LAYER);
+    printf("Pooling Test Started.\n");
+
+    cnn->addNewInputSample(ftensor3d(1, smiles));
+    cnn->setPoolType(AVG_POOLING);
+    cnn->printCNN();
+
+    printFMatrix(cnn->Pooling());
+}

@@ -10,6 +10,8 @@ public:
 
     void printCNN();
 
+    void addNewInputSample(ftensor3d);
+
     void addNewLayer(CNNLayerType);
 
     void addNewKernel(FilterStyle);
@@ -31,11 +33,11 @@ public:
     void setPoolType(DynamicFilterDimensions, int, PoolingStyle);
     void setPoolType(DynamicFilterDimensions, int, FilterStyle, PoolingStyle);
 
-
+    fmatrix Pooling();
 private:
-    int n_inputs;           // used to calculate number of samples
-    int n_input_layers;     // used to calculate number of layers per samples
-    ftensor3d inputs;
+    int n_input_samples;        // defined by inputs / n_sample_layers
+    int n_sample_layers;        // used to calculate number of layers per samples  - CMYK
+    ftensor3d inputs = ftensor3d(0, fmatrix(0, vector<fscalar>(0)));
     vector<std::string> labels;
     int n_layers;
     vector<CNNLayer*> layers;
