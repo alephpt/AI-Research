@@ -143,9 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Alpha Dev.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
-    </ClCompile>
+    <ClCompile Include="Alpha_Dev.cpp" />
     <ClCompile Include="CNN\Kernel.cpp" />
     <ClCompile Include="CNN_Old\CNNLayer.cpp" />
     <ClCompile Include="CNN_Old\Old_Kernel.cpp" />
@@ -195,6 +193,7 @@
     <ClCompile Include="Types\Matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CNN\CNNLayers.h" />
     <ClInclude Include="CNN\Filters.h" />
     <ClInclude Include="CNN\Kernel.h" />
     <ClInclude Include="CNN_Old\CNNData.h" />
