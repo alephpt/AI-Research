@@ -80,26 +80,27 @@ void testKernelParameters() {
 }
 
 void testCNNinit() {
-    printf("Init Cnn:\n");
+    printf("Initializing CNN...\n\n");
     CNN* cnn = new CNN();
-    printf("Current Layer count: \t\t%d\n", cnn->getLayerCount());
-    printf("Current Layer kernel count: \t%d\n\n", cnn->getCurrentLayer()->n_kernels);
 
-    cnn->addNewKernel(cnn->createNewKernel(THREExN, 1, TOP_EDGE_FILTER));
-    printf("Added new filter:\n");
-    cnn->getCurrentLayer()->kernels[cnn->getCurrentLayer()->n_kernels - 1]->printFilter();
+    cnn->addNewKernel(THREExN, 1, TOP_EDGE_FILTER);
+    cnn->addNewKernel(NxTHREE, 1, RIGHT_EDGE_FILTER);
+    cnn->addNewKernel(THREExTHREE, TLtoBR_GRADIENT_FILTER);
+    cnn->addNewKernel(THREExTHREE, BLtoTR_GRADIENT_FILTER);
+    
+    cnn->addNewLayer(CNN_POOLING_LAYER);
 
-    cnn->addNewKernel(cnn->createNewKernel(NxTHREE, 1, RIGHT_EDGE_FILTER));
-    printf("Added new filter:\n");
-    cnn->getCurrentLayer()->kernels[cnn->getCurrentLayer()->n_kernels - 1]->printFilter();
-    
-    cnn->addNewKernel(cnn->createNewKernel(THREExTHREE, TLtoBR_GRADIENT_FILTER));
-    printf("Added new filter:\n");
-    cnn->getCurrentLayer()->kernels[cnn->getCurrentLayer()->n_kernels - 1]->printFilter();
-    
-    cnn->addNewKernel(cnn->createNewKernel(THREExTHREE, BLtoTR_GRADIENT_FILTER));
-    printf("Added new filter:\n");
-    cnn->getCurrentLayer()->kernels[cnn->getCurrentLayer()->n_kernels - 1]->printFilter();
-    
-    printf("Current Layer kernel count: \t%d\n", cnn->getCurrentLayer()->n_kernels);
+    cnn->addNewLayer(CNN_CONVOLUTION_LAYER);
+    cnn->addNewKernel(THREExTHREE, GAUSSIAN_FILTER);
+    cnn->addNewKernel(THREExTHREE, CONICAL_FILTER);
+    cnn->addNewKernel(THREExN, 1, LtoR_GRADIENT_FILTER);
+    cnn->addNewKernel(NxTHREE, 1, TtoB_GRADIENT_FILTER);
+
+    cnn->addNewLayer(CNN_POOLING_LAYER);
+
+    cnn->addNewLayer(CNN_FLATTENING_LAYER);
+
+    cnn->addNewLayer(CNN_FULLY_CONNECTED);
+
+    cnn->printCNN();
 }

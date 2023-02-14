@@ -111,6 +111,17 @@ void Kernel::setFilterStyle(FilterStyle s) {
     populateFilter();
 }
 
+Filter* Kernel::getFilter() { return filter; }
+float Kernel::getBias() { return bias; }
+FilterStyle Kernel::getFilterStyle() { return filter_style; }
+std::string Kernel::getFilterStyleString() { return filterStyleString[filter_style]; }
+FilterDimensions Kernel::getFilterDimensions() { return filter_dimensions; }
+std::string Kernel::getFilterDimensionsString() { return filterDimensionsString.at(filter_dimensions); }
+void Kernel::setBias(float b) { bias = b; }
+int Kernel::getFilterWidth() { return filter->width; }
+int Kernel::getFilterHeight() { return filter->height; }
+fmatrix Kernel::getFilterWeights() { return filter->weights; }
+
 void Kernel::populateFilter()
 {
     filter->weights = fmatrix(filter->height, fvector(filter->width, 0.0f));

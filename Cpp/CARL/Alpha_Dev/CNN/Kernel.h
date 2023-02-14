@@ -103,16 +103,30 @@ public:
     Kernel(DynamicFilterDimensions, int, FilterStyle);
     ~Kernel();
 
-    void setFilterParameters(FixedFilterDimensions, FilterStyle);
-    void setFilterParameters(DynamicFilterDimensions, int, FilterStyle);
+    void printFilter();
+    
+    float getBias();
+    FilterStyle getFilterStyle();
+    std::string getFilterStyleString();
+    FilterDimensions getFilterDimensions();
+    std::string getFilterDimensionsString();
+    Filter* getFilter();
+    int getFilterWidth();
+    int getFilterHeight();
+    fmatrix getFilterWeights();
+
+    void setBias(float);
+    void setFilterStyle(FilterStyle);
     void setFilterDimensions(FixedFilterDimensions);
     void setFilterDimensions(DynamicFilterDimensions, int);
-    void setFilterStyle(FilterStyle);
-    void printFilter();
+    void setFilterParameters(FixedFilterDimensions, FilterStyle);
+    void setFilterParameters(DynamicFilterDimensions, int, FilterStyle);
 private:
     Filter* filter;
     FilterDimensions filter_dimensions;
     FilterStyle filter_style;
+    float bias;
+    int step;
 
     void populateFilter();
 };
