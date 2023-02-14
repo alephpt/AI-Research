@@ -15,7 +15,7 @@ typedef struct CNNLayer {
     int n_kernels = 0;
     union {
         vector<Kernel*> kernels;
-
+        vector<Pool*> pools;
     }
     CNNLayerType layer_type;
 } CNNLayer;
