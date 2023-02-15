@@ -112,14 +112,61 @@ void testCNNinit() {
 }
 
 void testConvolutions() {
-    CNN* cnn = new CNN();
-    cnn->addNewLayer(CNN_CONVOLUTION_LAYER);
     printf("Convolution Test Started.\n");
+    FixedFilterDimensions fd1 = THREExTHREE;
+    FixedFilterDimensions fd2 = THREExTHREE;
+    FixedFilterDimensions fd3 = THREExTHREE;
+    FixedFilterDimensions fd4 = THREExTHREE;
+    FixedFilterDimensions fd5 = THREExTHREE;
+    FixedFilterDimensions fd6 = THREExTHREE;
+    FilterStyle fs1 = TOP_EDGE_FILTER;
+    FilterStyle fs2 = RIGHT_EDGE_FILTER;
+    FilterStyle fs3 = TLtoBR_GRADIENT_FILTER;
+    FilterStyle fs4 = BLtoTR_GRADIENT_FILTER;
+    FilterStyle fs5 = CONICAL_FILTER;
+    FilterStyle fs6 = INVERSE_CONICAL_FILTER;
 
-    cnn->addNewInputSample(ftensor3d(1, smiles));
+    printf("Initializing CNN, Convolution Layer and Input Data:\n");
+    CNN* cnn = new CNN();
+    cnn->addNewInputSample(ftensor3d(4, smiles));
+
+    cnn->addNewLayer(CNN_CONVOLUTION_LAYER);
+
+    cnn->addNewKernel(fd1, fs1);
+    cnn->addNewKernel(fd2, fs2);
+    cnn->addNewKernel(fd3, fs3);
+    cnn->addNewKernel(fd4, fs4);
+    cnn->addNewKernel(fd5, fs5);
+    cnn->addNewKernel(fd6, fs6);
+
     cnn->printCNN();
 
-    // cnn->Pool();
+    printf("\nPooling Test Started.\n");
+
+    printf("Input:\n");
+    printf("pooling Height: %d\n", (int)smiles.size());
+    printf("pooling Width: %d\n", (int)smiles[0].size());
+    printFMatrix(smiles);
+
+    ftensor3d conv_out = cnn->Convolute();
+
+    printf("\n%s %s:\n", filterDimensionsString.at(fd1).c_str(), filterStyleString[fs1].c_str());
+    printFMatrix(conv_out[0]);
+
+    printf("\n%s %s:\n", filterDimensionsString.at(fd2).c_str(), filterStyleString[fs2].c_str());
+    printFMatrix(conv_out[1]);
+
+    printf("\n%s %s:\n", filterDimensionsString.at(fd3).c_str(), filterStyleString[fs3].c_str());
+    printFMatrix(conv_out[2]);
+
+    printf("\n%s %s:\n", filterDimensionsString.at(fd4).c_str(), filterStyleString[fs4].c_str());
+    printFMatrix(conv_out[3]);
+
+    printf("\n%s %s:\n", filterDimensionsString.at(fd5).c_str(), filterStyleString[fs5].c_str());
+    printFMatrix(conv_out[4]);
+
+    printf("\n%s %s:\n", filterDimensionsString.at(fd6).c_str(), filterStyleString[fs6].c_str());
+    printFMatrix(conv_out[5]);
 }
 
 void testPooling() {

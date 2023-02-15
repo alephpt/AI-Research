@@ -15,7 +15,6 @@ public:
     void printFilter();
     
     float getBias();
-    int getStride();
     FilterStyle getFilterStyle();
     std::string getFilterStyleString();
     FilterDimensions getFilterDimensions();
@@ -26,7 +25,6 @@ public:
     fmatrix getFilterWeights();
 
     void setBias(float);
-    void setStride(int);
     void setFilterStyle(FilterStyle);
     void setFilterDimensions(FixedFilterDimensions);
     void setFilterDimensions(DynamicFilterDimensions, int);
@@ -37,12 +35,8 @@ private:
     FilterDimensions filter_dimensions;
     FilterStyle filter_style;
     float bias;
-    int stride;
 
     void populateFilter();
 };
 
-typedef struct Convolution {
-    int n_kernels = 0;
-    vector<Kernel*> kernels = vector<Kernel*>(0);
-} Convolution;
+

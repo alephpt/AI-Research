@@ -1,15 +1,2 @@
-﻿  Pool.cpp
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(143,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(144,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(166,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(167,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(190,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(191,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(215,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(216,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(231,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(232,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(245,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(246,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(249,29): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  Tests.cpp
   CARL.vcxproj -> C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\CARL\Alpha Dev.exe
