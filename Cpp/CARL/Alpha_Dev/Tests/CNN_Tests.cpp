@@ -106,7 +106,7 @@ void testCNNinit() {
 
     cnn->addNewLayer(CNN_FLATTENING_LAYER);
 
-    cnn->addNewLayer(CNN_FULLY_CONNECTED);
+    cnn->addNewLayer(CNN_FULLY_CONNECTED_LAYER);
 
     cnn->printCNN();
 }
@@ -128,8 +128,18 @@ void testPooling() {
     printf("Pooling Test Started.\n");
 
     cnn->addNewInputSample(ftensor3d(1, smiles));
-    cnn->setPoolType(AVG_POOLING);
+    cnn->setPoolType(STOCHASTIC_POOLING);
     cnn->printCNN();
 
-    printFMatrix(cnn->Pooling());
+    printf("Input:\n");
+    printf("Input Heigt: %lu\n", smiles.size());
+    printf("Input Width: %lu\n", smiles[0].size());
+    printFMatrix(smiles);
+
+    fmatrix pool_data = cnn->Pooling();
+
+    printf("\nPooling output:\n");
+    printf("pooling Height: %lu\n", pool_data.size());
+    printf("pooling height: %lu\n", pool_data[0].size());
+    printFMatrix(pool_data);
 }

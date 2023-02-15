@@ -10,7 +10,7 @@ typedef enum {
     CNN_CONVOLUTION_LAYER,
     CNN_POOLING_LAYER,
     CNN_FLATTENING_LAYER,
-    CNN_FULLY_CONNECTED
+    CNN_FULLY_CONNECTED_LAYER
 } CNNLayerType;
 
 typedef std::variant<Convolution*, Pool*> LayerData;
@@ -25,6 +25,12 @@ typedef struct CNNLayer {
             }
             case CNN_POOLING_LAYER: {
                 data = new Pool;
+                break;
+            }
+            case CNN_FLATTENING_LAYER: {
+                break;
+            }
+            case CNN_FULLY_CONNECTED_LAYER: {
                 break;
             }
         }
