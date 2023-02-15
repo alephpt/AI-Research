@@ -132,7 +132,7 @@ void CNN::printCNN() {
                 printf("\t Layer %d: %s\n", layer, CNNLayerStrings[layers[l]->type].c_str());
                 break;
             }
-            case CNN_FULLY_CONNECTED: {
+            case CNN_FULLY_CONNECTED_LAYER: {
                 printf("\t Layer %d: %s\n", layer, CNNLayerStrings[layers[l]->type].c_str());
                 break;
             }

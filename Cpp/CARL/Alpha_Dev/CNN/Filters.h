@@ -137,40 +137,6 @@ extern inline void createInverseGaussianFilter(Filter* f);
 extern inline void createModifiedGaussianFilter(Filter* f);
 extern inline void createConicalFilter(Filter* f);
 extern inline void createInverseConicalFilter(Filter* f);
-
-
-extern inline void (*setFixedFilter[])(int* r, int* c) = {
-    oneXone, twoXtwo, threeXthree, fiveXfive, sevenXseven, elevenXeleven
-};
-
-extern inline void (*setDynamicFilter[])(int* r, int* c, int n) = {
-    oneXn, twoXn, threeXn, nXthree, nXtwo, nXone
-};
-
-extern inline void (*populateFilterStyle[])(Filter* f) = {
-    createNonDiscriminatoryFilter,
-    createRightEdgeFilter,
-    createLeftEdgeFilter,
-    createTopEdgeFilter,
-    createBottomEdgeFilter,
-    createTopRightCornerFilter,
-    createBottomRightCornerFilter,
-    createBottomLeftCornerFilter,
-    createTopLeftCornerFilter,
-    createAscendingFilter,
-    createDescendingFilter,
-    createVerticalAscendingFilter,
-    createVerticalDescendingFilter,
-    createLeftToRightGradientFilter,
-    createRightToLeftGradientFilter,
-    createTopToBottomGradientFilter,
-    createBottomToTopGradientFilter,
-    createTopLeftToBottomRightGradientFilter,
-    createBottomLeftToTopRightGradientFilter,
-    createGaussianFilter,
-    createBalancedGaussianFilter,
-    createInverseGaussianFilter,
-    createModifiedGaussianFilter,
-    createConicalFilter,
-    createInverseConicalFilter
-};
+extern void (*setFixedFilter[])(int* r, int* c);
+extern void (*setDynamicFilter[])(int* r, int* c, int n);
+extern void (*populateFilterStyle[])(Filter* f);

@@ -1,4 +1,3 @@
-#pragma once
 #include "Filters.h"
 #include <cmath>
 #ifndef M_PI
@@ -344,3 +343,38 @@ inline void createInverseConicalFilter(Filter* f) {
     }
 }
 
+void (*setFixedFilter[])(int* r, int* c) = {
+    oneXone, twoXtwo, threeXthree, fiveXfive, sevenXseven, elevenXeleven
+};
+
+void (*setDynamicFilter[])(int* r, int* c, int n) = {
+    oneXn, twoXn, threeXn, nXthree, nXtwo, nXone
+};
+
+void (*populateFilterStyle[])(Filter* f) = {
+    createNonDiscriminatoryFilter,
+    createRightEdgeFilter,
+    createLeftEdgeFilter,
+    createTopEdgeFilter,
+    createBottomEdgeFilter,
+    createTopRightCornerFilter,
+    createBottomRightCornerFilter,
+    createBottomLeftCornerFilter,
+    createTopLeftCornerFilter,
+    createAscendingFilter,
+    createDescendingFilter,
+    createVerticalAscendingFilter,
+    createVerticalDescendingFilter,
+    createLeftToRightGradientFilter,
+    createRightToLeftGradientFilter,
+    createTopToBottomGradientFilter,
+    createBottomToTopGradientFilter,
+    createTopLeftToBottomRightGradientFilter,
+    createBottomLeftToTopRightGradientFilter,
+    createGaussianFilter,
+    createBalancedGaussianFilter,
+    createInverseGaussianFilter,
+    createModifiedGaussianFilter,
+    createConicalFilter,
+    createInverseConicalFilter
+};

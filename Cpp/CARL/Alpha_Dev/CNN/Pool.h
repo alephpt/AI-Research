@@ -7,20 +7,16 @@ const std::string poolingStyleString[] = {
     "L2 Pooling",
     "Global Max Pooling",
     "Global Average Pooling",
-    "Stochastic Pooling",
-    "Region of Interest Pooling",
-    "Adaptive Pooling"
+    "Stochastic Pooling"
 };
 
 typedef enum {
     MAX_POOLING,                // max value of a pool
     AVG_POOLING,                // average of a pool
     L2_POOLING,                 // root of sum of squares
-    MAX_GLOBAL_POOLING,         // finds maximum of all the values
-    AVG_GLOBAL_POOLING,         // computes average over all values
-    STOCHASTIC_POOLING,         // selects a random value
-    ROI_POOLING,                // used to pool over regions of interest
-    ADAPTIVE_POOLING            // dynamically computes the pooling size
+    GLOBAL_MAX_POOLING,         // finds maximum of all the values
+    GLOBAL_AVG_POOLING,         // computes average over all values
+    STOCHASTIC_POOLING         // selects a random value
 } PoolingStyle;
 
 
