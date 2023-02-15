@@ -18,8 +18,8 @@ void runTests() {
         // CNN Tests //
     // testCNNinit();
     // testKernelParameters();              
-    // testConvolutions();
-    testPooling();
+     testConvolutions();
+    // testPooling();
 
         // SNN Tests //
     // testinitSNN();

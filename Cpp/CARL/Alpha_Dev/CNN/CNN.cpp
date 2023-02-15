@@ -3,12 +3,6 @@
 CNN::CNN() : n_input_samples(0), n_sample_layers(0), n_layers(0) {}
 
 CNN::~CNN() {
-    for (int l = 0; l < n_layers; l++) {
-        if (layers[l]->type == CNN_CONVOLUTION_LAYER) {
-            getConvolutionalData(layers[l])->kernels.clear();
-        }
-    }
-
     layers.clear();
     inputs.clear();
     labels.clear();
@@ -49,8 +43,7 @@ inline Kernel* CNN::createNewKernel(DynamicFilterDimensions fd, int n, FilterSty
 
 void CNN::appendNewKernel(Kernel* kernel) { 
     Convolution* data = getConvolutionalData(getCurrentLayer());
-    data->kernels.push_back(kernel); 
-    data->n_kernels++; 
+    data->addNewKernel(kernel); 
 }
 
 void CNN::addNewKernel(FilterStyle fs) { appendNewKernel(createNewKernel(fs)); };
@@ -92,7 +85,12 @@ void CNN::setPoolType(FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(crea
 void CNN::setPoolType(FixedFilterDimensions fd, FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(createNewPool(ps, fd, fs)); }
 void CNN::setPoolType(DynamicFilterDimensions fd, int n, FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(createNewPool(ps, fd, n, fs)); }
 
-fmatrix CNN::Convolution() { return getConvolutionalData(getCurrentLayer())->convolutionFunction(inputs); }
+
+        /////////////////////
+        // Layer Functions //
+        /////////////////////
+
+ftensor3d CNN::Convolute() { return getConvolutionalData(getCurrentLayer())->convolutionFunction(inputs, n_sample_layers); }
 fmatrix CNN::Pooling() { return getPoolingData(getCurrentLayer())->poolingFunction(inputs[0]); }
 
 void CNN::printCNN() {
@@ -106,14 +104,14 @@ void CNN::printCNN() {
         switch (layers[l]->type) {
             case CNN_CONVOLUTION_LAYER: {
                 Convolution* cl = getConvolutionalData(layers[l]);
-                printf("\t Layer %d: %s - %d Kernels\n", layer, CNNLayerStrings[layers[l]->type].c_str(), cl->n_kernels);
+                printf("\t Layer %d: %s - %d Kernels\n", layer, CNNLayerStrings[layers[l]->type].c_str(), cl->getKernelCount());
 
-                for (int k = 0; k < cl->n_kernels; k++) {
-                    Kernel* lk = cl->kernels[k];
+                for (int k = 0; k < cl->getKernelCount(); k++) {
+                    Kernel* lk = cl->getKernels()[k];
                     printf("\t\tKernel %d: \n", k);
                     printf("\t\t\t%s(%dx%d) %s Filter\n", lk->getFilterDimensionsString().c_str(), lk->getFilterWidth(), lk->getFilterHeight(), lk->getFilterStyleString().c_str());
                     printf("\t\t\tbias: %lf\n", lk->getBias());
-                    printf("\t\t\tstride: %d\n", lk->getStride());
+                    printf("\t\t\tstride: %d\n", cl ->getStride());
                 }
 
                 break;
