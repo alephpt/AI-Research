@@ -92,10 +92,8 @@ void CNN::setPoolType(FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(crea
 void CNN::setPoolType(FixedFilterDimensions fd, FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(createNewPool(ps, fd, fs)); }
 void CNN::setPoolType(DynamicFilterDimensions fd, int n, FilterStyle fs, PoolingStyle ps) { setCurrentPoolType(createNewPool(ps, fd, n, fs)); }
 
-fmatrix CNN::Pooling()
-{
-    return getPoolingData(layers[0])->poolingFunction(inputs[0]);
-}
+fmatrix CNN::Convolution() { return getConvolutionalData(getCurrentLayer())->convolutionFunction(inputs); }
+fmatrix CNN::Pooling() { return getPoolingData(getCurrentLayer())->poolingFunction(inputs[0]); }
 
 void CNN::printCNN() {
     printf("Convolutional Neural Network: \n");

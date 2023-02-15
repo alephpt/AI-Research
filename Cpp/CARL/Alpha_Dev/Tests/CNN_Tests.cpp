@@ -123,23 +123,79 @@ void testConvolutions() {
 }
 
 void testPooling() {
+    fmatrix pool_results;
+    PoolingStyle pool_method = MAX_POOLING;
+
+    printf("Initializing CNN, Pooling Layer and Input Data:\n");
+    
     CNN* cnn = new CNN();
     cnn->addNewLayer(CNN_POOLING_LAYER);
-    printf("Pooling Test Started.\n");
-
     cnn->addNewInputSample(ftensor3d(1, smiles));
-    cnn->setPoolType(STOCHASTIC_POOLING);
     cnn->printCNN();
 
+    printf("\nPooling Test Started.\n");
+
     printf("Input:\n");
-    printf("Input Heigt: %lu\n", smiles.size());
-    printf("Input Width: %lu\n", smiles[0].size());
+    printf("pooling Height: %d\n", (int)smiles.size());
+    printf("pooling Width: %d\n", (int)smiles[0].size());
     printFMatrix(smiles);
 
-    fmatrix pool_data = cnn->Pooling();
+    cnn->setPoolType(pool_method);
+    pool_results = cnn->Pooling();
 
-    printf("\nPooling output:\n");
-    printf("pooling Height: %lu\n", pool_data.size());
-    printf("pooling height: %lu\n", pool_data[0].size());
-    printFMatrix(pool_data);
+    printf("\n%s output:\n", poolingStyleString[pool_method].c_str());
+    printf("pooling Height: %d\n", (int)pool_results.size());
+    printf("pooling Width: %d\n", (int)pool_results[0].size());
+    printFMatrix(pool_results);
+    pool_results.clear();
+
+    pool_method = AVG_POOLING;
+    cnn->setPoolType(pool_method);
+    pool_results = cnn->Pooling();
+
+    printf("\n%s output:\n", poolingStyleString[pool_method].c_str());
+    printf("pooling Height: %d\n", (int)pool_results.size());
+    printf("pooling Width: %d\n", (int)pool_results[0].size());
+    printFMatrix(pool_results);
+    pool_results.clear();
+
+    pool_method = L2_POOLING;
+    cnn->setPoolType(pool_method);
+    pool_results = cnn->Pooling();
+
+    printf("\n%s output:\n", poolingStyleString[pool_method].c_str());
+    printf("pooling Height: %d\n", (int)pool_results.size());
+    printf("pooling Width: %d\n", (int)pool_results[0].size());
+    printFMatrix(pool_results);
+    pool_results.clear();
+
+    pool_method = STOCHASTIC_POOLING;
+    cnn->setPoolType(pool_method);
+    pool_results = cnn->Pooling();
+
+    printf("\n%s output:\n", poolingStyleString[pool_method].c_str());
+    printf("pooling Height: %d\n", (int)pool_results.size());
+    printf("pooling Width: %d\n", (int)pool_results[0].size());
+    printFMatrix(pool_results);
+    pool_results.clear();
+
+    pool_method = GLOBAL_MAX_POOLING;
+    cnn->setPoolType(pool_method);
+    pool_results = cnn->Pooling();
+
+    printf("\n%s output:\n", poolingStyleString[pool_method].c_str());
+    printf("pooling Height: %d\n", (int)pool_results.size());
+    printf("pooling Width: %d\n", (int)pool_results[0].size());
+    printFMatrix(pool_results);
+    pool_results.clear();
+
+    pool_method = GLOBAL_AVG_POOLING;
+    cnn->setPoolType(pool_method);
+    pool_results = cnn->Pooling();
+
+    printf("\n%s output:\n", poolingStyleString[pool_method].c_str());
+    printf("pooling Height: %d\n", (int)pool_results.size());
+    printf("pooling Width: %d\n", (int)pool_results[0].size());
+    printFMatrix(pool_results);
+    pool_results.clear();
 }
