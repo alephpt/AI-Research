@@ -39,12 +39,13 @@ for generation in range(num_generations):
         children.append(child)
     population = children
 
-    
+    if generation % (num_generations / 10) == 0:
+        plt.plot(fitness_values)
+        plt.xlabel('population')
+        plt.ylabel('fitnerss')
+        plt.show()
+
+
     # Track the best fitness value for this generation
     best_fitness_values.append(max(fitness_values))
 
-# Plot the best fitness values for each generation
-plt.plot(best_fitness_values)
-plt.xlabel('Generation')
-plt.ylabel('Best Fitness')
-plt.show()
