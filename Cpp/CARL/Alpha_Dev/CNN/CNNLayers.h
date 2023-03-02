@@ -1,6 +1,6 @@
 #pragma once
 #include "../Types/Types.h"
-#include "Kernel.h"
+#include "Convolution.h"
 #include "Pool.h"
 #include <variant>
 

@@ -1,6 +1,2 @@
-﻿  Pool.cpp
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(7,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(8,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(30,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\Alpha_Dev\CNN\Pool.cpp(31,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+﻿  Tests.cpp
   CARL.vcxproj -> C:\Users\aleph\Desktop\AI_Generated\Cpp\CARL\CARL\Alpha Dev.exe

@@ -78,13 +78,12 @@ void Kernel::setFilterStyle(FilterStyle s) {
 
 Filter* Kernel::getFilter() { return filter; }
 float Kernel::getBias() { return bias; }
-int Kernel::getStride() { return stride; }
+
 FilterStyle Kernel::getFilterStyle() { return filter_style; }
 std::string Kernel::getFilterStyleString() { return filterStyleString[filter_style]; }
 FilterDimensions Kernel::getFilterDimensions() { return filter_dimensions; }
 std::string Kernel::getFilterDimensionsString() { return filterDimensionsString.at(filter_dimensions); }
 void Kernel::setBias(float b) { bias = b; }
-void Kernel::setStride(int s) { stride = s; }
 int Kernel::getFilterWidth() { return filter->width; }
 int Kernel::getFilterHeight() { return filter->height; }
 fmatrix Kernel::getFilterWeights() { return filter->weights; }
