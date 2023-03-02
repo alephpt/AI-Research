@@ -165,6 +165,9 @@
     <ClCompile Include="CNN\Filters.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CNN\Convolution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RL\RL.h">
@@ -357,6 +360,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CNN\Pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CNN\Convolution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

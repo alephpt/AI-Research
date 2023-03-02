@@ -33,6 +33,7 @@ public:
     void setPoolType(DynamicFilterDimensions, int, PoolingStyle);
     void setPoolType(DynamicFilterDimensions, int, FilterStyle, PoolingStyle);
 
+    ftensor3d Convolute();
     fmatrix Pooling();
 private:
     int n_input_samples;        // defined by inputs / n_sample_layers

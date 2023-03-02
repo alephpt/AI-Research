@@ -147,6 +147,7 @@
     <ClCompile Include="CNN\Kernel.cpp" />
     <ClCompile Include="CNN\Pool.cpp" />
     <ClCompile Include="CNN\Filters.cpp" />
+    <ClCompile Include="CNN\Convolution.cpp" />
     <ClCompile Include="CNN_Old\CNNLayer.cpp" />
     <ClCompile Include="CNN_Old\Old_Kernel.cpp" />
     <ClCompile Include="CNN\CNN.cpp" />
@@ -197,6 +198,7 @@
   <ItemGroup>
     <ClInclude Include="CNN\CNNLayers.h" />
     <ClInclude Include="CNN\Filters.h" />
+    <ClInclude Include="CNN\Convolution.h" />
     <ClInclude Include="CNN\Kernel.h" />
     <ClInclude Include="CNN\Pool.h" />
     <ClInclude Include="CNN_Old\CNNData.h" />

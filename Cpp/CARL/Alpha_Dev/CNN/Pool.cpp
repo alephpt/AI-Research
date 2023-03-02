@@ -204,7 +204,6 @@ static inline void l2Pool(fmatrix* input, int stride) {
             }
             cache[y / stride][x / stride] = sqrtf(l2 / l2_counter);
         }
-
     }
 
     *input = cache;
@@ -248,7 +247,7 @@ static inline void stochasticPool(fmatrix* input, int stride) {
     fmatrix cache = fmatrix((input_h + 1) / stride, fvector((input_w + 1) / stride, 0.0f));
 
     std::mt19937 mtrand(time(0));
-    std::uniform_int_distribution<int> dist(0, 4);
+    std::uniform_int_distribution<int> dist(0, 3);
 
     for (int y = 0; y < input_h; y += stride) {
         for (int x = 0; x < input_w; x += stride) {
@@ -264,7 +263,7 @@ static inline void stochasticPool(fmatrix* input, int stride) {
 }
 
 inline void (*runPoolingFunction[])(fmatrix*, int) = {
-    maxPool, avgPool, l2Pool, maxGlobalPool, avgGlobalPool, stochasticPool
+    maxPool, avgPool, l2Pool, stochasticPool, maxGlobalPool, avgGlobalPool
 };
 
 fmatrix Pool::poolingFunction(fmatrix input)
