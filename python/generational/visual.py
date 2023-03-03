@@ -38,7 +38,7 @@ class Sexuality(Enum):
     Heterosexual = 1
     Bisexual = 2
     Homosexual = 3
-    Abstainant = 4
+    Abstinent = 4
 
 class Food():
     def __init__(self):
