@@ -19,10 +19,10 @@ void runTests() {
     // testCNNinit();
     // testKernelParameters();              
     // testConvolutions();
-     testPooling();
+    // testPooling();
 
         // SNN Tests //
-    // testinitSNN();
+     testinitSNN();
     // testConnectivityMatrix();
     // testGeneratorinit();
 
