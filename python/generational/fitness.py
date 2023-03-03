@@ -60,11 +60,12 @@ class Individual():
         self.acceleration = 0
         self.max_energy = 1000                                 # inherits average on next generation
         self.energy = 1000                                     # inherits average on next generation <- should be used for target
-        self.perspective = INIT_SIZE
+        self.perspective = INIT_SIZE                           #
         self.threshold_accel = 0                               # inherits avg_vel on next generation <- should be used for target
         self.threshold_velocity = 0                            # inherits avg_vel on next generation <- should be used for max + 1/2 accel
         self.threshold_energy = 1000                           # inherits (max + avg / 2) on next generation <- should be used for target
         self.threshold_energy_conserv = 0                      # TODO: maybe we create a reward to optimize maintaining energy at converservation level?
+        self.threshold_perspective = INIT_SIZE                 # inherits from parents and becomes new default perspective
         self.avg_accel = 0
         self.avg_vel = 0
         self.avg_direction = 0
@@ -77,7 +78,7 @@ class Individual():
         self.targets_reached = 0
     
     def energyConservation(self):
-        return self.energy / self.max_energy
+        return math.sqrt((self.energy / self.max_energy) ** 2) 
 
     def distance(a, b):
         return math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2)
@@ -196,13 +197,14 @@ class Individual():
                 # TODO: we need to be able to have different executions per target type
                 #       maybe just return bool to parent function call
                 if self.targetFound(target):
-                    self.reward = (250 + self.reward) * self.energyConservation()
+                    if self.energy > self.max_energy:
+                        self.max_energy = self.energy
                     self.energy += 500
+                    self.reward = (50 + self.reward) * self.energyConservation()
                     self.r += FOOD_SIZE
                     self.perspective = INIT_SIZE + self.r
                     
-                    if self.energy > self.max_energy:
-                        self.max_energy = self.energy
+
                     
                     self.targets_reached += 1
                     targets.remove(target)
