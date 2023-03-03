@@ -62,10 +62,11 @@ class Individual:
         self.r = INIT_RADIUS
         self.x = random.randint(0, SCREEN_WIDTH)
         self.y = random.randint(0, SCREEN_HEIGHT)
-        self.father = None
-        self.mother = None
         self.gender = random.choice([Gender.Male, Gender.Female])
         self.sexuality = Sexuality.Virgin
+        self.father = None
+        self.mother = None
+        self.children = 0
         self.partner = None
         self.committed = False
         self.max_energy = 3500
@@ -193,7 +194,7 @@ class Population:
         newborn.x = (a.x + b.x) / 2
         newborn.y = (a.y + b.y) / 2
 
-        print (a.id + " and " + b.id + " had a baby: generation " + newborn.generation)
+        print (a.id, " and ", b.id, " had a baby: generation ", newborn.generation)
         self.individuals.append(newborn)
     
     def spawnFood(self):
@@ -214,7 +215,6 @@ class Population:
 
                 individual.lifetime += 1
                 
-                # check against mutation rate
                 if random.random() < MUTATION_RATE:
                     if individual.energy < individual.energy_threshold:
                         for edible in self.food:
@@ -223,13 +223,9 @@ class Population:
                             if individual.foundTarget(edible):
                                 individual.consume(edible)
                                 self.food.remove(edible)
-                
-                    # if the individual does NOT have a partner
                     else:
                         if individual.partner == None:
-                            # check against all the other individuals
                             for other in self.individuals:
-                                # if the other also does not have a partner that isn't the parent
                                 if other.alive and individual != other \
                                    and other.partner == None \
                                    and other.id != individual.father \
@@ -242,6 +238,8 @@ class Population:
                                             if random.random() < MUTATION_RATE:
                                                 individual.mate(other)
                                                 other.mate(individual)
+                                                if random.random() < MUTATION_RATE:
+                                                    self.reproduce(individual, other)
                                                 continue
                         else:
                             for other in self.individuals:
