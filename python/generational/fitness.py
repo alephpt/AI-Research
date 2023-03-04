@@ -39,12 +39,12 @@ class Individual():
     actions = {
         "turn_right": (0, 0.01745),
         "turn_left": (0, -0.01745),
-        "accelerate": (1.1, 0),
-        "decelerate": (0.9, 0),
-        "accel_right": (1.1, 0.01745),
-        "accel_left": (1.1, -0.01745),
-        "decel_right": (0.9, 0.01745),
-        "decel_left": (0.9, -0.01745)
+        "accelerate": (0.5, 0),
+        "decelerate": (-0.5, 0),
+        "accel_right": (0.5, 0.01745),
+        "accel_left": (0.5, -0.01745),
+        "decel_right": (-0.5, 0.01745),
+        "decel_left": (-0.5, -0.01745)
     }
     
     action_bias = {
@@ -70,21 +70,20 @@ class Individual():
         self.r = INIT_SIZE
         self.color = (random.randint(178, 255), 0, 0)
         self.direction = math.radians(random.randint(0, 360))  # inherits avg from parents
-        self.max_velocity = 100
-        self.max_acceleration = 10
-        self.max_energy = 2500
         self.velocity = 0
+        self.max_velocity = 40
         self.acceleration = 0
+        self.max_energy = 2500
         self.energy = 1250                                     # inherits average on next generation <- should be used for target
         self.perspective = INIT_SIZE                           # inherits from parent
-        self.threshold_accel = 0                               # inherits avg_vel on next generation <- should be used for target
+        self.threshold_acceleration = 0                        # inherits avg_acceleration on next generation <- should be used for target
         self.threshold_velocity = 0                            # inherits avg_vel on next generation <- should be used for max + 1/2 accel
         self.threshold_energy = 1000                           # inherits (max + avg / 2) on next generation <- should be used for target
         self.threshold_energy_conserv = 0                      # TODO: maybe we create a reward to optimize maintaining energy at converservation level?
         self.threshold_perspective = INIT_SIZE                 # inherits from parents and becomes new default perspective
         self.avg_energy = 0                                    # used for threshold and next gen
-        self.avg_accel = 0                                     # used for threshold and next gen
-        self.avg_vel = 0                                       # used for threshold and next gen
+        self.avg_acceleration = 0                              # used for threshold and next gen
+        self.avg_velocity = 0                                  # used for threshold and next gen
         self.avg_direction = 0                                 # used for next gen
         self.avg_perspective = INIT_SIZE                       # used for threshold
         self.avg_energy_conservation = 1                       # used for threshold
@@ -96,26 +95,26 @@ class Individual():
         self.targets_reached = 0                               # fitness scalar
         self.total_actions = 0
     
-    def thresholdReward(self, v, t, m):
+    def thresholdReward(self, v, t,):
         if v == 0:
             return 0
         
         if t == 0:
             return 1
         
-        return (v / t) / (v / m)
+        return (v / t)
     
     def determineThresholdReward(self):
         # acceleration
-        atr = self.thresholdReward(self.acceleration, self.threshold_accel, self.max_acceleration)
+        atr = self.thresholdReward(self.acceleration, self.threshold_acceleration)
         # velocity
-        vtr = self.thresholdReward(self.velocity, self.threshold_velocity, self.max_velocity)
+        vtr = self.thresholdReward(self.velocity, self.threshold_velocity)
         # energy
-        etr = self.thresholdReward(self.energy, self.threshold_energy, self.max_energy)
+        etr = self.thresholdReward(self.energy, self.threshold_energy)
         # energy conservation
-        ectr = self.thresholdReward(self.energyConservation(), self.threshold_energy, 1)
+        ectr = self.thresholdReward(self.energyConservation(), self.threshold_energy)
         # perspective
-        ptr = self.thresholdReward(self.perspective, self.threshold_perspective, 1)
+        ptr = self.thresholdReward(self.perspective, self.threshold_perspective)
         
         return (atr + vtr + etr + ectr + ptr)
     
@@ -148,14 +147,15 @@ class Individual():
         for action in self.actions:
             current_action = action
             current_movement = self.actions[current_action]
-
-            self.acceleration *= current_movement[0]
+            
+            self.acceleration += current_movement[0]
             self.velocity += self.acceleration
             self.direction += current_movement[1]
             self.x += self.velocity * math.cos(self.direction)
             self.y += self.velocity * math.sin(self.direction)
 
             current_distance = self.distance(target)
+            
             if self.total_actions < 1:
                 current_fitness = 1 / current_distance
             else:
@@ -173,13 +173,13 @@ class Individual():
         self.action_bias[best_action] += 1
         self.change_in_acceleration = self.actions[best_action][0]
         self.change_in_direction = self.actions[best_action][1]
-        self.acceleration += self.change_in_acceleration
+        self.acceleration = self.acceleration + self.change_in_acceleration
         self.direction += self.change_in_direction
     
     def updateAverages(self):
         self.avg_energy = (self.avg_energy + self.energy) / 2
-        self.avg_vel = (self.avg_vel + self.velocity) / 2
-        self.avg_accel = (self.avg_accel + self.acceleration) / 2
+        self.avg_velocity = (self.avg_velocity + self.velocity) / 2
+        self.avg_acceleration = (self.avg_acceleration + self.acceleration) / 2
         self.avg_direction = (self.avg_direction + self.direction) / 2
         self.avg_perspective = (self.avg_perspective + self.perspective) / 2
         self.avg_energy_conservation = (self.avg_energy_conservation + self.energyConservation()) / 2
@@ -188,6 +188,9 @@ class Individual():
     def updateLocation(self):
         self.velocity += self.acceleration
         
+        if self.velocity > self.max_velocity:
+            self.velocity = self.max_velocity
+            
         new_x = self.x + (self.velocity * math.cos(self.direction))
         new_y = self.y + (self.velocity * math.sin(self.direction))
         
@@ -211,11 +214,11 @@ class Individual():
         distance_traveled = init_distance - new_distance
 
         change = math.sqrt((self.change_in_acceleration + self.change_in_direction) ** 2) 
-        self.r -= change / 2 if self.r > 2 else 0
+        self.r -= change / 2 if self.r > INIT_SIZE else 0
         self.energy -= math.floor(math.sqrt(distance_traveled ** 2) * change + self.r)
         self.reward += distance_traveled * self.energyConservation()
         
-        self.perspective -= init_distance - new_distance + 1
+        self.perspective -= distance_traveled + 1 if distance_traveled > 0 else distance_traveled - 1
 
     # returns true if the target is within scope
     def locateTarget(self, target):
@@ -247,10 +250,7 @@ class Individual():
                     self.energy += 750
                     self.reward = (50 + self.reward) * self.energyConservation()
                     self.r += FOOD_SIZE
-                    self.perspective = INIT_SIZE + self.r
-                    
-
-                    
+                    self.perspective = INIT_SIZE + self.r        
                     self.targets_reached += 1
                     targets.remove(target)
 
@@ -280,8 +280,8 @@ class Individual():
         print("\t - total lifetime: \t", self.lifetime)
         print("\t - targets reached: \t", self.targets_reached)
         print("\t - avg acceleration: \t", self.avg_energy)
-        print("\t - avg acceleration: \t", self.avg_accel)
-        print("\t - avg velocity: \t", self.avg_vel)
+        print("\t - avg acceleration: \t", self.avg_acceleration)
+        print("\t - avg velocity: \t", self.avg_velocity)
         print("\t - avg direction: \t", self.avg_direction)
         print("\t - avg perspective: \t", self.avg_perspective)
         print("\t - avg energy conserved: ", self.avg_energy_conservation)
@@ -302,10 +302,16 @@ class Society():
                 self.food.append(Food())
                 self.food_delay = 0
                 return
-
             self.food_delay += 1
 
-    def maintainHealth(self, food):
+        elif len(self.food) > maxFood():
+            if self.food_delay >= (maxFood() / (total_population / 2)):
+                self.food.pop()
+                self.food_delay = 0
+                return
+            self.food_delay += 1
+
+    def maintainHealth(self):
         for individual in self.population:
             if individual.alive:
                 if individual.energy <= 0:
@@ -323,26 +329,64 @@ class Society():
 
 
 class World():
+    mutation_rate = 0.05
+    
     def __init__(self):
         self.society = Society();
         self.epoch = 0
+    
+    def repopulate(self):
+        parents = self.society.sortPopulation()
+        children = []
         
+        # create children, crossover and mutate
+        for _ in range(len(parents) / 2):
+            parentA = random.choice(parents)
+            parentB = random.choice(parents)
+            childA = Individual()
+            childB = Individual()
+            
+            childA.fitness = (parentA.fitness + parentB.fitness) / 2
+            childA.energy = parentA.avg_energy
+            childA.action_bias = parentB.action_bias
+            childA.perspective = parentB.perspective
+            childA.direction = parentB.avg_direction
+            childA.threshold_acceleration = parentA.avg_acceleration
+            childA.threshold_energy = parentA.avg_energy
+            childA.threshold_energy_conserv = parentA.avg_energy_conservation
+            childA.threshold_perspective = parentA.avg_perspective
+            childA.threshold_velocity = parentA.avg_velocity
+
+            childB.fitness = (parentA.fitness + parentB.fitness) / 2
+            childB.energy = parentB.avg_energy
+            childB.action_bias = parentA.action_bias
+            childB.perspective = parentA.perspective
+            childB.direction = parentA.avg_direction
+            childB.threshold_acceleration = parentB.avg_acceleration
+            childB.threshold_energy = parentB.avg_energy
+            childB.threshold_energy_conserv = parentB.avg_energy_conservation
+            childB.threshold_perspective = parentB.avg_perspective
+            childB.threshold_velocity = parentB.avg_velocity
+            
+            children.append(childA)
+            children.append(childB)
+            
+    
     def evolve(self):
         global total_population
         
-        if len(self.society.sorted_population) < 1 and total_population == 0:
-            self.society.sortPopulation()
-            return
-        elif total_population > 0:
-            self.society.maintainHealth(self.food)
+        if total_population > 0:
+            self.society.maintainHealth()
             self.society.maintainFoodSupply()
+            return
+        
 
 
     def draw(self):
         for individual in self.society.population:
             individual.draw()
         
-        for edible in self.food:
+        for edible in self.society.food:
             edible.draw()
 
 def main():
