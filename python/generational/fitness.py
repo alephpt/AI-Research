@@ -5,9 +5,9 @@ import random
 import math
 
 
-SCREEN_WIDTH = 1600
-SCREEN_HEIGHT = 1200
-INIT_POP_N = 100
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 800
+INIT_POP_N = 300
 FOOD_SIZE = 5
 INIT_SIZE = 5
 
@@ -318,7 +318,7 @@ def main():
         world.evolve()
         
         pygame.display.update()
-        clock.tick(15)
+        clock.tick(2)
 
 
 if __name__ == "__main__":
