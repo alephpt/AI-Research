@@ -117,7 +117,7 @@ class Individual():
         self.acceleration += random.uniform(-1.0, 1.0)
         self.direction += random.uniform(-0.5, 0.5)
         self.energy -= self.perspective / INIT_SIZE
-        self.reward -= self.perspective / INIT_SIZE
+        self.reward -= self.r
         self.perspective += self.perspective
 
     def targetFound(self, target):
@@ -246,7 +246,7 @@ class Individual():
             self.updateLocation()
 
     def determineFitness(self):
-        return (((self.targets_reached * 10 + self.reward) * self.threshold_reward) / self.lifetime) * self.avg_energy_conservation
+        return (((self.targets_reached * 20 + self.reward) / self.lifetime) + (self.threshold_reward / self.lifetime)) * self.avg_energy_conservation
 
     def die(self):
         self.fitness = self.determineFitness()
@@ -259,7 +259,8 @@ class Individual():
     def printStatus(self, id):
         print("#################### \tIndividual", id, " \t#################### ")
         print("\t - fitness: \t\t", self.fitness)
-        print("\t - total reward: \t", self.reward)
+        print("\t - reward: \t\t", self.reward)
+        print("\t - threshold reward: \t", self.threshold_reward)
         print("\t - total lifetime: \t", self.lifetime)
         print("\t - targets reached: \t", self.targets_reached)
         print("\t - avg acceleration: \t", self.avg_energy)
