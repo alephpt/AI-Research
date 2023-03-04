@@ -3,6 +3,7 @@ import random
 import math
 
 
+TOTAL_GENERATION = 10
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
 INIT_POP_N = 20
@@ -21,7 +22,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def maxFood():
     global total_population
-    return math.floor(math.e ** -(total_population ** 0.25 / 2) * total_population)
+    return math.floor(math.e ** -(total_population ** 0.475 / 7.25) * total_population)
 
 class Food():
     def __init__(self):
@@ -36,14 +37,25 @@ class Food():
 class Individual():
     evolution_rate = 1
     actions = {
-        "turn_right": (0, 0.25),
-        "turn_left": (0, -0.25),
-        "accelerate": (0.5, 0),
-        "decelerate": (-0.5, 0),
-        "accel_right": (0.5, 0.25),
-        "accel_left": (0.5, -0.25),
-        "decel_right": (-0.5, 0.25),
-        "decel_left": (-0.5, -0.25)
+        "turn_right": (0, 0.01745),
+        "turn_left": (0, -0.01745),
+        "accelerate": (1.1, 0),
+        "decelerate": (0.9, 0),
+        "accel_right": (1.1, 0.01745),
+        "accel_left": (1.1, -0.01745),
+        "decel_right": (0.9, 0.01745),
+        "decel_left": (0.9, -0.01745)
+    }
+    
+    action_bias = {
+        "turn_right": 1,
+        "turn_left": 1,
+        "accelerate": 1,
+        "decelerate": 1,
+        "accel_right": 1,
+        "accel_left": 1,
+        "decel_right": 1,
+        "decel_left": 1
     }
     
     def __init__(self):
@@ -63,7 +75,7 @@ class Individual():
         self.max_energy = 2500
         self.velocity = 0
         self.acceleration = 0
-        self.energy = 1000                                     # inherits average on next generation <- should be used for target
+        self.energy = 1250                                     # inherits average on next generation <- should be used for target
         self.perspective = INIT_SIZE                           # inherits from parent
         self.threshold_accel = 0                               # inherits avg_vel on next generation <- should be used for target
         self.threshold_velocity = 0                            # inherits avg_vel on next generation <- should be used for max + 1/2 accel
@@ -82,6 +94,7 @@ class Individual():
         self.reward = 0                                        # main fitness factor
         self.fitness = 0                                       # used for genetic evolution
         self.targets_reached = 0                               # fitness scalar
+        self.total_actions = 0
     
     def thresholdReward(self, v, t, m):
         if v == 0:
@@ -136,14 +149,17 @@ class Individual():
             current_action = action
             current_movement = self.actions[current_action]
 
-            self.acceleration += current_movement[0]
+            self.acceleration *= current_movement[0]
             self.velocity += self.acceleration
             self.direction += current_movement[1]
             self.x += self.velocity * math.cos(self.direction)
             self.y += self.velocity * math.sin(self.direction)
 
             current_distance = self.distance(target)
-            current_fitness = 1 / current_distance
+            if self.total_actions < 1:
+                current_fitness = 1 / current_distance
+            else:
+                current_fitness = (1 / current_distance) * (self.action_bias[current_action] / self.total_actions)
 
             if max_fitness < current_fitness:
                 max_fitness = current_fitness
@@ -154,6 +170,7 @@ class Individual():
             self.x = current_x
             self.y = current_y
 
+        self.action_bias[best_action] += 1
         self.change_in_acceleration = self.actions[best_action][0]
         self.change_in_direction = self.actions[best_action][1]
         self.acceleration += self.change_in_acceleration
@@ -193,13 +210,12 @@ class Individual():
         new_distance = self.distance(target)   
         distance_traveled = init_distance - new_distance
 
-        change = math.sqrt((self.change_in_acceleration + self.change_in_direction) ** 2) / 2 
-        self.r -= change if self.r > 2 else 0
-        self.energy -= math.floor(math.sqrt(distance_traveled ** 2) * self.r)
+        change = math.sqrt((self.change_in_acceleration + self.change_in_direction) ** 2) 
+        self.r -= change / 2 if self.r > 2 else 0
+        self.energy -= math.floor(math.sqrt(distance_traveled ** 2) * change + self.r)
         self.reward += distance_traveled * self.energyConservation()
         
         self.perspective -= init_distance - new_distance + 1
-        return False
 
     # returns true if the target is within scope
     def locateTarget(self, target):
@@ -228,7 +244,7 @@ class Individual():
                 if self.targetFound(target):
                     if self.energy > self.max_energy:
                         self.max_energy = self.energy
-                    self.energy += 500
+                    self.energy += 750
                     self.reward = (50 + self.reward) * self.energyConservation()
                     self.r += FOOD_SIZE
                     self.perspective = INIT_SIZE + self.r
@@ -277,34 +293,9 @@ class Individual():
 class Society():
     def __init__(self): 
         self.population = [Individual() for _ in range(INIT_POP_N)]
-        self.sorted_population = []
-
-    def maintainHealth(self, food):
-        for individual in self.population:
-            if individual.alive:
-                if individual.energy <= 0:
-                    individual.die()
-                    #individual.printStatus(self.population.index(individual))
-                    return
-
-                individual.navigate(food)
-
-                individual.lifetime += 1
-
-    def sortPopulation(self):
-        self.sorted_population = sorted(self.population, key=lambda x: x.fitness, reverse=True)
-
-        for individual in self.sorted_population:
-            individual.printStatus(self.population.index(individual))
-
-
-
-class World():
-    def __init__(self):
-        self.society = Society();
         self.food = [Food() for _ in range(maxFood())]
         self.food_delay = 0
-    
+
     def maintainFoodSupply(self):
         if len(self.food) < maxFood():
             if self.food_delay >= (maxFood() / total_population):
@@ -314,6 +305,28 @@ class World():
 
             self.food_delay += 1
 
+    def maintainHealth(self, food):
+        for individual in self.population:
+            if individual.alive:
+                if individual.energy <= 0:
+                    individual.die()
+                    #individual.printStatus(self.population.index(individual))
+                    return
+
+                individual.navigate(self.food)
+
+                individual.lifetime += 1
+
+    def sortPopulation(self):
+        return sorted(self.population, key=lambda x: x.fitness, reverse=True)
+
+
+
+class World():
+    def __init__(self):
+        self.society = Society();
+        self.epoch = 0
+        
     def evolve(self):
         global total_population
         
@@ -322,7 +335,7 @@ class World():
             return
         elif total_population > 0:
             self.society.maintainHealth(self.food)
-            self.maintainFoodSupply()
+            self.society.maintainFoodSupply()
 
 
     def draw(self):
