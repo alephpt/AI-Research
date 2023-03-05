@@ -116,7 +116,7 @@ class Individual():
         self.reward = 0                                        # main fitness factor
         self.threshold_reward = 0                              # used to scale fitness
         ## Action Tables
-        self.target_learning = {
+        self.target_bias = {
             "working": {[self.satisfaction_score, self.energy_score, self.money_score], 1},
             "eating": {[self.satisfaction_score, self.energy_score, self.money_score], 1},
             "mating": {[self.satisfaction_score, self.energy_score, self.money_score], 1}
