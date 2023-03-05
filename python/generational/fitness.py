@@ -47,6 +47,17 @@ class Individual():
         "decel_left": (-0.5, -0.01745)
     }
     
+    action_history = {
+        "turn_right": 1,
+        "turn_left": 1,
+        "accelerate": 1,
+        "decelerate": 1,
+        "accel_right": 1,
+        "accel_left": 1,
+        "decel_right": 1,
+        "decel_left": 1
+    }
+    
     action_bias = {
         "turn_right": 1,
         "turn_left": 1,
@@ -159,7 +170,7 @@ class Individual():
             if self.total_actions < 1:
                 current_fitness = 1 / current_distance
             else:
-                current_fitness = (1 / current_distance) * (self.action_bias[current_action] / self.total_actions)
+                current_fitness = (1 / current_distance) * (self.action_history[current_action] / self.total_actions) * self.action_bias
 
             if max_fitness < current_fitness:
                 max_fitness = current_fitness
