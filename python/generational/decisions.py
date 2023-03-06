@@ -36,7 +36,8 @@ TARGETS = {
     "mating": 2     # need energy to mate, as well as attraction
 }
 
-class Work():
+
+class Work:
     def __init__(self):
         self.x = random.randint(INIT_EMPLOYER_SIZE, SCREEN_WIDTH - INIT_EMPLOYER_SIZE)
         self.y = random.randint(INIT_EMPLOYER_SIZE, SCREEN_HEIGHT - INIT_EMPLOYER_SIZE)
@@ -46,9 +47,10 @@ class Work():
         self.pay = 100
     
     def draw(self):
-        pygame.draw.rect(screen, self.c, (self.x, self.y, self.s, self.s), 1)
+        pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size), 1)
 
-class Food():
+
+class Food:
     def __init__(self):
         self.x = random.randint(INIT_FOOD_SIZE, SCREEN_WIDTH - INIT_FOOD_SIZE)
         self.y = random.randint(INIT_FOOD_SIZE, SCREEN_HEIGHT - INIT_FOOD_SIZE)
@@ -60,8 +62,9 @@ class Food():
     def draw(self):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size), 1)
 
-class Individual():
-    def __init__(self, id):
+
+class Individual:
+    def __init__(self, _id):
         self.fitness = 0                                       # used for genetic evolution
         self.lifetime = 0
         self.total_actions = 0                                 # used for averaging actions
@@ -72,7 +75,7 @@ class Individual():
         self.mother = None
         self.partner = None
         self.children = 0
-        self.sex = id % 2   # 0 for female, 1 for male
+        self.sex = _id % 2   # 0 for female, 1 for male
         self.x = random.randint(INIT_INDIVIDUAL_RADIUS, SCREEN_WIDTH - INIT_INDIVIDUAL_RADIUS)
         self.y = random.randint(INIT_INDIVIDUAL_RADIUS, SCREEN_HEIGHT - INIT_INDIVIDUAL_RADIUS)
         self.size = INIT_INDIVIDUAL_RADIUS
@@ -117,9 +120,9 @@ class Individual():
         self.threshold_reward = 0                              # used to scale fitness
         ## Action Tables
         self.target_bias = {
-            "working": {[self.satisfaction_score, self.energy_score, self.money_score], 1},
-            "eating": {[self.satisfaction_score, self.energy_score, self.money_score], 1},
-            "mating": {[self.satisfaction_score, self.energy_score, self.money_score], 1}
+            "working": ((self.satisfaction_score, self.energy_score, self.money_score), 1),
+            "eating": ((self.satisfaction_score, self.energy_score, self.money_score), 1),
+            "mating": ((self.satisfaction_score, self.energy_score, self.money_score), 1)
         }
         self.action_history = {
             "forward": 0,
@@ -149,9 +152,10 @@ class Individual():
         return
     
     def draw(self):
-        pygame.draw.circle(screen, self.c, (self.x, self.y), self.s)
-        
-class Society():
+        pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
+
+
+class Society:
     def __init__(self):
         self.population = [Individual(n) for n in range(INIT_POPULATION)]
         self.employers = [Work() for _ in range(INIT_EMPLOYERS)]
@@ -167,7 +171,8 @@ class Society():
         for employer in self.employers:
             employer.draw()
 
-class World():
+
+class World:
     def __init__(self):
         self.society = Society()
     
@@ -190,6 +195,7 @@ def main():
         
         pygame.display.update()
         clock.tick(15)
+
 
 if __name__ == "__main__":
     main()
