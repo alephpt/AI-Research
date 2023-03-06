@@ -43,8 +43,8 @@ class Work:
         self.y = random.randint(INIT_EMPLOYER_SIZE, SCREEN_HEIGHT - INIT_EMPLOYER_SIZE)
         self.size = INIT_EMPLOYER_SIZE
         self.color = (255, 125, 0)
-        self.energy = -100
-        self.pay = 100
+        self.award_energy = -100
+        self.award_money = 100
     
     def draw(self):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size), 1)
@@ -56,8 +56,8 @@ class Food:
         self.y = random.randint(INIT_FOOD_SIZE, SCREEN_HEIGHT - INIT_FOOD_SIZE)
         self.size = INIT_FOOD_SIZE
         self.color = (0, 183, 69)
-        self.energy = 500
-        self.cost = 10
+        self.award_energy = 500
+        self.award_money = -20
         
     def draw(self):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size), 1)
@@ -85,9 +85,9 @@ class Individual:
         ## Energy
         self.energy = 1250                                     # inherits average on next generation
         self.avg_energy = self.energy                          # used for threshold and next gen
-        self.threshold_energy = 1000                           # inherits (max + avg) / 2 on next generation
-        self.max_energy = 2500                                 # inherits (max + avg) / 2 on next generation
-        self.energy_score = 0.5                                # used for target_learning table -> passes to nextgen
+        self.energy_threshold = 1000                           # inherits average / 2 on next generation
+        self.max_energy = 2500                                 # inherits (max + threshold) / 2 on next generation
+        self.energy_score = 0                                  # used for target_learning table -> passes to nextgen
         ## Energy Conservation
         self.avg_energy_conservation = 1                       # used for threshold in next gen
         self.threshold_energy_conserv = 0                      # used for threshold reward
@@ -109,20 +109,21 @@ class Individual:
         self.satisfaction = 0
         self.avg_satisfaction = 0                              # passed to children as new target
         self.target_satisfaction = 100                         # inherits parents avg on nextgen
-        self.satisfaction_score = 0                            # used for target_learning table
+        self.satisfaction_score = 0                            # used for nextgen target_learning table
         ## Money
         self.money = 0                                         # used to buy food and determine attraction <- mutate this
         self.money_threshold = 100                             # used to determine score, passed to children
-        self.money_score = 0                                   # used for target_learning
+        self.money_score = 0                                   # used for target_learning nextgen 
         ## Rewards
         self.attractability = 0                                # used to attracting mates - Needs to incorporate energy conservation
         self.reward = 0                                        # main fitness factor
         self.threshold_reward = 0                              # used to scale fitness
         ## Action Tables
+        # state = [1 * money_score, 1 * energy_score, 1 * satisfaction_score] ? I'm not sure about this 
         self.target_bias = {
-            "working": ((self.satisfaction_score, self.energy_score, self.money_score), 1),
-            "eating": ((self.satisfaction_score, self.energy_score, self.money_score), 1),
-            "mating": ((self.satisfaction_score, self.energy_score, self.money_score), 1)
+            "working": 1,
+            "eating": 1,
+            "mating": 1
         }
         self.action_history = {
             "forward": 0,
@@ -145,11 +146,45 @@ class Individual:
             "reverse_right": 1
         }
     
+    def getDistance(self, target):
+        return math.sqrt((target.x - self.x)**2 - (target.y - self.y)**2)
+    
+    def getThresholdReward(self, v, t):
+        return 0 if v == 0 else 1 if t == 0 else v / t
+    
+    def determineThresholdRewards(self):
+        atr = self.getThresholdReward
+    
+    def getTargetBias(self, target):
+        money_bias = self.target_bias[target] * self.getThresholdReward(self.money, self.money_threshold)
+        energy_bias = self.target_bias[target] * self.getThresholdReward(self.energy, self.energy_threshold)
+        mating_bias = self.target_bias[target] * self.getThresholdReward(self.satisfaction, self.target_satisfaction)
+        
+        return (money_bias + energy_bias + mating_bias) / 3
+    
+    # TODO: do this if target = None, and backpropagate success
     def chooseTarget(self):
-        return
+        best_target = None
+        best_bias = 0
+        
+        for target in TARGETS.keys():
+            current_target_bias = self.getTargetBias(target)
+            
+            if best_bias < current_target_bias:
+                best_bias = current_target_bias
+                best_target = target
+            
+        return best_target if best_target != None else random.choice(TARGETS.keys())
+    
+    def locateTarget(self, target):
+        return self.getDistance(target) < (self.size + target.size)
     
     def chooseAction(self):
         return
+    
+    def die(self):
+        self.alive = False
+        
     
     def draw(self):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
@@ -160,6 +195,34 @@ class Society:
         self.population = [Individual(n) for n in range(INIT_POPULATION)]
         self.employers = [Work() for _ in range(INIT_EMPLOYERS)]
         self.food_supply = [Food() for _ in range(INIT_FOOD)]
+    
+    def mutate(self):
+        for individual in self.population:
+            individual.lifetime += 1
+            
+            if individual.target == "working":
+                for employer in self.employers:
+                    if individual.locateTarget(employer):
+                        individual.work(employer)
+                    else:
+                        individual.navigate(employer)
+            elif individual.target == "eating":
+                for food in self.food_supply:
+                    if individual.locateTarget(food):
+                        individual.eat(food)
+                        self.food_supply.remove(food)
+                    else:
+                        individual.navigate(food)
+            elif individual.target == "mating":
+                for partner in self.population:
+                    if individual.locateTarget(partner):
+                        desirable = individual.checkAttraction()
+                        individual.mate
+                    else: 
+                        individual.navigate(partner)
+            else:
+                individual.target = self.chooseTarget()
+
     
     def draw(self):
         for individual in self.population:
