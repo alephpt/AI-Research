@@ -37,6 +37,9 @@ TARGETS = {
     "mating": 2     # need energy to mate, as well as attraction
 }
 
+def normalizeDirection(d):
+    return (d + math.pi) % (2*math.pi) - math.pi
+
 
 class Work:
     def __init__(self):
@@ -76,51 +79,55 @@ class Agent:
         def getDistance(self, target):
             return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
         
-        def getOrientationDeviation(self, target):
-            target_theta = math.atan2(target.y - self.y, target.x - self.x)
-            velocity_vector = math.atan2((self.velocity) * math.sin(self.direction + self.rotation), \
-                                         (self.velocity) * math.cos(self.direction + self.rotation))
-            deviation = target_theta - velocity_vector
+        def getDirection(self, target):
+            return math.atan2(target.y - self.y, target.x - self.x)
 
-            if deviation > math.pi:
-                deviation -= 2 * math.pi
-            elif deviation < -math.pi:
-                deviation += 2 * math.pi
+        def getArrivalTime(self, target):
+            return self.getDistance(target) / (self.velocity + self.acceleration)
 
-            return deviation - (abs(deviation)**2)
+        def getProjectedDistance(self, target):
+            new_velocity = self.velocity + self.acceleration
+            new_direction = self.direction + self.rotation
+            new_x = self.x + (new_velocity) * math.cos(new_direction)
+            new_y = self.y + (new_velocity) * math.sin(new_direction)
+            return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
 
-        def calculateTrajectoryOffset(self, target):
-            new_x = self.velocity * math.cos(self.direction) + self.acceleration * math.cos(self.rotation)
-            new_y = self.velocity * math.sin(self.direction) + self.acceleration * math.sin(self.rotation)
-            new_angle = math.atan2(new_y, new_x)
-            return new_angle - math.atan2(target.y - self.y, target.x - self.x)
-
-        def calculateAccelerationOffset(self, target):
+        def getTargetVelocity(self, target):
             d = self.getDistance(target)
-            time_to_arrival = d / (self.velocity + self.acceleration)
-            dt = self.velocity * time_to_arrival + 0.5 * self.acceleration * time_to_arrival ** 2
-            return dt - d
+            pd = self.getProjectedDistance(target)
 
-        def getReward(self, target, action):
-            orientation_deviation = self.getOrientationDeviation(target)
-            trajectory_offset = math.tanh(self.calculateTrajectoryOffset(target))
-            acceleration_offset = math.tanh(self.calculateAccelerationOffset(target))
+            return 0 if d < pd  else math.sqrt(2 * self.acceleration * d - pd)
 
-            maintain_reward = 0
-            rotation_reward = self.rotation * -trajectory_offset
-            acceleration_reward = self.acceleration * -acceleration_offset
+        def getReward(self, target, delta_a, delta_r):
+            rotation_reward = -1
+            acceleration_reward = -1
+            delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
+            delta_alpha = self.getTargetVelocity(target) - self.velocity
 
-
-            if action == "maintain":
-                if abs(acceleration_offset) < 0.5 and abs(orientation_deviation) < 0.1 and abs(self.rotation) < 0.03:
-                    maintain_reward = 1
+            if delta_a == 0 and delta_r == 0 and \
+               abs(delta_theta) < 0.03 and abs(delta_alpha) < 0.2:
+                rotation_reward = 1
+                acceleration_reward = 1
+            else:
+                if delta_a < 0 and delta_alpha < 0 or \
+                   delta_a > 0 and delta_alpha > 0:
+                    acceleration_reward = abs(delta_alpha)
                 else:
-                    maintain_reward = -1
+                    acceleration_reward = -abs(delta_alpha)
 
-            return 0.4 * orientation_deviation + 0.4 * trajectory_offset + 0.1 * acceleration_reward \
-                   + 0.1 * maintain_reward + 0.1 * rotation_reward
+                if delta_r < 0 and delta_theta < 0 or \
+                   delta_r > 0 and delta_theta > 0:
+                    rotation_reward = abs(delta_theta)
+                else:
+                    rotation_reward = -abs(delta_theta)
 
+            return rotation_reward + acceleration_reward
 
+        def getRewardB(self, target):
+            delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
+            delta_alpha = self.velocity - self.getTargetVelocity(target)
+
+            return 1 / (d + abs(delta_theta) + abs(delta_alpha))
 
 
 class Individual:
@@ -254,7 +261,7 @@ class Individual:
  
     def updateLocation(self):
         self.velocity += self.acceleration
-        self.direction += self.rotation
+        self.direction = normalizeDirection(self.direction + self.rotation)
         
         if self.velocity >= self.velocity_max:
             self.velocity_max = self.velocity
@@ -281,10 +288,10 @@ class Individual:
     def foundTarget(self, target):
         return self.getDistance(target) < (self.size + target.size)
 
-    def getNextState(self, s, action):
+    def getNextState(self, s, accelerate, rotate):
         new_state = Agent(s.x, s.y, s.acceleration, s.velocity, s.rotation, s.direction)
-        new_state.acceleration += action[0]
-        new_state.rotation += action[1]
+        new_state.acceleration += accelerate
+        new_state.rotation += rotate
         new_state.velocity += new_state.acceleration
         new_state.direction += new_state.rotation
         new_state.x += new_state.velocity * math.cos(new_state.direction)
@@ -292,13 +299,14 @@ class Individual:
         return new_state
 
     def chooseAction(self, target):
-        best_reward = -1
+        best_reward = -2
         best_action = None
-        init_agent = Agent(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction,)
+        init_agent = Agent(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction)
+        init_reward = init_agent.getReward(target, 0, 0)
 
         for A in ACTIONS:
-            agent = self.getNextState(init_agent, ACTIONS[A])
-            current_reward = agent.getReward(target, A)
+            agent = self.getNextState(init_agent, ACTIONS[A][0], ACTIONS[A][1])
+            current_reward = init_reward - agent.getReward(target, ACTIONS[A][0], ACTIONS[A][1])
 
             if current_reward > best_reward:
                 best_reward = current_reward
@@ -318,7 +326,10 @@ class Individual:
         self.energy -= 1
 
         d1 = self.getDistance(target)
-        self.chooseAction(target)
+
+        if random.random() < 0.7:
+            self.chooseAction(target)
+
         self.updateLocation()
         d2 = self.getDistance(target)
         distance = d1 - d2
@@ -327,7 +338,7 @@ class Individual:
         self.size -= change / self.size if self.size > INIT_INDIVIDUAL_RADIUS else 0
         self.energy -= math.floor(self.size + math.sqrt(distance ** 2) * change)
         self.reward += distance * self.energyConservation()
-        self.perception -= distance + 1 if distance > 0 else distance - 1
+        self.perception -= distance
 
     def roam(self):
         self.acceleration += random.uniform(-0.4, 0.4)
