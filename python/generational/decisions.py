@@ -21,14 +21,14 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 ACTIONS = {
     "maintain": (0, 0),
-    "forward": (0.2, 0),
-    "reverse": (-0.2, 0),
+    "forward": (0.02, 0),
+    "reverse": (-0.02, 0),
     "turn_left": (0, -0.0349),
     "turn_right": (0, 0.0349),
-    "forward_left": (0.2, -0.0349),
-    "forward_right": (0.2, 0.0349),    
-    "reverse_left": (-0.2, -0.0349),
-    "reverse_right": (-0.2, 0.0349),
+    "forward_left": (0.02, -0.0349),
+    "forward_right": (0.02, 0.0349),    
+    "reverse_left": (-0.02, -0.0349),
+    "reverse_right": (-0.02, 0.0349),
 }
 
 TARGETS = {
@@ -76,13 +76,19 @@ class Proto:
         def getDistance(self, target):
             return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
         
-        def getOrientation(self, target):
-            dot = (target.x * self.x) + (target.y * self.y)
-            self_orientation = math.sqrt(self.x ** 2 + self.y ** 2)
-            target_orientation = math.sqrt(target.x ** 2 + target.y ** 2)
+        def getOrientationDeviation(self, target):
+            target_theta = math.atan2(target.y - self.y, target.x - self.x)
+            velocity_vector = math.atan2(self.velocity * math.sin(self.direction), self.velocity * math.cos(self.direction))
+            deviation = target_theta - velocity_vector
 
-            return math.acos(dot / (self_orientation * target_orientation))
+            if deviation > math.pi:
+                deviation -= 2 * math.pi
+            elif deviation < -math.pi:
+                deviation += 2 * math.pi
 
+            deviation *= abs(self.velocity)
+
+            return 1 / (1 + abs(deviation))
 
 class Individual:
     def __init__(self, identity):
@@ -242,8 +248,8 @@ class Individual:
     def foundTarget(self, target):
         return self.getDistance(target) < (self.size + target.size)
 
-    def getNextState(self, old_state, action):
-        new_state = old_state
+    def getNextState(self, s, action):
+        new_state = Proto(s.x, s.y, s.acceleration, s.velocity, s.rotation, s.direction)
         new_state.acceleration += action[0]
         new_state.rotation += action[1]
         new_state.velocity += new_state.acceleration
@@ -263,7 +269,7 @@ class Individual:
                 proto_C = self.getNextState(proto_A, ACTIONS[C])
                 for T in ACTIONS:
                     proto_T = self.getNextState(proto_C, ACTIONS[T])
-                    current_reward = proto_T.getDistance(target) * proto_T.getOrientation(target)
+                    current_reward = proto_T.getDistance(target) * proto_T.getOrientationDeviation(target)
 
                     if current_reward < best_reward:
                         best_reward = current_reward
@@ -345,6 +351,21 @@ class Individual:
     def draw(self):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
 
+    def printStatus(self):
+        print("#################### \tIndividual", self.identity, " \t#################### ")
+        print("\t - fitness: \t\t", self.fitness)
+        print("\t - reward: \t\t", self.reward)
+        print("\t - threshold reward: \t", self.threshold_reward)
+        print("\t - total lifetime: \t", self.lifetime)
+        print("\t - targets reached: \t", self.targets_reached)
+        print("\t - avg energy: \t", self.energy_avg)
+        print("\t - avg acceleration: \t", self.acceleration_avg)
+        print("\t - avg velocity: \t", self.velocity_avg)
+        print("\t - avg direction: \t", self.direction_avg)
+        print("\t - avg perspective: \t", self.perception_avg)
+        print("\t - avg energy conserved: ", self.energy_conservation_avg)
+        print("#################### \t~~~~~~~~~~~~ \t#################### \n")
+
 class Society:
     def __init__(self):
         self.population = [Individual(n) for n in range(INIT_POPULATION)]
@@ -356,8 +377,6 @@ class Society:
         mutation_rate = 0.05
 
         for individual in self.population:
-            individual.lifetime += 1
-            
             if not individual.alive:
                 continue
 
@@ -367,7 +386,9 @@ class Society:
                 individual.die()
                 continue
 
-            # not intented to change ratio of bias
+            individual.lifetime += 1
+
+            # not intented to change ratio of bias, added randomness
             # gives option to update new target early
             #if individual.target != None and random.random() < mutation_rate / 3:
             #   individual.target = individual.chooseTarget()
@@ -472,8 +493,6 @@ class Society:
                 individual.satisfaction += 10
                 print("Individual", self.population.index(individual), ": ", individual.target)
 
-
-    
     def draw(self):
         for individual in self.population:
             individual.draw()
@@ -485,12 +504,24 @@ class Society:
             employer.draw()
 
 
+    def printState(self):
+        for individual in self.population:
+            individual.printStatus()
+
+
 class World:
     def __init__(self):
         self.society = Society()
+        self.running = True
 
     def evolve(self):
-        self.society.mutate()
+        if self.society.total_alive > 0:
+            self.society.mutate()
+        elif self.running:
+            self.society.printState()
+            self.running = False
+
+        return
     
     def render(self):
         self.society.draw()
