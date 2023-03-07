@@ -5,11 +5,11 @@ import math
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
-INIT_EMPLOYERS = 2
+INIT_EMPLOYERS = 1
 INIT_EMPLOYER_SIZE = 16
-INIT_POPULATION = 4
+INIT_POPULATION = 2
 INIT_INDIVIDUAL_RADIUS = 5
-INIT_FOOD = 2
+INIT_FOOD = 1
 INIT_FOOD_SIZE = 4
 
 pygame.init()
@@ -64,7 +64,7 @@ class Food:
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size), 1)
 
 
-class Proto:
+class Agent:
         def __init__(self, x, y, a, v, r, d):
             self.x = x
             self.y = y
@@ -78,7 +78,8 @@ class Proto:
         
         def getOrientationDeviation(self, target):
             target_theta = math.atan2(target.y - self.y, target.x - self.x)
-            velocity_vector = math.atan2(self.velocity * math.sin(self.direction), self.velocity * math.cos(self.direction))
+            velocity_vector = math.atan2((self.velocity) * math.sin(self.direction + self.rotation), \
+                                         (self.velocity) * math.cos(self.direction + self.rotation))
             deviation = target_theta - velocity_vector
 
             if deviation > math.pi:
@@ -86,9 +87,41 @@ class Proto:
             elif deviation < -math.pi:
                 deviation += 2 * math.pi
 
-            deviation *= abs(self.velocity)
+            return deviation - (abs(deviation)**2)
 
-            return 1 / (1 + abs(deviation))
+        def calculateTrajectoryOffset(self, target):
+            new_x = self.velocity * math.cos(self.direction) + self.acceleration * math.cos(self.rotation)
+            new_y = self.velocity * math.sin(self.direction) + self.acceleration * math.sin(self.rotation)
+            new_angle = math.atan2(new_y, new_x)
+            return new_angle - math.atan2(target.y - self.y, target.x - self.x)
+
+        def calculateAccelerationOffset(self, target):
+            d = self.getDistance(target)
+            time_to_arrival = d / (self.velocity + self.acceleration)
+            dt = self.velocity * time_to_arrival + 0.5 * self.acceleration * time_to_arrival ** 2
+            return dt - d
+
+        def getReward(self, target, action):
+            orientation_deviation = self.getOrientationDeviation(target)
+            trajectory_offset = math.tanh(self.calculateTrajectoryOffset(target))
+            acceleration_offset = math.tanh(self.calculateAccelerationOffset(target))
+
+            maintain_reward = 0
+            rotation_reward = self.rotation * -trajectory_offset
+            acceleration_reward = self.acceleration * -acceleration_offset
+
+
+            if action == "maintain":
+                if abs(acceleration_offset) < 0.5 and abs(orientation_deviation) < 0.1 and abs(self.rotation) < 0.03:
+                    maintain_reward = 1
+                else:
+                    maintain_reward = -1
+
+            return 0.4 * orientation_deviation + 0.4 * trajectory_offset + 0.1 * acceleration_reward \
+                   + 0.1 * maintain_reward + 0.1 * rotation_reward
+
+
+
 
 class Individual:
     def __init__(self, identity):
@@ -249,7 +282,7 @@ class Individual:
         return self.getDistance(target) < (self.size + target.size)
 
     def getNextState(self, s, action):
-        new_state = Proto(s.x, s.y, s.acceleration, s.velocity, s.rotation, s.direction)
+        new_state = Agent(s.x, s.y, s.acceleration, s.velocity, s.rotation, s.direction)
         new_state.acceleration += action[0]
         new_state.rotation += action[1]
         new_state.velocity += new_state.acceleration
@@ -259,26 +292,22 @@ class Individual:
         return new_state
 
     def chooseAction(self, target):
-        best_reward = SCREEN_WIDTH * SCREEN_HEIGHT
+        best_reward = -1
         best_action = None
-        init_proto = Proto(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction,)
+        init_agent = Agent(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction,)
 
         for A in ACTIONS:
-            proto_A = self.getNextState(init_proto, ACTIONS[A])
-            for C in ACTIONS:
-                proto_C = self.getNextState(proto_A, ACTIONS[C])
-                for T in ACTIONS:
-                    proto_T = self.getNextState(proto_C, ACTIONS[T])
-                    current_reward = proto_T.getDistance(target) * proto_T.getOrientationDeviation(target)
+            agent = self.getNextState(init_agent, ACTIONS[A])
+            current_reward = agent.getReward(target, A)
 
-                    if current_reward < best_reward:
-                        best_reward = current_reward
-                        best_action = A
+            if current_reward > best_reward:
+                best_reward = current_reward
+                best_action = A
 
         if best_action == None or best_reward : 
             best_action = random.choice(list(ACTIONS.keys()))
 
-        print(self.identity, "best action:", best_action)
+        print("male" if self.identity == 1 else "female", "best action:", best_action)
 
         self.change_in_acceleration = ACTIONS[best_action][0]
         self.change_in_rotation = ACTIONS[best_action][1]
@@ -457,13 +486,14 @@ class Society:
                     for partner in self.population:
                         if partner.alive and partner != individual and \
                            individual.locateTarget(partner) and \
+                           partner.target == "mating" and \
                            partner.identity != individual.mother and \
                            partner.identity != individual.father and \
                            individual.isCompatible(partner) and \
                            partner.isCompatible(individual) and \
                            partner.partner == None:
-                                individual.mate = self.population.index(partner)
-                                partner.mate = self.population.index(individual)
+                                individual.partner = self.population.index(partner)
+                                partner.partner = self.population.index(individual)
                         else:
                            continue
                     individual.roam()
@@ -479,8 +509,8 @@ class Society:
                             partner.updateTargetBias()
                             partner.partner(individual)
                             if random.random() < mutation_rate:
-                                individual.mate = None
-                                individual.mate = None
+                                individual.partner = None
+                                individual.partner = None
                         else:
                             individual.navigate(self.population[individual.partner])
                     else:
