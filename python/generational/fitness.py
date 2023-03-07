@@ -47,27 +47,7 @@ class Individual():
         "decel_left": (-0.5, -0.01745)
     }
     
-    action_history = {
-        "turn_right": 1,
-        "turn_left": 1,
-        "accelerate": 1,
-        "decelerate": 1,
-        "accel_right": 1,
-        "accel_left": 1,
-        "decel_right": 1,
-        "decel_left": 1
-    }
-    
-    action_bias = {
-        "turn_right": 1,
-        "turn_left": 1,
-        "accelerate": 1,
-        "decelerate": 1,
-        "accel_right": 1,
-        "accel_left": 1,
-        "decel_right": 1,
-        "decel_left": 1
-    }
+
     
     def __init__(self):
         self.alive = True

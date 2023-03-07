@@ -75,6 +75,13 @@ class Proto:
 
         def getDistance(self, target):
             return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
+        
+        def getOrientation(self, target):
+            dot = (target.x * self.x) + (target.y * self.y)
+            self_orientation = math.sqrt(self.x ** 2 + self.y ** 2)
+            target_orientation = math.sqrt(target.x ** 2 + target.y ** 2)
+
+            return math.acos(dot / (self_orientation * target_orientation))
 
 
 class Individual:
@@ -94,7 +101,6 @@ class Individual:
         self.color = (255, 125, 125) if self.sex == 0 else (125, 125, 255)
         self.perception = INIT_INDIVIDUAL_RADIUS               # inherits from parent
         self.perception_avg = self.perception                  # inherits from parents and becomes new default perspective
-        self.total_actions = 0                                 # used for averaging actions
         self.target = None
         self.targets_acquired = 0
         self.targets_reached = 0                               # fitness scalar
@@ -146,30 +152,7 @@ class Individual:
             "eating": {"money_bias": 0, "energy_bias": 0, "satisfaction_bias": 0},
             "mating": {"money_bias": 0, "energy_bias": 0, "satisfaction_bias": 0}
         }
-        self.action_history = {
-            "maintain": 0,
-            "forward": 0,
-            "reverse": 0,
-            "turn_left": 0,
-            "turn_right": 0,
-            "forward_left": 0,
-            "forward_right": 0,    
-            "reverse_left": 0,
-            "reverse_right": 0
-        }
-        self.action_bias = {
-            "maintain": 0,
-            "forward": 1,
-            "reverse": 1,
-            "turn_left": 1,
-            "turn_right": 1,
-            "forward_left": 1,
-            "forward_right": 1,    
-            "reverse_left": 1,
-            "reverse_right": 1
-        }
 
-    
     def getDistance(self, target):
         return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
     
@@ -189,11 +172,6 @@ class Individual:
 
         return (entr + attr + vetr + satr + motr) / 5 * etctr
 
-    def updateActionBias(self):
-        for action in ACTIONS:
-            if self.action_history[action] != 0:
-                self.action_bias[action] = self.total_actions / self.action_history[action]
-
     def updateAverages(self):
         self.energy_conservation_avg = (self.energy_conservation_avg + self.energyConservation()) / 2
         self.energy_avg = (self.energy_avg + self.energy) / 2
@@ -203,7 +181,6 @@ class Individual:
         self.velocity_avg = (self.velocity_avg + self.velocity) / 2
         self.direction_avg = (self.direction_avg + self.direction) / 2
         self.threshold_reward = self.determineThresholdRewards()
-        self.updateActionBias()
     
     def getTargetBias(self, target):
         money_bias = self.target_bias[target]["money_bias"] / self.getThresholdReward(self.money, self.money_threshold)
@@ -213,17 +190,14 @@ class Individual:
         return (money_bias + energy_bias + satisfaction_bias ) + 1 / 3
     
     def updateTargetBias(self):
-        self.target_bias[self.target]["money_bias"] = \
-            self.getThresholdReward(self.working_tally, self.targets_acquired) / \
-            self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
+        self.target_bias[self.target]["money_bias"] = self.getThresholdReward(self.working_tally, self.targets_acquired) / \
+                                                      self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
 
-        self.target_bias[self.target]["energy_bias"] = \
-            self.getThresholdReward(self.eating_tally, self.targets_acquired) / \
-            self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
+        self.target_bias[self.target]["energy_bias"] = self.getThresholdReward(self.eating_tally, self.targets_acquired) / \
+                                                       self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
 
-        self.target_bias[self.target]["satisfaction_bias"] = \
-            self.getThresholdReward(self.mating_tally, self.targets_acquired) /  \
-            self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
+        self.target_bias[self.target]["satisfaction_bias"] = self.getThresholdReward(self.mating_tally, self.targets_acquired) /  \
+                                                             self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
 
     # TODO: do this if target = None, and backpropagate success
     def chooseTarget(self):
@@ -268,61 +242,48 @@ class Individual:
     def foundTarget(self, target):
         return self.getDistance(target) < (self.size + target.size)
 
-    def getReward(self, pre, post, action):
-        if post < pre:
-            return (pre - post) * self.action_bias[action]
-        else:
-            return -10
-
-    def getNextState(self, state, action):
-        state.acceleration += action[0]
-        state.rotation += action[1]
-        state.velocity += state.acceleration
-        state.direction += state.rotation
-        state.x += state.velocity * math.cos(state.direction)
-        state.y += state.velocity * math.sin(state.direction)
-        return state
+    def getNextState(self, old_state, action):
+        new_state = old_state
+        new_state.acceleration += action[0]
+        new_state.rotation += action[1]
+        new_state.velocity += new_state.acceleration
+        new_state.direction += new_state.rotation
+        new_state.x += new_state.velocity * math.cos(new_state.direction)
+        new_state.y += new_state.velocity * math.sin(new_state.direction)
+        return new_state
 
     def chooseAction(self, target):
-        best_reward = 0
+        best_reward = SCREEN_WIDTH * SCREEN_HEIGHT
         best_action = None
-        prototype = Proto(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction,)
+        init_proto = Proto(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction,)
 
-        for first_action in ACTIONS:
-            d_a = prototype.getDistance(target)
-            prototype = self.getNextState(prototype, ACTIONS[first_action])
-            d_b = prototype.getDistance(target)
-            first_reward = self.getReward(d_a, d_b, first_action)
-            third_reward = 0
-            second_reward = 0
-            for second_action in ACTIONS:
-                prototype = self.getNextState(prototype, ACTIONS[second_action])
-                d_c = prototype.getDistance(target)
-                second_reward = self.getReward(d_b, d_c, second_action)
+        for A in ACTIONS:
+            proto_A = self.getNextState(init_proto, ACTIONS[A])
+            for C in ACTIONS:
+                proto_C = self.getNextState(proto_A, ACTIONS[C])
+                for T in ACTIONS:
+                    proto_T = self.getNextState(proto_C, ACTIONS[T])
+                    current_reward = proto_T.getDistance(target) * proto_T.getOrientation(target)
 
-            current_reward = (first_reward + second_reward + third_reward) / 3
-            if current_reward > best_reward:
-                best_reward = current_reward
-                best_action = first_action
-                print(self.identity, "best action:", first_action)
+                    if current_reward < best_reward:
+                        best_reward = current_reward
+                        best_action = A
 
         if best_action == None: 
             best_action = random.choice(list(ACTIONS.keys()))
 
+        print(self.identity, "best action:", best_action)
+
         self.change_in_acceleration = ACTIONS[best_action][0]
         self.change_in_rotation = ACTIONS[best_action][1]
-        
         self.acceleration += self.change_in_acceleration
         self.rotation += self.change_in_rotation
 
-        self.action_history[best_action] += 1
-        self.total_actions += 1
-
-
     def navigate(self, target):
         self.energy -= 1
-        self.chooseAction(target)
+
         d1 = self.getDistance(target)
+        self.chooseAction(target)
         self.updateLocation()
         d2 = self.getDistance(target)
         distance = d1 - d2
@@ -331,11 +292,11 @@ class Individual:
         self.size -= change / self.size if self.size > INIT_INDIVIDUAL_RADIUS else 0
         self.energy -= math.floor(self.size + math.sqrt(distance ** 2) * change)
         self.reward += distance * self.energyConservation()
-        self.perception -= distance + 1 if distance > 0 else -(distance + 1) 
+        self.perception -= distance + 1 if distance > 0 else distance - 1
 
     def roam(self):
-        self.acceleration += random.uniform(-0.2, 0.2)
-        self.rotation += random.uniform(-0.0349, 0.0349)
+        self.acceleration += random.uniform(-0.4, 0.4)
+        self.rotation += random.uniform(-0.0698, 0.0698)
         self.energy -= self.perception / INIT_INDIVIDUAL_RADIUS
         self.reward -= self.size
         self.perception += self.perception
@@ -438,37 +399,38 @@ class Society:
                         individual.employer = None
                         individual.roam()
             elif individual.target == "eating":
-                if len(individual.food) < 1:
-                    if individual.food_source == None:
-                        for food in self.food_supply:
-                            if individual.locateTarget(food):
-                                individual.food_source = self.food_supply.index(food)
-                                individual.satisfaction += 10
-                                break
-                        individual.roam()
-                    else:
-                        if individual.locateTarget(self.food_supply[individual.food_source]):
-                            if individual.foundTarget(self.food_supply[individual.food_source]):
-                                individual.eating_tally += 1
-                                individual.targets_reached += 1
-                                individual.updateTargetBias()
-                                if individual.hungry():
-                                    individual.eat(self.food_supply[individual.food_source])
-                                    self.food_supply.remove(self.food_supply[individual.food_source])
-                                    individual.food_source = None
-                                else:
-                                    individual.food.append(self.food_supply[individual.food_source])
-                                    self.food_supply.remove(self.food_supply[individual.food_source])
-                                    individual.food_source = None
-                                individual.target = None
-                            else:
-                                individual.navigate(self.food_supply[individual.food_source])
-                        else:
-                            individual.food_source = None
-                            individual.satisfaction -= 1
-                            individual.roam()
-                else:
+                if len(individual.food) > 1 and individual.hungry():
                     individual.eat(individual.food.pop())
+                    individual.targets_acquired -= 1
+                    individual.food_source = None
+                    individual.target = None
+                elif individual.food_source == None:
+                    for food in self.food_supply:
+                        if individual.locateTarget(food):
+                            individual.food_source = self.food_supply.index(food)
+                            individual.satisfaction += 10
+                            break
+                    individual.roam()
+                elif individual.locateTarget(self.food_supply[individual.food_source]):
+                    if individual.foundTarget(self.food_supply[individual.food_source]):
+                        individual.eating_tally += 1
+                        individual.targets_reached += 1
+                        individual.updateTargetBias()
+                        if individual.hungry():
+                            individual.eat(self.food_supply[individual.food_source])
+                            self.food_supply.remove(self.food_supply[individual.food_source])
+                            individual.food_source = None
+                        else:
+                            individual.food.append(self.food_supply[individual.food_source])
+                            self.food_supply.remove(self.food_supply[individual.food_source])
+                            individual.food_source = None
+                        individual.target = None
+                    else:
+                        individual.navigate(self.food_supply[individual.food_source])
+                else:
+                    individual.food_source = None
+                    individual.satisfaction -= 1
+                    individual.roam()
             elif individual.target == "mating":
                 if individual.partner == None:
                     for partner in self.population:
