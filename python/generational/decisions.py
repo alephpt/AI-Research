@@ -269,7 +269,7 @@ class Individual:
                         best_reward = current_reward
                         best_action = A
 
-        if best_action == None: 
+        if best_action == None or best_reward : 
             best_action = random.choice(list(ACTIONS.keys()))
 
         print(self.identity, "best action:", best_action)
