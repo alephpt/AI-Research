@@ -42,7 +42,8 @@ def normalizeDirection(d):
 
 
 class Work:
-    def __init__(self):
+    def __init__(self, identity):
+        self.identity = identity
         self.x = random.randint(INIT_EMPLOYER_SIZE, SCREEN_WIDTH - INIT_EMPLOYER_SIZE)
         self.y = random.randint(INIT_EMPLOYER_SIZE, SCREEN_HEIGHT - INIT_EMPLOYER_SIZE)
         self.size = INIT_EMPLOYER_SIZE
@@ -55,7 +56,8 @@ class Work:
 
 
 class Food:
-    def __init__(self):
+    def __init__(self, identity):
+        self.identity = identity
         self.x = random.randint(INIT_FOOD_SIZE, SCREEN_WIDTH - INIT_FOOD_SIZE)
         self.y = random.randint(INIT_FOOD_SIZE, SCREEN_HEIGHT - INIT_FOOD_SIZE)
         self.size = INIT_FOOD_SIZE
@@ -93,58 +95,37 @@ class Agent:
         return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
 
     def getTargetVelocity(self, target):
-        distance = self.getDistance(target)
-        current_velocity = self.velocity
-        acceleration = self.acceleration
-
-        # Solve for the time it takes to reach the target using the quadratic formula
-        a = 0.5 * acceleration
-        b = current_velocity
-        c = -distance
-        discriminant = b**2 - 4*a*c
-        t = (-b - math.sqrt(discriminant)) / (2*a)
-
-        # Calculate the target velocity based on the remaining distance and time
-        remaining_distance = max(0, distance - 0.5 * acceleration * t**2)
-        remaining_time = max(0, t - current_velocity / acceleration)
-        if remaining_distance == 0 or remaining_time == 0:
-            return current_velocity
-        else:
-            target_velocity = remaining_distance / remaining_time
-            return current_velocity + acceleration * math.copysign(1, target_velocity - current_velocity)
-
-    def getTargetVelocity(self, target):
-        distance = self.getDistance(target)
-        time = (-self.velocity - (self.velocity ** 2 - 4 * (0.5 * self.acceleration) * -distance) ** 0.5) / self.acceleration
-        distance_remaining = distance - (0.5 * self.acceleration) * time ** 2
-        time_remaining = time - self.velocity / self.acceleration
-        return distance_remaining / time_remaining
+        directional_offset = normalizeDirection(self.getDirection(target) - self.direction)
+        return (self.velocity + self.acceleration * self.getArrivalTime(target)) * directional_offset
 
     def getReward(self, target, delta_a, delta_r):
-        delta_alpha = self.getTargetVelocity(target) - self.velocity
-        delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
-        trajectory_reward = -1 if abs(delta_theta) > 0.1 else 1
-        acceleration_reward = None
-        rotation_reward = None
+        target_velocity = self.getTargetVelocity(target)
+        target_direction = self.getDirection(target)
+        velocity_offset = target_velocity - (self.velocity + self.acceleration)
+        direction_offset = target_direction - (self.direction + self.rotation)
+        trajectory_offset = math.sqrt(velocity_offset ** 2 + direction_offset ** 2)
+        trajectory_reward = -math.tanh(-trajectory_offset)
+        acceleration_reward = -1
+        rotation_reward = -1
 
         if delta_a == 0 and delta_r == 0 and \
-           abs(delta_theta) < 0.03 and abs(delta_alpha) < 0.2:
-            rotation_reward = 1
-            acceleration_reward = 1
+           abs(direction_offset) < 0.03 and abs(velocity_offset) < 0.4:
+            rotation_reward = 2
+            acceleration_reward = 2
         else:
-            if delta_a < 0 and delta_alpha < 0 or \
-               delta_a > 0 and delta_alpha > 0:
-                acceleration_reward = abs(delta_alpha)
+            if delta_a < 0 and self.velocity > target_velocity or \
+               delta_a > 0 and self.velocity < target_velocity:
+                acceleration_reward = abs(velocity_offset)
             else:
-                acceleration_reward = -abs(delta_alpha)
+                acceleration_reward = -abs(velocity_offset)
 
-            if delta_r < 0 and delta_theta < 0 or \
-               delta_r > 0 and delta_theta > 0:
-                rotation_reward = abs(delta_theta)
+            if delta_r < 0 and self.direction > target_direction or \
+               delta_r > 0 and self.direction < target_direction:
+                rotation_reward = abs(direction_offset)
             else:
-                rotation_reward = -abs(delta_theta)
+                rotation_reward = -abs(direction_offset)
 
-        return rotation_reward + acceleration_reward + trajectory_reward
+        return rotation_reward * 0.4 + acceleration_reward * 0.4 + trajectory_reward * 0.2
 
 
 class Individual:
@@ -319,17 +300,16 @@ class Individual:
         best_reward = -1
         best_action = None
         init_agent = Agent(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction)
-        init_reward = init_agent.getReward(target, 0, 0)
 
         for A in ACTIONS:
             agent = self.getNextState(init_agent, ACTIONS[A][0], ACTIONS[A][1])
-            current_reward = init_reward - agent.getReward(target, ACTIONS[A][0], ACTIONS[A][1])
+            current_reward = agent.getReward(target, ACTIONS[A][0], ACTIONS[A][1])
 
             if current_reward > best_reward:
                 best_reward = current_reward
                 best_action = A
 
-        if not best_action:
+        if best_action is None:
             best_action = random.choice(list(ACTIONS.keys()))
 
         print("male" if self.identity == 1 else "female", "best action:", best_action)
@@ -422,8 +402,8 @@ class Individual:
 class Society:
     def __init__(self):
         self.population = [Individual(n) for n in range(INIT_POPULATION)]
-        self.employers = [Work() for _ in range(INIT_EMPLOYERS)]
-        self.food_supply = [Food() for _ in range(INIT_FOOD)]
+        self.employers = [Work(n) for n in range(INIT_EMPLOYERS)]
+        self.food_supply = [Food(n) for n in range(INIT_FOOD)]
         self.total_alive = INIT_POPULATION
     
     def mutate(self):
@@ -445,13 +425,13 @@ class Society:
             # gives option to update new target early
             # if individual.target != None and random.random() < mutation_rate / 3:
             #   individual.target = individual.chooseTarget()
-            #    print("Individual", self.population.index(individual), ": ", individual.target)
+            #    print("Individual", individual.identity, ": ", individual.target)
 
             if individual.target == "working":
-                if not individual.employer:
+                if individual.employer is None:
                     for employer in self.employers:
                         if individual.locateTarget(employer):
-                            individual.employer = self.employers.index(employer)
+                            individual.employer = employer.identity
                             individual.satisfaction += 10
                             break
                     individual.roam()
@@ -478,10 +458,10 @@ class Society:
                     individual.eating_tally += 1
                     individual.food_source = None
                     individual.target = None
-                elif not individual.food_source:
+                elif individual.food_source is None:
                     for food in self.food_supply:
                         if individual.locateTarget(food):
-                            individual.food_source = self.food_supply.index(food)
+                            individual.food_source = food.identity
                             individual.satisfaction += 10
                             break
                     individual.roam()
@@ -506,7 +486,7 @@ class Society:
                     individual.satisfaction -= 1
                     individual.roam()
             elif individual.target == "mating":
-                if not individual.partner:
+                if individual.partner is None:
                     for partner in self.population:
                         if partner.alive and partner != individual and \
                            individual.locateTarget(partner) and \
@@ -516,8 +496,8 @@ class Society:
                            individual.isCompatible(partner) and \
                            partner.isCompatible(individual) and \
                            not partner.partner:
-                                individual.partner = self.population.index(partner)
-                                partner.partner = self.population.index(individual)
+                                individual.partner = partner.identity
+                                partner.partner = individual.identity
                         else:
                            continue
                     individual.roam()
@@ -542,10 +522,10 @@ class Society:
                         individual.satisfaction -= 1
                         individual.roam()
             else:
-                individual.target = individual.chooseTarget()
+                individual.target = "working" #individual.chooseTarget()
                 individual.targets_acquired += 1
                 individual.satisfaction += 10
-                print("Individual", self.population.index(individual), ": ", individual.target)
+                print("Individual", individual.identity, ": ", individual.target)
 
     def draw(self):
         for individual in self.population:
