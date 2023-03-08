@@ -20,7 +20,7 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 ACTIONS = {
-    "maintain": (0, 0),                         # make sure direction and acceleration are acceptable
+    "maintain": (0, 0),
     "forward": (0.02, 0),
     "reverse": (-0.02, 0),
     "turn_left": (0, -0.0349),
@@ -93,13 +93,39 @@ class Agent:
         return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
 
     def getTargetVelocity(self, target):
-        return self.getProjectedDistance(target) / (self.velocity + self.acceleration)
+        distance = self.getDistance(target)
+        current_velocity = self.velocity
+        acceleration = self.acceleration
+
+        # Solve for the time it takes to reach the target using the quadratic formula
+        a = 0.5 * acceleration
+        b = current_velocity
+        c = -distance
+        discriminant = b**2 - 4*a*c
+        t = (-b - math.sqrt(discriminant)) / (2*a)
+
+        # Calculate the target velocity based on the remaining distance and time
+        remaining_distance = max(0, distance - 0.5 * acceleration * t**2)
+        remaining_time = max(0, t - current_velocity / acceleration)
+        if remaining_distance == 0 or remaining_time == 0:
+            return current_velocity
+        else:
+            target_velocity = remaining_distance / remaining_time
+            return current_velocity + acceleration * math.copysign(1, target_velocity - current_velocity)
+
+    def getTargetVelocity(self, target):
+        distance = self.getDistance(target)
+        time = (-self.velocity - (self.velocity ** 2 - 4 * (0.5 * self.acceleration) * -distance) ** 0.5) / self.acceleration
+        distance_remaining = distance - (0.5 * self.acceleration) * time ** 2
+        time_remaining = time - self.velocity / self.acceleration
+        return distance_remaining / time_remaining
 
     def getReward(self, target, delta_a, delta_r):
-        rotation_reward = None
-        acceleration_reward = None
-        delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
         delta_alpha = self.getTargetVelocity(target) - self.velocity
+        delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
+        trajectory_reward = -1 if abs(delta_theta) > 0.1 else 1
+        acceleration_reward = None
+        rotation_reward = None
 
         if delta_a == 0 and delta_r == 0 and \
            abs(delta_theta) < 0.03 and abs(delta_alpha) < 0.2:
@@ -118,7 +144,7 @@ class Agent:
             else:
                 rotation_reward = -abs(delta_theta)
 
-        return rotation_reward + acceleration_reward
+        return rotation_reward + acceleration_reward + trajectory_reward
 
 
 class Individual:
@@ -315,24 +341,21 @@ class Individual:
 
     def navigate(self, target):
         d1 = self.getDistance(target)
-
-        if random.random() < 0.7:
-            self.chooseAction(target)
-
+        self.chooseAction(target)
         self.updateLocation()
         d2 = self.getDistance(target)
         distance_traveled = d1 - d2
 
-        change = math.sqrt((self.change_in_acceleration + self.change_in_rotation) ** 2)
+        change = math.sqrt((self.change_in_acceleration + self.change_in_rotation) ** 2) + 1
         self.size -= change / self.size if self.size > INIT_INDIVIDUAL_RADIUS else 0
-        self.energy -= math.floor(math.sqrt(distance_traveled ** 2) / self.velocity + self.size * change)
+        self.energy -= math.floor(self.size / math.sqrt(distance_traveled ** 2) * change)
         self.reward += distance_traveled * self.energyConservation()
         self.perception -= distance_traveled
 
     def roam(self):
-        self.acceleration += random.uniform(-0.4, 0.4)
+        self.acceleration += random.uniform(-0.2, 0.2)
         self.rotation += random.uniform(-0.0698, 0.0698)
-        self.energy -= self.perception / INIT_INDIVIDUAL_RADIUS
+        self.energy -= self.size + self.acceleration + self.rotation 
         self.reward -= self.size
         self.perception += self.perception
         self.updateLocation()
@@ -452,6 +475,7 @@ class Society:
                 if len(individual.food) > 1 and individual.hungry():
                     individual.eat(individual.food.pop())
                     individual.targets_acquired -= 1
+                    individual.eating_tally += 1
                     individual.food_source = None
                     individual.target = None
                 elif not individual.food_source:
