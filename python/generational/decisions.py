@@ -14,19 +14,19 @@ INIT_FOOD_SIZE = 4
 
 pygame.init()
 pygame.font.init()
-pygame.display.set_caption("Genetic Desicion Making")
+pygame.display.set_caption("Genetic Decision Making")
 text = pygame.font.SysFont('Comic Sans MS', 16)
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 ACTIONS = {
-    "maintain": (0, 0),
+    "maintain": (0, 0),                         # make sure direction and acceleration are acceptable
     "forward": (0.02, 0),
     "reverse": (-0.02, 0),
     "turn_left": (0, -0.0349),
     "turn_right": (0, 0.0349),
     "forward_left": (0.02, -0.0349),
-    "forward_right": (0.02, 0.0349),    
+    "forward_right": (0.02, 0.0349),
     "reverse_left": (-0.02, -0.0349),
     "reverse_right": (-0.02, 0.0349),
 }
@@ -68,66 +68,57 @@ class Food:
 
 
 class Agent:
-        def __init__(self, x, y, a, v, r, d):
-            self.x = x
-            self.y = y
-            self.acceleration = a
-            self.velocity = v
-            self.rotation = r
-            self.direction = d
+    def __init__(self, x, y, a, v, r, d):
+        self.x = x
+        self.y = y
+        self.acceleration = a
+        self.velocity = v
+        self.rotation = r
+        self.direction = d
 
-        def getDistance(self, target):
-            return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
-        
-        def getDirection(self, target):
-            return math.atan2(target.y - self.y, target.x - self.x)
+    def getDistance(self, target):
+        return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
 
-        def getArrivalTime(self, target):
-            return self.getDistance(target) / (self.velocity + self.acceleration)
+    def getDirection(self, target):
+        return math.atan2(target.y - self.y, target.x - self.x)
 
-        def getProjectedDistance(self, target):
-            new_velocity = self.velocity + self.acceleration
-            new_direction = self.direction + self.rotation
-            new_x = self.x + (new_velocity) * math.cos(new_direction)
-            new_y = self.y + (new_velocity) * math.sin(new_direction)
-            return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
+    def getArrivalTime(self, target):
+        return self.getDistance(target) / (self.velocity + self.acceleration)
 
-        def getTargetVelocity(self, target):
-            d = self.getDistance(target)
-            pd = self.getProjectedDistance(target)
+    def getProjectedDistance(self, target):
+        new_velocity = self.velocity + self.acceleration
+        new_direction = self.direction + self.rotation
+        new_x = self.x + (new_velocity) * math.cos(new_direction)
+        new_y = self.y + (new_velocity) * math.sin(new_direction)
+        return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
 
-            return 0 if d < pd  else math.sqrt(2 * self.acceleration * d - pd)
+    def getTargetVelocity(self, target):
+        return self.getProjectedDistance(target) / (self.velocity + self.acceleration)
 
-        def getReward(self, target, delta_a, delta_r):
-            rotation_reward = -1
-            acceleration_reward = -1
-            delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
-            delta_alpha = self.getTargetVelocity(target) - self.velocity
+    def getReward(self, target, delta_a, delta_r):
+        rotation_reward = None
+        acceleration_reward = None
+        delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
+        delta_alpha = self.getTargetVelocity(target) - self.velocity
 
-            if delta_a == 0 and delta_r == 0 and \
-               abs(delta_theta) < 0.03 and abs(delta_alpha) < 0.2:
-                rotation_reward = 1
-                acceleration_reward = 1
+        if delta_a == 0 and delta_r == 0 and \
+           abs(delta_theta) < 0.03 and abs(delta_alpha) < 0.2:
+            rotation_reward = 1
+            acceleration_reward = 1
+        else:
+            if delta_a < 0 and delta_alpha < 0 or \
+               delta_a > 0 and delta_alpha > 0:
+                acceleration_reward = abs(delta_alpha)
             else:
-                if delta_a < 0 and delta_alpha < 0 or \
-                   delta_a > 0 and delta_alpha > 0:
-                    acceleration_reward = abs(delta_alpha)
-                else:
-                    acceleration_reward = -abs(delta_alpha)
+                acceleration_reward = -abs(delta_alpha)
 
-                if delta_r < 0 and delta_theta < 0 or \
-                   delta_r > 0 and delta_theta > 0:
-                    rotation_reward = abs(delta_theta)
-                else:
-                    rotation_reward = -abs(delta_theta)
+            if delta_r < 0 and delta_theta < 0 or \
+               delta_r > 0 and delta_theta > 0:
+                rotation_reward = abs(delta_theta)
+            else:
+                rotation_reward = -abs(delta_theta)
 
-            return rotation_reward + acceleration_reward
-
-        def getRewardB(self, target):
-            delta_theta = normalizeDirection(self.getDirection(target) - self.direction)
-            delta_alpha = self.velocity - self.getTargetVelocity(target)
-
-            return 1 / (d + abs(delta_theta) + abs(delta_alpha))
+        return rotation_reward + acceleration_reward
 
 
 class Individual:
@@ -146,7 +137,7 @@ class Individual:
         self.size = INIT_INDIVIDUAL_RADIUS
         self.color = (255, 125, 125) if self.sex == 0 else (125, 125, 255)
         self.perception = INIT_INDIVIDUAL_RADIUS               # inherits from parent
-        self.perception_avg = self.perception                  # inherits from parents and becomes new default perspective
+        self.perception_avg = self.perception                  # becomes nextgen initial perception
         self.target = None
         self.targets_acquired = 0
         self.targets_reached = 0                               # fitness scalar
@@ -161,10 +152,10 @@ class Individual:
         self.energy_max = 2500                                 # inherits (max + threshold) / 2 on next generation
         ## Energy Conservation
         self.energy_conservation_avg = 1                       # used for threshold in next gen
-        self.energy_conserv_threshold = 0                      # used for threshold reward, inherits avg on nextgen
+        self.energy_conserve_threshold = 0                     # used for threshold reward, inherits avg on nextgen
         ## Rotation
         self.rotation = 0
-        self.change_in_rotation = 0                           # used for energy deduction
+        self.change_in_rotation = 0                            # used for energy deduction
         ## Direction
         self.direction = math.radians(random.randint(0, 360))  # inherits avg from parents
         self.direction_avg = 0                                 # used for next gen
@@ -209,7 +200,7 @@ class Individual:
         return 0.0001 if v == 0 else 1 if t == 0 else v / t
     
     def determineThresholdRewards(self):
-        etctr = self.getThresholdReward(self.energy_conservation_avg, self.energy_conserv_threshold)
+        etctr = self.getThresholdReward(self.energy_conservation_avg, self.energy_conserve_threshold)
         entr = self.getThresholdReward(self.energy, self.energy_threshold)
         attr = self.getThresholdReward(self.acceleration, self.acceleration_threshold)
         vetr = self.getThresholdReward(self.velocity, self.velocity_target)
@@ -256,8 +247,8 @@ class Individual:
             if best_bias < current_target_bias:
                 best_bias = current_target_bias
                 best_target = target
-            
-        return best_target if best_target != None else random.choice(list(TARGETS.keys()))
+
+        return best_target if best_target is not None else random.choice(list(TARGETS.keys()))
  
     def updateLocation(self):
         self.velocity += self.acceleration
@@ -299,7 +290,7 @@ class Individual:
         return new_state
 
     def chooseAction(self, target):
-        best_reward = -2
+        best_reward = -1
         best_action = None
         init_agent = Agent(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction)
         init_reward = init_agent.getReward(target, 0, 0)
@@ -312,7 +303,7 @@ class Individual:
                 best_reward = current_reward
                 best_action = A
 
-        if best_action == None or best_reward : 
+        if not best_action:
             best_action = random.choice(list(ACTIONS.keys()))
 
         print("male" if self.identity == 1 else "female", "best action:", best_action)
@@ -323,8 +314,6 @@ class Individual:
         self.rotation += self.change_in_rotation
 
     def navigate(self, target):
-        self.energy -= 1
-
         d1 = self.getDistance(target)
 
         if random.random() < 0.7:
@@ -332,13 +321,13 @@ class Individual:
 
         self.updateLocation()
         d2 = self.getDistance(target)
-        distance = d1 - d2
+        distance_traveled = d1 - d2
 
         change = math.sqrt((self.change_in_acceleration + self.change_in_rotation) ** 2)
         self.size -= change / self.size if self.size > INIT_INDIVIDUAL_RADIUS else 0
-        self.energy -= math.floor(self.size + math.sqrt(distance ** 2) * change)
-        self.reward += distance * self.energyConservation()
-        self.perception -= distance
+        self.energy -= math.floor(math.sqrt(distance_traveled ** 2) / self.velocity + self.size * change)
+        self.reward += distance_traveled * self.energyConservation()
+        self.perception -= distance_traveled
 
     def roam(self):
         self.acceleration += random.uniform(-0.4, 0.4)
@@ -406,6 +395,7 @@ class Individual:
         print("\t - avg energy conserved: ", self.energy_conservation_avg)
         print("#################### \t~~~~~~~~~~~~ \t#################### \n")
 
+
 class Society:
     def __init__(self):
         self.population = [Individual(n) for n in range(INIT_POPULATION)]
@@ -428,15 +418,14 @@ class Society:
 
             individual.lifetime += 1
 
-            # not intented to change ratio of bias, added randomness
+            # not intended to change ratio of bias, added randomness
             # gives option to update new target early
-            #if individual.target != None and random.random() < mutation_rate / 3:
+            # if individual.target != None and random.random() < mutation_rate / 3:
             #   individual.target = individual.chooseTarget()
             #    print("Individual", self.population.index(individual), ": ", individual.target)
 
-
             if individual.target == "working":
-                if individual.employer == None:
+                if not individual.employer:
                     for employer in self.employers:
                         if individual.locateTarget(employer):
                             individual.employer = self.employers.index(employer)
@@ -465,7 +454,7 @@ class Society:
                     individual.targets_acquired -= 1
                     individual.food_source = None
                     individual.target = None
-                elif individual.food_source == None:
+                elif not individual.food_source:
                     for food in self.food_supply:
                         if individual.locateTarget(food):
                             individual.food_source = self.food_supply.index(food)
@@ -493,7 +482,7 @@ class Society:
                     individual.satisfaction -= 1
                     individual.roam()
             elif individual.target == "mating":
-                if individual.partner == None:
+                if not individual.partner:
                     for partner in self.population:
                         if partner.alive and partner != individual and \
                            individual.locateTarget(partner) and \
@@ -502,7 +491,7 @@ class Society:
                            partner.identity != individual.father and \
                            individual.isCompatible(partner) and \
                            partner.isCompatible(individual) and \
-                           partner.partner == None:
+                           not partner.partner:
                                 individual.partner = self.population.index(partner)
                                 partner.partner = self.population.index(individual)
                         else:
@@ -514,11 +503,11 @@ class Society:
                             individual.mating_tally += 1
                             individual.targets_reached += 1
                             individual.updateTargetBias()
-                            individual.partner(partner)
+                            individual.mate(partner)
                             partner.mating_tally += 1
                             partner.targets_reached += 1
                             partner.updateTargetBias()
-                            partner.partner(individual)
+                            partner.mate(individual)
                             if random.random() < mutation_rate:
                                 individual.partner = None
                                 individual.partner = None
