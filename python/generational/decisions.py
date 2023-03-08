@@ -5,11 +5,11 @@ import math
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
-INIT_EMPLOYERS = 1
+INIT_EMPLOYERS = 3
 INIT_EMPLOYER_SIZE = 16
-INIT_POPULATION = 2
+INIT_POPULATION = 10
 INIT_INDIVIDUAL_RADIUS = 5
-INIT_FOOD = 1
+INIT_FOOD = 5
 INIT_FOOD_SIZE = 4
 
 pygame.init()
@@ -78,6 +78,11 @@ class Agent:
 
     def getDistance(self, target):
         return math.sqrt((target.x - self.x) ** 2 + (target.y - self.y) ** 2)
+    
+    def getProjectedDistance(self, target):
+        new_x = self.x + self.velocity * math.cos(self.direction)
+        new_y = self.y + self.velocity * math.sin(self.direction)
+        return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
 
     def getDirection(self, target):
         return math.atan2(target.y - self.y, target.x - self.x)
@@ -89,19 +94,19 @@ class Agent:
         return self.getDistance(target) / self.getArrivalTime(target)
 
     def getReward(self, target, delta_a, delta_r):
+        acceleration_reward = -1
+        direction_reward = -1
         target_velocity = self.getTargetVelocity(target)
         target_direction = self.getDirection(target)
         velocity_offset = math.tanh(target_velocity - self.velocity)
         direction_offset = math.tanh(normalizeDirection(target_direction - self.direction))
-        acceleration_reward = -1
-        direction_reward = -1
-
+        
         if delta_a == 0 and delta_r == 0 and \
            abs(direction_offset) < 0.03 and abs(velocity_offset) < 0.4:
             direction_reward = 2
             acceleration_reward = 2
         else:
-            if delta_a < 0 and self.velocity > target_velocity or \
+            if delta_a < 0 and self.getProjectedDistance(target) / 2 < self.velocity or \
                delta_a > 0 and self.velocity < target_velocity:
                 acceleration_reward = abs(velocity_offset)
             else:
@@ -125,6 +130,7 @@ class Individual:
         self.father = None
         self.mother = None
         self.partner = None
+        self.wants_children = False if random.random() < 0.56 else True
         self.children = 0
         self.sex = identity % 2   # 0 for female, 1 for male
         self.x = random.randint(INIT_INDIVIDUAL_RADIUS, SCREEN_WIDTH - INIT_INDIVIDUAL_RADIUS)
@@ -187,7 +193,7 @@ class Individual:
     
     def getThresholdReward(self, v, t):
         return 0.0001 if v == 0 else 1 if t == 0 else v / t
-    
+
     def determineThresholdRewards(self):
         etctr = self.getThresholdReward(self.energy_conservation_avg, self.energy_conserve_threshold)
         entr = self.getThresholdReward(self.energy, self.energy_threshold)
@@ -213,16 +219,6 @@ class Individual:
         
         return (money_bias + energy_bias + satisfaction_bias ) + 1 / 3
     
-    def updateTargetBias(self):
-        self.target_bias[self.target]["money_bias"] = self.getThresholdReward(self.working_tally, self.targets_acquired) / \
-                                                      self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
-
-        self.target_bias[self.target]["energy_bias"] = self.getThresholdReward(self.eating_tally, self.targets_acquired) / \
-                                                       self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
-
-        self.target_bias[self.target]["satisfaction_bias"] = self.getThresholdReward(self.mating_tally, self.targets_acquired) /  \
-                                                             self.getThresholdReward(self.money, self.money_threshold) * self.targets_reached
-
     # TODO: do this if target = None, and backpropagate success
     def chooseTarget(self):
         best_target = None
@@ -289,7 +285,7 @@ class Individual:
         if best_action is None:
             best_action = random.choice(list(ACTIONS.keys()))
 
-        print("male" if self.identity == 1 else "female", "best action:", best_action)
+        #print("male" if self.identity == 1 else "female", "best action:", best_action)
 
         self.change_in_velocity = ACTIONS[best_action][0]
         self.change_in_direction = ACTIONS[best_action][1]
@@ -347,7 +343,8 @@ class Individual:
         chance_of_reproducing = random.uniform(0.15, 0.25)
         chance_of_male = 0.51
 
-        if random.random() < chance_of_reproducing:
+        if random.random() < chance_of_reproducing and \
+           self.wants_children and partner.wants_children:
             print("You had a baby!")
             sex = "male" if random.random() < chance_of_male else "female"
             print("It's a", sex)
@@ -355,7 +352,6 @@ class Individual:
     def die(self):
         self.velocity = 0
         self.color = (75, 75, 75)
-        self.updateTargetBias()
         self.threshold_reward = self.determineThresholdRewards()
         self.alive = False
     
@@ -385,7 +381,7 @@ class Society:
         self.total_alive = INIT_POPULATION
     
     def mutate(self):
-        mutation_rate = 0.05
+        mutation_rate = 0.02
 
         for individual in self.population:
             if not individual.alive:
@@ -401,9 +397,9 @@ class Society:
 
             # not intended to change ratio of bias, added randomness
             # gives option to update new target early
-            # if individual.target != None and random.random() < mutation_rate / 3:
-            #   individual.target = individual.chooseTarget()
-            #    print("Individual", individual.identity, ": ", individual.target)
+            if individual.target and random.random() < mutation_rate:
+                individual.target = individual.chooseTarget()
+                print("Individual", individual.identity, ": ", individual.target)
 
             if individual.target == "working":
                 if individual.employer is None:
@@ -418,11 +414,11 @@ class Society:
                         if individual.foundTarget(self.employers[individual.employer]):
                             individual.working_tally += 1
                             individual.targets_reached += 1
-                            individual.updateTargetBias()
                             individual.work(self.employers[individual.employer])
                             individual.target = None
                             if random.random() < mutation_rate:
                                 individual.employer = None
+                            individual.navigate(self.employers[individual.employer])
                         else:
                             individual.navigate(self.employers[individual.employer])
                     else:
@@ -447,7 +443,6 @@ class Society:
                     if individual.foundTarget(self.food_supply[individual.food_source]):
                         individual.eating_tally += 1
                         individual.targets_reached += 1
-                        individual.updateTargetBias()
                         if individual.hungry():
                             individual.eat(self.food_supply[individual.food_source])
                             self.food_supply.remove(self.food_supply[individual.food_source])
@@ -482,13 +477,12 @@ class Society:
                 else:
                     if individual.locateTarget(self.population[individual.partner]):
                         if individual.foundTarget(self.population[individual.partner]):
+                            partner = self.population[individual.partner]
                             individual.mating_tally += 1
                             individual.targets_reached += 1
-                            individual.updateTargetBias()
                             individual.mate(partner)
                             partner.mating_tally += 1
                             partner.targets_reached += 1
-                            partner.updateTargetBias()
                             partner.mate(individual)
                             if random.random() < mutation_rate:
                                 individual.partner = None
