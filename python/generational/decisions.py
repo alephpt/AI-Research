@@ -23,9 +23,12 @@ ACTIONS = {
     "maintain": (0, 0),
     "forward": (0.2, 0),
     "reverse": (-0.2, 0),
-    "turn_left": (0, -0.0349),
-    "turn_right": (0, 0.0349),
-
+    "turn_left": (0, -0.0698),
+    "turn_right": (0, 0.0698),
+    "forward_left": (0.2, -0.0698),
+    "forward_right": (0.2, 0.0698),
+    "reverse_left": (-0.2, 0.0698),
+    "reverse_right": (-0.2, -0.0698),
 }
 
 TARGETS = {
@@ -80,19 +83,16 @@ class Agent:
         return math.atan2(target.y - self.y, target.x - self.x)
 
     def getArrivalTime(self, target):
-        return self.getDistance(target) / self.velocity
+        return self.getDistance(target) / (self.velocity + 1)
 
     def getTargetVelocity(self, target):
-        directional_offset = normalizeDirection(self.getDirection(target) - self.direction)
-        return (self.velocity * self.getArrivalTime(target)) * directional_offset
+        return self.getDistance(target) / self.getArrivalTime(target)
 
     def getReward(self, target, delta_a, delta_r):
         target_velocity = self.getTargetVelocity(target)
         target_direction = self.getDirection(target)
         velocity_offset = math.tanh(target_velocity - self.velocity)
         direction_offset = math.tanh(normalizeDirection(target_direction - self.direction))
-        trajectory_offset = math.sqrt(velocity_offset ** 2 + direction_offset ** 2)
-        trajectory_reward = -math.tanh(-trajectory_offset)
         acceleration_reward = -1
         direction_reward = -1
 
@@ -113,7 +113,7 @@ class Agent:
             else:
                 direction_reward = -abs(direction_offset)
 
-        return direction_reward + acceleration_reward + trajectory_reward 
+        return direction_reward + acceleration_reward
 
 
 class Individual:
