@@ -284,8 +284,8 @@ class Individual():
         global total_population 
         total_population -= 1
 
-    def printStatus(self, id):
-        print("#################### \tIndividual", id, " \t#################### ")
+    def printStatus(self):
+        print("#################### \tIndividual", self.identity, " \t#################### ")
         print("\t - fitness: \t\t", self.fitness)
         print("\t - reward: \t\t", self.reward)
         print("\t - threshold reward: \t", self.threshold_reward)
@@ -328,7 +328,7 @@ class Society():
             if individual.alive:
                 if individual.energy <= 0:
                     individual.die()
-                    #individual.printStatus(self.population.index(individual))
+                    #individual.printStatus()
                     return
 
                 individual.navigate(self.food)
