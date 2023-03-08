@@ -21,14 +21,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 ACTIONS = {
     "maintain": (0, 0),
-    "forward": (0.02, 0),
-    "reverse": (-0.02, 0),
+    "forward": (0.2, 0),
+    "reverse": (-0.2, 0),
     "turn_left": (0, -0.0349),
     "turn_right": (0, 0.0349),
-    "forward_left": (0.02, -0.0349),
-    "forward_right": (0.02, 0.0349),
-    "reverse_left": (-0.02, -0.0349),
-    "reverse_right": (-0.02, 0.0349),
+
 }
 
 TARGETS = {
@@ -70,12 +67,10 @@ class Food:
 
 
 class Agent:
-    def __init__(self, x, y, a, v, r, d):
+    def __init__(self, x, y, v, d):
         self.x = x
         self.y = y
-        self.acceleration = a
         self.velocity = v
-        self.rotation = r
         self.direction = d
 
     def getDistance(self, target):
@@ -85,32 +80,25 @@ class Agent:
         return math.atan2(target.y - self.y, target.x - self.x)
 
     def getArrivalTime(self, target):
-        return self.getDistance(target) / (self.velocity + self.acceleration)
-
-    def getProjectedDistance(self, target):
-        new_velocity = self.velocity + self.acceleration
-        new_direction = self.direction + self.rotation
-        new_x = self.x + (new_velocity) * math.cos(new_direction)
-        new_y = self.y + (new_velocity) * math.sin(new_direction)
-        return math.sqrt((target.x - new_x) ** 2 + (target.y - new_y) ** 2)
+        return self.getDistance(target) / self.velocity
 
     def getTargetVelocity(self, target):
         directional_offset = normalizeDirection(self.getDirection(target) - self.direction)
-        return (self.velocity + self.acceleration * self.getArrivalTime(target)) * directional_offset
+        return (self.velocity * self.getArrivalTime(target)) * directional_offset
 
     def getReward(self, target, delta_a, delta_r):
         target_velocity = self.getTargetVelocity(target)
         target_direction = self.getDirection(target)
-        velocity_offset = target_velocity - (self.velocity + self.acceleration)
-        direction_offset = target_direction - (self.direction + self.rotation)
+        velocity_offset = math.tanh(target_velocity - self.velocity)
+        direction_offset = math.tanh(normalizeDirection(target_direction - self.direction))
         trajectory_offset = math.sqrt(velocity_offset ** 2 + direction_offset ** 2)
         trajectory_reward = -math.tanh(-trajectory_offset)
         acceleration_reward = -1
-        rotation_reward = -1
+        direction_reward = -1
 
         if delta_a == 0 and delta_r == 0 and \
            abs(direction_offset) < 0.03 and abs(velocity_offset) < 0.4:
-            rotation_reward = 2
+            direction_reward = 2
             acceleration_reward = 2
         else:
             if delta_a < 0 and self.velocity > target_velocity or \
@@ -121,11 +109,11 @@ class Agent:
 
             if delta_r < 0 and self.direction > target_direction or \
                delta_r > 0 and self.direction < target_direction:
-                rotation_reward = abs(direction_offset)
+                direction_reward = abs(direction_offset)
             else:
-                rotation_reward = -abs(direction_offset)
+                direction_reward = -abs(direction_offset)
 
-        return rotation_reward * 0.4 + acceleration_reward * 0.4 + trajectory_reward * 0.2
+        return direction_reward + acceleration_reward + trajectory_reward 
 
 
 class Individual:
@@ -160,18 +148,12 @@ class Individual:
         ## Energy Conservation
         self.energy_conservation_avg = 1                       # used for threshold in next gen
         self.energy_conserve_threshold = 0                     # used for threshold reward, inherits avg on nextgen
-        ## Rotation
-        self.rotation = 0
-        self.change_in_rotation = 0                            # used for energy deduction
         ## Direction
+        self.change_in_direction = 0                            # used for energy deduction
         self.direction = math.radians(random.randint(0, 360))  # inherits avg from parents
         self.direction_avg = 0                                 # used for next gen
-        ## Acceleration
-        self.acceleration = 0
-        self.change_in_acceleration = 0                        # used for energy deduction
-        self.acceleration_avg = 0                              # used for threshold and next gen
-        self.acceleration_threshold = 0                        # inherits avg_acceleration on next generation
         ## Velocity
+        self.change_in_velocity = 0                        # used for energy deduction
         self.velocity = 0
         self.velocity_avg = 0                                  # inherits avg on nextgen (used as Velocity + Avg / 2)
         self.velocity_target = 0                               # inherits avg_vel + max / 2 on nextgen (used for threshrold)
@@ -209,19 +191,17 @@ class Individual:
     def determineThresholdRewards(self):
         etctr = self.getThresholdReward(self.energy_conservation_avg, self.energy_conserve_threshold)
         entr = self.getThresholdReward(self.energy, self.energy_threshold)
-        attr = self.getThresholdReward(self.acceleration, self.acceleration_threshold)
         vetr = self.getThresholdReward(self.velocity, self.velocity_target)
         satr = self.getThresholdReward(self.satisfaction, self.satisfaction_target)
         motr = self.getThresholdReward(self.money, self.money_threshold)
 
-        return (entr + attr + vetr + satr + motr) / 5 * etctr
+        return (entr + vetr + satr + motr) / 4 * etctr
 
     def updateAverages(self):
         self.energy_conservation_avg = (self.energy_conservation_avg + self.energyConservation()) / 2
         self.energy_avg = (self.energy_avg + self.energy) / 2
         self.satisfaction_avg = (self.satisfaction_avg + self.satisfaction) / 2
         self.perception_avg = (self.perception_avg + self.perception) / 2
-        self.acceleration_avg = (self.acceleration_avg + self.acceleration) / 2
         self.velocity_avg = (self.velocity_avg + self.velocity) / 2
         self.direction_avg = (self.direction_avg + self.direction) / 2
         self.threshold_reward = self.determineThresholdRewards()
@@ -258,8 +238,7 @@ class Individual:
         return best_target if best_target is not None else random.choice(list(TARGETS.keys()))
  
     def updateLocation(self):
-        self.velocity += self.acceleration
-        self.direction = normalizeDirection(self.direction + self.rotation)
+        self.direction = normalizeDirection(self.direction)
         
         if self.velocity >= self.velocity_max:
             self.velocity_max = self.velocity
@@ -287,11 +266,9 @@ class Individual:
         return self.getDistance(target) < (self.size + target.size)
 
     def getNextState(self, s, accelerate, rotate):
-        new_state = Agent(s.x, s.y, s.acceleration, s.velocity, s.rotation, s.direction)
-        new_state.acceleration += accelerate
-        new_state.rotation += rotate
-        new_state.velocity += new_state.acceleration
-        new_state.direction += new_state.rotation
+        new_state = Agent(s.x, s.y, s.velocity, s.direction)
+        new_state.velocity += accelerate
+        new_state.direction += rotate
         new_state.x += new_state.velocity * math.cos(new_state.direction)
         new_state.y += new_state.velocity * math.sin(new_state.direction)
         return new_state
@@ -299,7 +276,7 @@ class Individual:
     def chooseAction(self, target):
         best_reward = -1
         best_action = None
-        init_agent = Agent(self.x, self.y, self.acceleration, self.velocity, self.rotation, self.direction)
+        init_agent = Agent(self.x, self.y, self.velocity, self.direction)
 
         for A in ACTIONS:
             agent = self.getNextState(init_agent, ACTIONS[A][0], ACTIONS[A][1])
@@ -314,10 +291,10 @@ class Individual:
 
         print("male" if self.identity == 1 else "female", "best action:", best_action)
 
-        self.change_in_acceleration = ACTIONS[best_action][0]
-        self.change_in_rotation = ACTIONS[best_action][1]
-        self.acceleration += self.change_in_acceleration
-        self.rotation += self.change_in_rotation
+        self.change_in_velocity = ACTIONS[best_action][0]
+        self.change_in_direction = ACTIONS[best_action][1]
+        self.velocity += self.change_in_velocity
+        self.direction += self.change_in_direction
 
     def navigate(self, target):
         d1 = self.getDistance(target)
@@ -326,16 +303,18 @@ class Individual:
         d2 = self.getDistance(target)
         distance_traveled = d1 - d2
 
-        change = math.sqrt((self.change_in_acceleration + self.change_in_rotation) ** 2) + 1
+        change = math.sqrt(self.change_in_velocity ** 2 + self.change_in_direction ** 2) + 1
         self.size -= change / self.size if self.size > INIT_INDIVIDUAL_RADIUS else 0
         self.energy -= math.floor(self.size / math.sqrt(distance_traveled ** 2) * change)
         self.reward += distance_traveled * self.energyConservation()
         self.perception -= distance_traveled
 
     def roam(self):
-        self.acceleration += random.uniform(-0.2, 0.2)
-        self.rotation += random.uniform(-0.0698, 0.0698)
-        self.energy -= self.size + self.acceleration + self.rotation 
+        change_in_velocity = random.uniform(-0.2, 0.2)
+        change_in_direction = random.uniform(-0.0698, 0.0698)
+        self.velocity += change_in_velocity
+        self.direction += change_in_direction
+        self.energy -= self.size * math.sqrt(change_in_velocity ** 2 + change_in_direction ** 2)
         self.reward -= self.size
         self.perception += self.perception
         self.updateLocation()
@@ -391,7 +370,6 @@ class Individual:
         print("\t - total lifetime: \t", self.lifetime)
         print("\t - targets reached: \t", self.targets_reached)
         print("\t - avg energy: \t", self.energy_avg)
-        print("\t - avg acceleration: \t", self.acceleration_avg)
         print("\t - avg velocity: \t", self.velocity_avg)
         print("\t - avg direction: \t", self.direction_avg)
         print("\t - avg perspective: \t", self.perception_avg)
