@@ -4,7 +4,7 @@ def tanh(x):
     return n.tanh(x)
 
 def tanh_prime(x):
-    return 1 - n.tanh(x) ** 2
+    return 1 - n.tanh(x.float()) ** 2
 
 def mse(y_returned, y_expected):
     return n.mean(n.power(y_returned - y_expected, 2))
@@ -36,9 +36,11 @@ class FC(Layer):
         return self.output
     
     def backward(self, err_out, learning_rate):
-        self.weights -= learning_rate * n.dot(self.input.T, err_out)
+        err_in = n.dot(err_out, self.weights.T)
+        err_weights = n.dot(self.input.T, err_out)
+        self.weights -= learning_rate * err_weights
         self.bias -= learning_rate * err_out
-        return n.dot(err_out, self.weights.T)
+        return err_in
     
     
 class Activation(Layer):
@@ -48,7 +50,7 @@ class Activation(Layer):
     
     def forward(self, data_in):
         self.input = data_in
-        self.output = self.activation(input)
+        self.output = self.activation(self.input)
         return self.output
     
     def backward(self, err_out, learning_rate):
@@ -85,7 +87,7 @@ class Network:
         n_samples = len(dataset)
         
         for epoch in range(cycles):
-            err = 0
+            loss = 0
             for sample in range(n_samples):
                 data_out = dataset[sample]
                 
@@ -98,7 +100,7 @@ class Network:
                 for layer in self.layers:
                     err = layer.backward(err, learning_rate)
                 
-            err /= n_samples
+            loss /= n_samples
             
             if epoch % (n_samples / 20) == 0:
-                print('epoch %d/%d:  err - %f' % (epoch + 1, cycles, err)
+                print('epoch %d/%d:  err - %f' % (epoch + 1, cycles, err))
