@@ -87,26 +87,27 @@ class Agent:
     def getDirection(self, target):
         return math.atan2(target.y - self.y, target.x - self.x)
 
-    def getArrivalTime(self, target):
-        return self.getDistance(target) / (self.velocity + 1)
-
     def getTargetVelocity(self, target):
-        return self.getDistance(target) / self.getArrivalTime(target)
+        return self.getDistance(target) / 2
 
     def getReward(self, target, delta_a, delta_r):
         acceleration_reward = -1
         direction_reward = -1
         target_velocity = self.getTargetVelocity(target)
         target_direction = self.getDirection(target)
+        projected_distance = self.getProjectedDistance(target)
         velocity_offset = math.tanh(target_velocity - self.velocity)
         direction_offset = math.tanh(normalizeDirection(target_direction - self.direction))
+        delta_distance = self.getDistance(target) - projected_distance
         
         if delta_a == 0 and delta_r == 0 and \
            abs(direction_offset) < 0.03 and abs(velocity_offset) < 0.4:
             direction_reward = 2
             acceleration_reward = 2
         else:
-            if delta_a < 0 and self.getProjectedDistance(target) / 2 < self.velocity or \
+            if delta_a < 0 and (delta_distance < 0 or \
+               projected_distance < self.velocity or \
+               self.velocity < target_velocity) or \
                delta_a > 0 and self.velocity < target_velocity:
                 acceleration_reward = abs(velocity_offset)
             else:
@@ -415,10 +416,10 @@ class Society:
                             individual.working_tally += 1
                             individual.targets_reached += 1
                             individual.work(self.employers[individual.employer])
+                            individual.navigate(self.employers[individual.employer])
                             individual.target = None
                             if random.random() < mutation_rate:
                                 individual.employer = None
-                            individual.navigate(self.employers[individual.employer])
                         else:
                             individual.navigate(self.employers[individual.employer])
                     else:
