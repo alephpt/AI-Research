@@ -398,9 +398,9 @@ class Society:
 
             # not intended to change ratio of bias, added randomness
             # gives option to update new target early
-            if individual.target and random.random() < mutation_rate:
-                individual.target = individual.chooseTarget()
-                print("Individual", individual.identity, ": ", individual.target)
+            #if individual.target and random.random() < mutation_rate:
+            #    individual.target = individual.chooseTarget()
+            #    print("Individual", individual.identity, ": ", individual.target)
 
             if individual.target == "working":
                 if individual.employer is None:
@@ -495,7 +495,7 @@ class Society:
                         individual.satisfaction -= 1
                         individual.roam()
             else:
-                individual.target = "working" #individual.chooseTarget()
+                individual.target = individual.chooseTarget()
                 individual.targets_acquired += 1
                 individual.satisfaction += 10
                 print("Individual", individual.identity, ": ", individual.target)
