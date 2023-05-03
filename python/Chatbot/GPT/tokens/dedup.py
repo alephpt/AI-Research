@@ -1,12 +1,14 @@
 import os
 
 # open tokens.txt and deduplicate any tokens
-with open("tokens.txt", "r") as f:
+with open("tokens.txt", "r", encoding="utf-8") as f:
     tokens = f.readlines()
 
-tokens = sorted(list(set(tokens)))
+print("Tokens Start: " + str(len(tokens)))
+tokens = list(set(tokens))
+tokens.sort(key=len, reverse=True)
 
-print("Tokens: " + str(len(tokens)))
+print("Tokens Finish: " + str(len(tokens)))
 
 # save to dedup_tokens.txt
 with open("dedup_tokens.txt", "w") as f:

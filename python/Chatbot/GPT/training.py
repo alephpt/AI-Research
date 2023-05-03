@@ -142,7 +142,7 @@ class BigramModel(nn.Module):
 
 
 def main():
-    eval_iterations = 10
+    eval_iterations = 250
     max_iterations = 37000
     learning_rate = 0.0000725
     batch_size = 64
