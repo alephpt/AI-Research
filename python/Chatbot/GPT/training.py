@@ -149,8 +149,7 @@ def main():
     block_size = 128
     n_embeds = 32
     strings = []
-    # TODO: Turn this into WORD Matching instead of CHAR Matching
-    # TODO: Implement Sub-Word Schema
+    # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
     chars = load_training_data(strings)
     vocab_size = len(chars)
 
