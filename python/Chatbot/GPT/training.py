@@ -40,7 +40,7 @@ class Head(nn.Module):
         self.value = nn.Linear(n_embeds, head_size, bias=False)
         self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
         self.dropout = nn.Dropout(dropout)
-    
+
     def forward(self, x):
         Bx, Tx, Cx = x.shape
         k = self.key(x)
@@ -60,7 +60,7 @@ class MultiHead(nn.Module):
         self.heads = nn.ModuleList([Head(block_size, head_size, n_embeds) for _ in range(n_heads)])
         self.linear = nn.Linear(n_heads * head_size, n_embeds)
         self.dropout = nn.Dropout(dropout)
-    
+
     def forward(self, x):
         out = torch.cat([head(x) for head in self.heads], dim=-1)
         out = self.dropout(self.linear(out))
@@ -76,10 +76,10 @@ class FeedForward(nn.Module):
             nn.Linear(4 * n_hidden, n_embeds),
             nn.Dropout(dropout)
         )
-    
+
     def forward(self, x):
         return self.net(x)
-    
+
 
 class Block(nn.Module):
     def __init__(self, block_size, n_embeds=16, n_heads=8):
@@ -89,7 +89,7 @@ class Block(nn.Module):
         self.ff = FeedForward(n_embeds, n_embeds)
         self.ln = nn.LayerNorm(n_embeds)
         self.ln2 = nn.LayerNorm(n_embeds)
-    
+
     def forward(self, x):
         x = x + self.head(self.ln(x))
         x = x + self.ff(self.ln2(x))
@@ -113,7 +113,7 @@ class BigramModel(nn.Module):
 
     def forward(self, x, targets=None):
         Bx, Tx = x.shape
-        
+
         token_embed = self.embedding(x)
         position_embed = self.position_embed(torch.arange(Tx, device=device))
         tx = token_embed + position_embed
@@ -143,11 +143,11 @@ class BigramModel(nn.Module):
 
 def main():
     eval_iterations = 50
-    max_iterations = 1000
+    max_iterations = 7000
     learning_rate = 0.0001725
-    batch_size = 32
-    block_size = 128
-    n_embeds = 32
+    batch_size = 64
+    block_size = 256
+    n_embeds = 64
     strings = []
     # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
     chars = load_training_data(strings)
@@ -181,7 +181,7 @@ def main():
     def estimate_loss():
         out = {}
         model.eval()
-        
+
         for split in ["train", "valid"]:
             losses = torch.zeros(eval_iterations)
             for k in range(eval_iterations):
@@ -189,50 +189,38 @@ def main():
                 _, loss = model(xb, yb)
                 losses[k] = loss.item()
             out[split] = losses.mean().item()
-        model.train()
-        
-        return out
-    
-    # xb, yb = get_batch("train")
-    # print("\nInput Batch:", xb.shape, "\n", xb, "\n")
-    # print("Target Batch:", yb.shape, "\n", yb, "\n")
 
-    # for b in range(batch_size):
-    #     for t in range(block_size):
-    #         context = xb[b, :t+1]
-    #         target = yb[b, t]
-    #         print(f"Context: {context.tolist()} \t Target: {target}")
+        model.train()
+        return out
 
     model = BigramModel(block_size, vocab_size, n_embeds)
     m = model.to(device)
-    # logits, loss = m(xb, yb)
-    # print("Logits:", logits.shape)
-    # print("Loss:", loss)
-
     optimizer = torch.optim.Adam(m.parameters(), lr=learning_rate)
 
     # Training Loop
-    elapsed_t = 0
+    elapsed_t = time.time()
+    # Convert time to hh:mm:ss
+    print_t = time.strftime("%H:%M:%S", time.gmtime(elapsed_t))
+    print("\nTraining... starting at " + str(print_t))
     for steps in range(max_iterations):
         if steps % eval_iterations == 0:
-            if elapsed_t == 0:
-                elapsed_t = time.time()
-            else:
-                elapsed_t = time.time() - elapsed_t
+            new_t = time.time()
+            elapsed_t = new_t - elapsed_t
 
             losses = estimate_loss()
-                
+
             print(f"Step: {steps} \t Time: {elapsed_t:.4f} \t", end="")
             print(f"\t Train Loss: {losses['train']:.4f} \t Valid Loss: {losses['valid']:.4f}")
-            
+            elapsed_t = new_t
+
         xb, yb = get_batch("train")
         logits, loss = m(xb, yb)
-        
+
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
         optimizer.step()
 
-    print("Generated:", decode(m.generate(x = torch.zeros((1, 1), dtype=torch.long), n=500)[0].tolist()))
+    print("Generated:", decode(m.generate(x = torch.zeros((1, 1), dtype=torch.long), n=1000)[0].tolist()))
 
 
 if __name__ == "__main__":
