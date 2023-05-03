@@ -142,15 +142,26 @@ class BigramModel(nn.Module):
 
 
 def main():
-    eval_iterations = 50
-    max_iterations = 7000
-    learning_rate = 0.0001725
+    eval_iterations = 10
+    max_iterations = 37000
+    learning_rate = 0.0000725
     batch_size = 64
     block_size = 256
     n_embeds = 64
     strings = []
-    # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
-    chars = load_training_data(strings)
+
+    # Load Training Data
+    if os.path.exists("models/strings.txt"):
+        with open("models/strings.txt", "r") as f:
+            strings = f.readlines()
+
+    if strings and os.path.exists("models/chars.txt"):
+        with open("models/chars.txt", "r") as f:
+            chars = f.readlines()
+    else:
+        # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
+        chars = load_training_data(strings)
+
     vocab_size = len(chars)
 
     stoi = {ch: i for i, ch in enumerate(chars)}
@@ -197,30 +208,50 @@ def main():
     m = model.to(device)
     optimizer = torch.optim.Adam(m.parameters(), lr=learning_rate)
 
-    # Training Loop
-    elapsed_t = time.time()
-    # Convert time to hh:mm:ss
-    print_t = time.strftime("%H:%M:%S", time.gmtime(elapsed_t))
-    print("\nTraining... starting at " + str(print_t))
-    for steps in range(max_iterations):
-        if steps % eval_iterations == 0:
-            new_t = time.time()
-            elapsed_t = new_t - elapsed_t
+    # load model if it exists
+    if os.path.isfile("models/model.pt"):
+        print("Loading model...")
+        m.load_state_dict(torch.load("model.pt"))
+    else:
+        elapsed_t = time.time()
+        start_time = elapsed_t
+        print_t = time.strftime("%H:%M:%S", time.gmtime(elapsed_t))
+        print("\nTraining... starting at " + str(print_t))
 
-            losses = estimate_loss()
+        # Training Loop
+        for steps in range(max_iterations):
+            if steps % eval_iterations == 0:
+                new_t = time.time()
+                elapsed_t = new_t - elapsed_t
 
-            print(f"Step: {steps} \t Time: {elapsed_t:.4f} \t", end="")
-            print(f"\t Train Loss: {losses['train']:.4f} \t Valid Loss: {losses['valid']:.4f}")
-            elapsed_t = new_t
+                losses = estimate_loss()
 
-        xb, yb = get_batch("train")
-        logits, loss = m(xb, yb)
+                print(f"Step: {steps} \t Time: {elapsed_t:.4f} \t", end="")
+                print(f"\t Train Loss: {losses['train']:.4f} \t Valid Loss: {losses['valid']:.4f}")
+                elapsed_t = new_t
 
-        optimizer.zero_grad(set_to_none=True)
-        loss.backward()
-        optimizer.step()
+            xb, yb = get_batch("train")
+            _, loss = m(xb, yb)
 
-    print("Generated:", decode(m.generate(x = torch.zeros((1, 1), dtype=torch.long), n=1000)[0].tolist()))
+            optimizer.zero_grad(set_to_none=True)
+            loss.backward()
+            optimizer.step()
+
+        print("Training Completed at " + str(time.strftime("%H:%M:%S", time.gmtime(time.time()))))
+        print("Total Training Time: " + str(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))) + "\n")
+
+        #save model
+        print("Saving model...")
+        torch.save(m.state_dict(), "models/model.pt")
+
+
+    context = m.generate(x = torch.zeros((1, 1), dtype=torch.long), n=10000)
+    print("Generated:", decode(context[0].tolist()))
+
+
+    #save decoded text
+    with open("decoded.txt", "w") as f:
+        f.write(decode(context[0].tolist()))
 
 
 if __name__ == "__main__":
