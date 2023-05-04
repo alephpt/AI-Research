@@ -1,8 +1,6 @@
-import os
-import torch
+import os, re, torch, time
 import torch.nn as nn
 from torch.nn import functional as F
-import time
 
 dropout = 0.1
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -151,25 +149,29 @@ def main():
     strings = []
 
     # Load Training Data
-    if os.path.exists("models/strings.txt"):
-        with open("models/strings.txt", "r") as f:
-            strings = f.readlines()
+    
+    # if os.path.exists("models/strings.txt"):
+    #     with open("models/strings.txt", "r") as f:
+    #         strings = f.readlines()
 
-    if strings and os.path.exists("models/chars.txt"):
-        with open("models/chars.txt", "r") as f:
-            chars = f.readlines()
-    else:
-        # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
-        chars = load_training_data(strings)
+    # if strings and os.path.exists("models/tokens.txt"):
+    #     with open("models/tokens.txt", "r") as f:
+    #         tokens = f.readlines()
+    # else:
+    #     # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
+    _ = load_training_data(strings)
+    
+    with open("tokens/max_tokens.txt", "r") as f:
+        tokens = f.readlines()
 
-    vocab_size = len(chars)
+    vocab_size = len(tokens)
 
-    stoi = {ch: i for i, ch in enumerate(chars)}
-    itos = {i: ch for i, ch in enumerate(chars)}
-    encode = lambda x: [stoi[ch] for ch in x]
+    strtoint = {s: i for i, s in enumerate(tokens)}
+    inttostr = {i: s for i, s in enumerate(tokens)}
+    encode = lambda x: [] # need to figure out how to do this
     decode = lambda x: ''.join([itos[i] for i in x])
 
-    print(''.join(chars[3:]))
+    #print(''.join(tokens[3:]))
     print("Vocab size: " + str(vocab_size) + "\n")
 
     encoded = encode("Never Outshine the Master\n")
