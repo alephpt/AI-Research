@@ -47,4 +47,4 @@ for token in tokens:
 print("Tokens: " + str(len(tokens)))
 
 with open("max_cleaned_tokens.txt", "w", encoding="utf-8") as f:
-    f.write(str(tokens))
+    f.write(str('\n'.join(tokens)))
