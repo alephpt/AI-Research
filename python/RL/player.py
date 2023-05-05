@@ -11,9 +11,12 @@ class Bullet:
         return False
 
     def hit(self, enemies):
-        for enemy in enemies:
+        for enemy in enemies.enemies:
             if self.collide(enemy):
-                enemies.remove(enemy)
+                if enemy in enemies.attackers:
+                    enemies.attackers.remove(enemy)
+                
+                enemies.enemies.remove(enemy)
                 return True
 
     def render(self, screen, image, x, y):
@@ -37,6 +40,8 @@ class Player:
         self.lives = 3
         self.max_speed = 2
         self.score = 0
+        self.dead = False
+        self.respawn_timer = 300
 
     def level_up(self, level):
         self.bullets = []
@@ -47,6 +52,30 @@ class Player:
         self.max_speed *= 1.2
         self.score += 100 * level
 
+    def die(self):
+        self.lives -= 1
+        self.x = 600
+        self.y = 700
+        self.x_velocity = 0
+        self.firing_rate = self.firing_cap
+        self.score -= 100
+        self.dead = True
+
+    def collide(self, enemy):
+        if (self.x > enemy.x and self.x < enemy.x + 64 or \
+            self.x < enemy.x and self.x + 64 > enemy.x) and \
+            (self.y > enemy.y and self.y < enemy.y + 64 or \
+            self.y < enemy.y and self.y + 64 > enemy.y):
+            return True
+        return False
+
+    def hit(self, enemies):
+        for enemy in enemies.enemies:
+            if self.collide(enemy):
+                enemies.enemies.remove(enemy)
+                return True
+        return False
+
     def shoot(self):
         if pygame.time.get_ticks() - self.last_fired > self.firing_rate * 1000:
             self.firing_rate = self.firing_cap
@@ -55,6 +84,14 @@ class Player:
 
     def update(self, enemies, level):
         self.x += self.x_velocity
+        
+        if self.dead:
+            self.respawn_timer -= 1
+            if self.respawn_timer <= 0:
+                self.dead = False
+                self.respawn_timer = 300
+        elif self.hit(enemies):
+            self.die()
         
         for bullet in self.bullets:
             bullet.y -= self.bullet_speed
@@ -66,6 +103,9 @@ class Player:
                 self.score += 10 * level
 
     def render(self, screen, x, y):
+        if self.dead:
+            return
+        
         if self.x < 0:
             self.x = 0
             self.x_velocity = 0
