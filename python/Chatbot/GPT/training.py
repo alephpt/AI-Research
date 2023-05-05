@@ -1,26 +1,43 @@
 import os, re, torch, time
+import os, re, torch, time
 import torch.nn as nn
 from torch.nn import functional as F
 
 dropout = 0.1
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-def load_training_data(strings):
-    # open all the files in the training_data folder
-    files = os.listdir("training_data")
+def gather_input_data():
+    texts = []
 
-    # read the files into a list of strings
-    for file in files:
-        with open("training_data/" + file, "r", encoding="utf8") as f:
-            strings += f.read()
+    # see if we can open the pre-made text file
+    if os.path.isfile('training_data.txt'):
+        # if so, open it and read it
+        with open('training_data.txt', 'r', encoding='utf-8') as f:
+            texts = f.read()
+    else:
+        # if not, gather all the text files in the training_data folder
+        files = os.listdir('training_data')
 
+        for file in files:
+            with open('training_data/' + file, 'r', encoding='utf-8') as f:
+                texts.append(f.read())
+
+        texts = ''.join(texts)
+
+        # save the text file for future use
+        with open('training_data.txt', 'w', encoding='utf-8') as f:
+            f.write(texts)
+
+    return texts
+
+def sort_tokens(strings):
     # then split the strings into a list of chars
     return sorted(list(set("".join(strings))))
 
 def construct_training_data(strings, encode):
     # Encode Data
     data = torch.tensor(encode(strings), dtype=torch.long)
-    print("Data Loaded:\t\t", data.dtype, data.shape)
+    print("\tData Loaded:\t\t", data.dtype, data.shape)
 
     # Split Data
     training_split = int(len(data) * 0.9)
@@ -140,96 +157,106 @@ class BigramModel(nn.Module):
 
 
 def main():
-    eval_iterations = 250
-    max_iterations = 37000
-    learning_rate = 0.0000725
-    batch_size = 64
-    block_size = 256
-    n_embeds = 64
-    strings = []
+    continue_training = True
+    model_loaded = False
+    eval_iterations = 25
+    max_iterations = 500
+    learning_rate = 0.00000332
+    batch_size = 32
+    block_size = 1024
+    n_embeds = 256
+    strings = gather_input_data()
+    chars = sort_tokens(strings)
+    vocab_size = len(chars)
 
-    # Load Training Data
-    
-    # if os.path.exists("models/strings.txt"):
-    #     with open("models/strings.txt", "r") as f:
-    #         strings = f.readlines()
-
-    # if strings and os.path.exists("models/tokens.txt"):
-    #     with open("models/tokens.txt", "r") as f:
-    #         tokens = f.readlines()
-    # else:
-    #     # TODO: Turn this into WORD or Morpheme Matching instead of CHAR Matching
-    _ = load_training_data(strings)
-    
-    with open("tokens/max_tokens.txt", "r") as f:
-        tokens = f.readlines()
-
-    vocab_size = len(tokens)
-
-    strtoint = {s: i for i, s in enumerate(tokens)}
-    inttostr = {i: s for i, s in enumerate(tokens)}
-    encode = lambda x: [] # need to figure out how to do this
+    stoi = {s: i for i, s in enumerate(chars)}
+    itos = {i: s for i, s in enumerate(chars)}
+    encode = lambda x: [stoi[s] for s in x]
     decode = lambda x: ''.join([itos[i] for i in x])
 
-    #print(''.join(tokens[3:]))
+    print(''.join(chars[3:]))
     print("Vocab size: " + str(vocab_size) + "\n")
 
     encoded = encode("Never Outshine the Master\n")
     print(encoded)
     print(decode(encoded))
 
-    # Construct Training Data
-    training_data, validation_data = construct_training_data(strings, encode)
-    print("Training Data:\t\t", training_data.dtype, training_data.shape)
-    print("Validation Data:\t", validation_data.dtype, validation_data.shape)
-
-    def get_batch(training_split):
-        data = training_data if training_split == "train" else validation_data
-        ix = torch.randint(len(data) - block_size, (batch_size,))
-        x = torch.stack([data[i:i+block_size] for i in ix])
-        y = torch.stack([data[i+1:i+block_size+1] for i in ix])
-        return x.to(device), y.to(device)
-
-    @torch.no_grad()
-    def estimate_loss():
-        out = {}
-        model.eval()
-
-        for split in ["train", "valid"]:
-            losses = torch.zeros(eval_iterations)
-            for k in range(eval_iterations):
-                xb, yb = get_batch(split)
-                _, loss = model(xb, yb)
-                losses[k] = loss.item()
-            out[split] = losses.mean().item()
-
-        model.train()
-        return out
+    model_path = "gpt_model.pt"
+    save_path = "generated.txt"
 
     model = BigramModel(block_size, vocab_size, n_embeds)
     m = model.to(device)
     optimizer = torch.optim.Adam(m.parameters(), lr=learning_rate)
 
+    encoded = encode("Never Outshine the Master\n")
+    print(decode(encoded))
+    print(encoded)
+
     # load model if it exists
-    if os.path.isfile("models/model.pt"):
-        print("Loading model...")
-        m.load_state_dict(torch.load("model.pt"))
-    else:
+    if os.path.isfile(model_path):
+        print(f'Loading model {model_path}...')
+        m.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
+        model_loaded = True
+        print("Loaded:", model_path)
+
+    if continue_training or not model_loaded:
+        import gc
+        print("Vocab size: " + str(vocab_size))
+        print("\nGrammar:\n", ''.join(chars[3:]), "\n")
+
+        def get_batch(training_split):
+            data = training_data if training_split == "train" else validation_data
+            ix = torch.randint(len(data) - block_size, (batch_size,))
+            x = torch.stack([data[i:i+block_size] for i in ix])
+            y = torch.stack([data[i+1:i+block_size+1] for i in ix])
+            return x.to(device), y.to(device)
+
+        @torch.no_grad()
+        def estimate_loss():
+            out = {}
+            model.eval()
+
+            for split in ["train", "valid"]:
+                losses = torch.zeros(eval_iterations)
+                for k in range(eval_iterations):
+                    xb, yb = get_batch(split)
+                    _, loss = model(xb, yb)
+                    losses[k] = loss.item()
+                out[split] = losses.mean().item()
+
+            model.train()
+            return out
+
+        print("\tMax Iterations: \t" + str(max_iterations))
+        print("\tEval Iterations: \t" + str(eval_iterations))
+        print("\tLearning Rate: \t\t" + str(learning_rate))
+        print("\tBatch Size: \t\t" + str(batch_size))
+        print("\tBlock Size: \t\t" + str(block_size))
+        print("\tEmbedding Size: \t" + str(n_embeds))
+
+        # Construct Training Data
+        training_data, validation_data = construct_training_data(strings, encode)
+        print("\tTraining Data:\t\t", training_data.shape, training_data.dtype)
+        print("\tValidation Data:\t", validation_data.shape, validation_data.dtype)
+
         elapsed_t = time.time()
         start_time = elapsed_t
         print_t = time.strftime("%H:%M:%S", time.gmtime(elapsed_t))
-        print("\nTraining... starting at " + str(print_t))
+        print("\nTraining... starting at " + str(print_t) + "\n")
 
         # Training Loop
         for steps in range(max_iterations):
+            torch.cuda.empty_cache()
+            gc.collect()
+
             if steps % eval_iterations == 0:
                 new_t = time.time()
                 elapsed_t = new_t - elapsed_t
 
                 losses = estimate_loss()
 
-                print(f"Step: {steps} \t Time: {elapsed_t:.4f} \t", end="")
-                print(f"\t Train Loss: {losses['train']:.4f} \t Valid Loss: {losses['valid']:.4f}")
+                print(f"Step: {steps} \t Time: {elapsed_t:09.4f} \t", end="")
+                print(f" Train Loss: {losses['train']:.4f} \t Valid Loss: {losses['valid']:.4f}")
                 elapsed_t = new_t
 
             xb, yb = get_batch("train")
@@ -239,22 +266,22 @@ def main():
             loss.backward()
             optimizer.step()
 
-        print("Training Completed at " + str(time.strftime("%H:%M:%S", time.gmtime(time.time()))))
+        print("\nTraining Completed at " + str(time.strftime("%H:%M:%S", time.gmtime(time.time()))))
         print("Total Training Time: " + str(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))) + "\n")
 
         #save model
-        print("Saving model...")
-        torch.save(m.state_dict(), "models/model.pt")
+        print(f'Saving model {model_path}...')
+        torch.save(m.state_dict(), model_path)
 
+    print("Generating text...")
+    context = m.generate(x = torch.zeros((1, 1), dtype=torch.long).to(device), n=600)
+    generated = decode(context[0].tolist())
 
-    context = m.generate(x = torch.zeros((1, 1), dtype=torch.long), n=10000)
-    print("Generated:", decode(context[0].tolist()))
+    print("Saving generated text...")
+    with open(save_path, 'w') as f:
+      f.write(generated)
 
-
-    #save decoded text
-    with open("decoded.txt", "w") as f:
-        f.write(decode(context[0].tolist()))
-
+    print("\nGenerated:\n", generated)
 
 if __name__ == "__main__":
     main()
