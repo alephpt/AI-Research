@@ -1,5 +1,8 @@
 import pygame, random
 
+# enemies per row, rows
+levels = [(4, 2), (4, 3), (5, 3), (5, 4), (6, 4), (7, 4), (7, 5), (8, 5), (9, 5), (9, 6)]
+
 class UFO:
     def __init__(self, index, x, y, image):
         self.index = index
@@ -15,7 +18,7 @@ class UFO:
             screen.blit(self.image, (self.x, self.y))
 
 class Enemies:
-    def __init__(self, n_enemies_per_row, n_rows, screen_size):
+    def __init__(self, level, screen_size):
         self.image1 = pygame.image.load('assets/enemy1.png')
         self.image1 = pygame.transform.scale(self.image1, (64, 64))
         self.image2 = pygame.image.load('assets/enemy2.png')
@@ -26,8 +29,9 @@ class Enemies:
         self.image4 = pygame.transform.scale(self.image4, (64, 64))
         self.image5 = pygame.image.load('assets/enemy5.png')
         self.image5 = pygame.transform.scale(self.image5, (64, 64))
-        self.n_enemies_per_row = n_enemies_per_row
-        self.n_rows = n_rows
+        enemies_per_row, rows = levels[level]
+        self.n_enemies_per_row = enemies_per_row
+        self.n_rows = rows
         self.screen_size = screen_size
         self.enemies = [enemy for enemy in self.spawn(screen_size)]
         self.x_velocity = 1
@@ -35,17 +39,18 @@ class Enemies:
         self.attackers = []
         self.attacking = False
         self.attack_speed = 2
-        self.attack_chance = 0.01
+        self.attack_chance = 0.005
 
-    def level_up(self):
-        self.n_enemies_per_row += 1
-        self.n_rows += 1
-        self.x_velocity += 0.5
+    def level_up(self, level):
+        enemies_per_row, rows = levels[level]
+        self.n_enemies_per_row = enemies_per_row
+        self.n_rows = rows
+        self.x_velocity *= 1.2
         self.enemies = [enemy for enemy in self.spawn(self.screen_size)]
         self.attacking = False
         self.attackers = []
-        self.attack_speed += 0.5
-        self.attack_chance += 0.01
+        self.attack_speed *= 1.1
+        self.attack_chance += 0.005
     
     def spawn(self, screen_size):
         x_offset = screen_size[0] // 2 - (self.n_enemies_per_row * 64)
@@ -68,11 +73,15 @@ class Enemies:
                     yield enemy
                     
     def attack(self):
-        if not self.attacking:
-            self.attacking = True
-            self.attackers = [enemy for enemy in self.get_attackers()]
-            for enemy in self.attackers:
-                enemy.attacking = True
+        self.attacking = True
+        
+        # either we pick a column or we pick a single random enemy
+        self.attackers = [enemy for enemy in self.get_attackers()] \
+                            if random.choice([True, False]) else \
+                            [self.enemies[random.randint(0, len(self.enemies) - 1)]]
+                            
+        for enemy in self.attackers: 
+            enemy.attacking = True
 
     def update(self, screen_size):
         self.y_velocity = 0
@@ -95,7 +104,7 @@ class Enemies:
                 if enemy.y > screen_size[1]:
                     enemy.y = 0 - 64
                 elif enemy.origin_y > enemy.y and \
-                     enemy.origin_y - 2 <= enemy.y:
+                     enemy.origin_y - self.attack_speed <= enemy.y:
                     enemy.attacking = False
                     self.attackers.remove(enemy)
                 enemy.y += self.attack_speed
@@ -105,7 +114,7 @@ class Enemies:
         # check if any enemies are attacking and set attacking to false if not
         self.attacking = False if len(self.attackers) == 0 else True
         
-        if random.random() < self.attack_chance:
+        if not self.attacking and random.random() < self.attack_chance:
             self.attack()
         
     def draw(self, screen):
