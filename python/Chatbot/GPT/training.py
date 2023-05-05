@@ -162,13 +162,13 @@ def main():
     eval_iterations = 25
     max_iterations = 500
     learning_rate = 0.00000332
-    batch_size = 64
+    batch_size = 128
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
     chars = sort_tokens(strings)
     vocab_size = len(chars)
-    model_path = "gpt_model_lg.pt"
+    model_path = "large_gpt_model.pt"
     save_path = "generated_lg.txt"
     model = BigramModel(block_size, vocab_size, n_embeds)
     m = model.to(device)
@@ -232,6 +232,8 @@ def main():
         training_data, validation_data = construct_training_data(strings, encode)
         print("\tTraining Data:\t\t", training_data.shape, training_data.dtype)
         print("\tValidation Data:\t", validation_data.shape, validation_data.dtype)
+        start_loss = estimate_loss()
+        print("\tCurrent Loss: \t" + str(start_loss) + "\n")
 
         elapsed_t = time.time()
         start_time = elapsed_t
