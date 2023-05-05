@@ -162,35 +162,28 @@ def main():
     eval_iterations = 25
     max_iterations = 500
     learning_rate = 0.00000332
-    batch_size = 32
+    batch_size = 64
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
     chars = sort_tokens(strings)
     vocab_size = len(chars)
-
+    model_path = "gpt_model_lg.pt"
+    save_path = "generated_lg.txt"
+    model = BigramModel(block_size, vocab_size, n_embeds)
+    m = model.to(device)
+    optimizer = torch.optim.Adam(m.parameters(), lr=learning_rate)
     stoi = {s: i for i, s in enumerate(chars)}
     itos = {i: s for i, s in enumerate(chars)}
     encode = lambda x: [stoi[s] for s in x]
     decode = lambda x: ''.join([itos[i] for i in x])
+    encoded = encode("Never Outshine the Master\n")
+
+    print(encoded)
+    print(decode(encoded))
 
     print(''.join(chars[3:]))
     print("Vocab size: " + str(vocab_size) + "\n")
-
-    encoded = encode("Never Outshine the Master\n")
-    print(encoded)
-    print(decode(encoded))
-
-    model_path = "gpt_model.pt"
-    save_path = "generated.txt"
-
-    model = BigramModel(block_size, vocab_size, n_embeds)
-    m = model.to(device)
-    optimizer = torch.optim.Adam(m.parameters(), lr=learning_rate)
-
-    encoded = encode("Never Outshine the Master\n")
-    print(decode(encoded))
-    print(encoded)
 
     # load model if it exists
     if os.path.isfile(model_path):
@@ -199,6 +192,7 @@ def main():
         model_loaded = True
         print("Loaded:", model_path)
 
+    # train model if it doesn't exist or if we want to continue training
     if continue_training or not model_loaded:
         import gc
         print("Vocab size: " + str(vocab_size))
