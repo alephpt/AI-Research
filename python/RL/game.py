@@ -68,8 +68,10 @@ class Game:
             self.enemies.level_up()
             self.level += 1
             
+        if self.player.lives == 0:
+            self.running = False
         
-        self.player.update(self.enemies.enemies, self.level)
+        self.player.update(self.enemies, self.level)
         self.enemies.update(self.screen_size)
         self.gui.update(self.player.lives, self.level, self.player.score)
         self.gui.manager.update(self.clock.get_time())

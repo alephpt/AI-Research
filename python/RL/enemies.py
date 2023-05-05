@@ -1,11 +1,14 @@
 import pygame, random
 
 class UFO:
-    def __init__(self, x, y, image):
+    def __init__(self, index, x, y, image):
+        self.index = index
         self.x = x
         self.y = y
+        self.origin_y = y
         self.image = image
         self.alive = True
+        self.attacking = False
 
     def render(self, screen):
         if self.alive:
@@ -29,19 +32,47 @@ class Enemies:
         self.enemies = [enemy for enemy in self.spawn(screen_size)]
         self.x_velocity = 1
         self.y_velocity = 0
+        self.attackers = []
+        self.attacking = False
+        self.attack_speed = 2
+        self.attack_chance = 0.01
 
     def level_up(self):
         self.n_enemies_per_row += 1
         self.n_rows += 1
         self.x_velocity += 0.5
         self.enemies = [enemy for enemy in self.spawn(self.screen_size)]
-
+        self.attacking = False
+        self.attackers = []
+        self.attack_speed += 0.5
+        self.attack_chance += 0.01
+    
     def spawn(self, screen_size):
         x_offset = screen_size[0] // 2 - (self.n_enemies_per_row * 64)
         y_offset = 64
         for rows in range(self.n_rows):
             for enemies in range(self.n_enemies_per_row):
-                yield UFO(enemies * 80 + x_offset, rows * 80 + y_offset, random.choice([self.image1, self.image2, self.image3, self.image4, self.image5]))
+                index = rows * self.n_enemies_per_row + enemies
+                x = enemies * 80 + x_offset
+                y = rows * 80 + y_offset
+                image = random.choice([self.image1, self.image2, self.image3, self.image4, self.image5])
+                yield UFO(index, x, y, image)
+
+    def get_attackers(self):
+        col = random.randint(0, self.n_enemies_per_row - 1)
+        
+        for i in range(self.n_rows):
+            index = i * self.n_enemies_per_row + col
+            for enemy in self.enemies:
+                if enemy.index == index:
+                    yield enemy
+                    
+    def attack(self):
+        if not self.attacking:
+            self.attacking = True
+            self.attackers = [enemy for enemy in self.get_attackers()]
+            for enemy in self.attackers:
+                enemy.attacking = True
 
     def update(self, screen_size):
         self.y_velocity = 0
@@ -58,7 +89,24 @@ class Enemies:
         
         for enemy in self.enemies:
             enemy.x += self.x_velocity
-            enemy.y += self.y_velocity
+            enemy.origin_y += self.y_velocity
+
+            if enemy.attacking:
+                if enemy.y > screen_size[1]:
+                    enemy.y = 0 - 64
+                elif enemy.origin_y > enemy.y and \
+                     enemy.origin_y - 2 <= enemy.y:
+                    enemy.attacking = False
+                    self.attackers.remove(enemy)
+                enemy.y += self.attack_speed
+            else:
+                enemy.y += self.y_velocity
+                
+        # check if any enemies are attacking and set attacking to false if not
+        self.attacking = False if len(self.attackers) == 0 else True
+        
+        if random.random() < self.attack_chance:
+            self.attack()
         
     def draw(self, screen):
         for enemy in self.enemies:
