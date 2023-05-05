@@ -21,6 +21,8 @@ class GUI:
 
 class Game:
     def __init__(self):
+        self.running = True
+        self.level = 1
         pygame.init()
         pygame.display.set_caption("Space Invader Knock Off by P3r5157")    
         icon = pygame.image.load('assets/ufo.png')
@@ -28,13 +30,11 @@ class Game:
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         flags = pygame.DOUBLEBUF | pygame.HWSURFACE
         self.screen_size = (1200, 800)
+        self.player = Player(self.screen_size)
+        self.enemies = Enemies(0, self.screen_size)
         self.screen = pygame.display.set_mode(self.screen_size, flags)
         self.screen.set_alpha(None)
         self.clock = pygame.time.Clock()
-        self.player = Player(self.screen_size)
-        self.enemies = Enemies(4, 2, self.screen_size)
-        self.running = True
-        self.level = 1
         self.gui = GUI(self.screen_size, self.player.lives, self.level, self.player.score)
     
     def run(self): 
@@ -65,7 +65,7 @@ class Game:
     def update(self):
         if len(self.enemies.enemies) == 0:
             self.player.level_up(self.level)
-            self.enemies.level_up()
+            self.enemies.level_up(self.level)
             self.level += 1
             
         if self.player.lives == 0:

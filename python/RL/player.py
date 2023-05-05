@@ -41,12 +41,12 @@ class Player:
         self.max_speed = 2
         self.score = 0
         self.dead = False
-        self.respawn_timer = 300
+        self.respawn_timer = 60
 
     def level_up(self, level):
         self.bullets = []
         self.lives += 1
-        self.firing_rate *= 0.8
+        self.firing_rate *= 0.9
         self.firing_cap = self.firing_rate
         self.acceleration_rate *= 1.2
         self.max_speed *= 1.2
@@ -60,12 +60,15 @@ class Player:
         self.firing_rate = self.firing_cap
         self.score -= 100
         self.dead = True
+        # set image to explosion
+        self.image = pygame.image.load('assets/explosion.png')
+        self.image = pygame.transform.scale(self.image, (64, 64))
 
     def collide(self, enemy):
-        if (self.x > enemy.x and self.x < enemy.x + 64 or \
-            self.x < enemy.x and self.x + 64 > enemy.x) and \
-            (self.y > enemy.y and self.y < enemy.y + 64 or \
-            self.y < enemy.y and self.y + 64 > enemy.y):
+        if (self.x + 16 > enemy.x and self.x < enemy.x + 48 or \
+            self.x < enemy.x + 16 and self.x + 48 > enemy.x) and \
+            (self.y + 16 > enemy.y and self.y < enemy.y + 48 or \
+            self.y < enemy.y + 16 and self.y + 48 > enemy.y):
             return True
         return False
 
@@ -77,10 +80,10 @@ class Player:
         return False
 
     def shoot(self):
-        if pygame.time.get_ticks() - self.last_fired > self.firing_rate * 1000:
-            self.firing_rate = self.firing_cap
+        if pygame.time.get_ticks() - self.last_fired > self.firing_rate * 1000 and not self.dead:
             self.bullets.append(Bullet(self.x + 16, self.y - 32))
             self.last_fired = pygame.time.get_ticks()
+            self.firing_rate = self.firing_cap
 
     def update(self, enemies, level):
         self.x += self.x_velocity
@@ -89,7 +92,7 @@ class Player:
             self.respawn_timer -= 1
             if self.respawn_timer <= 0:
                 self.dead = False
-                self.respawn_timer = 300
+                self.respawn_timer = 60
         elif self.hit(enemies):
             self.die()
         
@@ -98,7 +101,7 @@ class Player:
             if bullet.y < 0:
                 self.bullets.remove(bullet)
             if bullet.hit(enemies):
-                self.firing_rate *= 0.8
+                self.firing_rate *= 0.75
                 self.bullets.remove(bullet)
                 self.score += 10 * level
 
