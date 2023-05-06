@@ -159,10 +159,10 @@ class BigramModel(nn.Module):
 def main():
     continue_training = True
     model_loaded = False
-    eval_iterations = 25
-    max_iterations = 500
+    eval_iterations = 50
+    max_iterations = 3000
     learning_rate = 0.00000332
-    batch_size = 128
+    batch_size = 256
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
@@ -262,8 +262,15 @@ def main():
             loss.backward()
             optimizer.step()
 
-        print("\nTraining Completed at " + str(time.strftime("%H:%M:%S", time.gmtime(time.time()))))
-        print("Total Training Time: " + str(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))) + "\n")
+        end_loss = estimate_loss()
+        training_loss = end_loss['train'] - start_loss['train']
+        validation_loss = end_loss['valid'] - start_loss['valid']
+        print("\nTraining Completed at " + str(time.strftime("%H:%M:%S", time.gmtime(time.time()))) + "\n")
+        print("\tTotal Training Loss: " + str(training_loss))
+        print("\tTotal Validation Loss: " + str(validation_loss))
+        print("\tTotal Training Time: " + str(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))) + "\n")
+
+
 
         #save model
         print(f'Saving model {model_path}...')
