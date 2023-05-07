@@ -41,25 +41,15 @@ class Game:
         self.prev_score = 0
     
     def step(self, actions): 
-        n_enemies = len(self.enemies.enemies)
-        self.handle_input()
         self.process_actions(actions)
         self.update()
         self.draw()
         #find how close the player is to the enemies in the x direction
         dx = math.fabs(self.player.x - self.enemies.enemies[0].x if len(self.enemies.enemies) > 0 else 0)
         adx = math.fabs(self.player.x - self.enemies.attackers[0].x if len(self.enemies.attackers) > 0 else 0)
-        ady = math.fabs(self.player.y - self.enemies.attackers[0].y if len(self.enemies.attackers) > 0 else 0)
-        enemies_killed = n_enemies - len(self.enemies.enemies)
-                 # reward for killing enemies, getting closer to enemies, 
-                 # shooting when close, killing * level, getting away from attacking enemies
-                 # and negative reward for shooting, time, and dying
-        reward = (self.player.score - self.prev_score) + \
-                 (self.screen_size[0] - dx) + \
-                 ((self.screen_size[0] - dx) * len(self.player.bullets)) + \
-                 (enemies_killed * 100 * self.level) + \
-                 (self.enemies.attacking * self.level * ((adx / self.screen_size[0]) + (self.screen_size[1] - ady))) \
-                 - (len(self.player.bullets) * 10) - (self.timer / 100) - (1000 * self.player.dead)
+        reward = (((self.screen_size[0] - dx) * (1 + len(self.player.bullets))) + # reward for being close to enemies and shooting
+                  (self.enemies.attacking * self.level * ((adx / self.screen_size[0] * 100))) - # reward for moving away from attackers
+                  (len(self.player.bullets) * 10) - (self.timer / 100)) * (1 - self.player.dead) # negative reward for shooting and dying
         self.prev_score = self.player.score
         return reward
     
@@ -118,9 +108,14 @@ class Game:
         pygame.display.update()
         
     def get_states(self):
-        states = (self.level, *self.player.get_states(), *self.enemies.get_states())
+        states = (*self.player.get_states(), *self.enemies.get_states())
         return states
 
+    def run(self):
+        self.clock.tick(8000)
+        self.handle_input()
+        self.update()
+        self.draw()
         
     def reset(self):
         self.level = 1

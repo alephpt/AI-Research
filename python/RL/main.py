@@ -7,11 +7,11 @@ import random, os
 class QLearningAgent:
     def __init__(self, n_states):
         # Q-table (state, action) -> value
-        self.learning_rate = 0.001
+        self.learning_rate = 0.05
         # discount factor (how much we care about future rewards)
         self.discount_factor = 0.9
         # exploration rate at the beginning
-        self.exploration_rate = 1.0
+        self.exploration_rate = 0.7
         # how much we reduce the exploration rate every step
         self.exploration_decay_rate = 0.001
         # number of states
@@ -68,7 +68,7 @@ def main():
                 agent.q_table = eval(f.read())
             
         total_reward = 0
-        for epoch in range(1000):
+        for epoch in range(20):
             # save previous q table
             with open('table.qtf', 'w') as f:
                 f.write(str(agent.q_table))
