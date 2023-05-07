@@ -10,18 +10,15 @@ class UFO:
         self.y = y
         self.origin_y = y
         self.image = image
-        self.alive = True
         self.attacking = False
 
     def render(self, screen):
-        if self.alive:
-            screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image, (self.x, self.y))
     
     def get_states(self):
         return (
             self.x,
             self.y,
-            self.alive,
             self.attacking
         )
 
@@ -132,12 +129,7 @@ class Enemies:
     def get_states(self):
         enemy_states = tuple(enemy.get_states() for enemy in self.enemies)
         return (
-            self.n_rows,
-            self.n_enemies_per_row,
             self.x_velocity,
             self.y_velocity,
-            self.attacking,
-            self.attack_speed,
-            self.attack_chance,
-            enemy_states
+            enemy_states,
         )

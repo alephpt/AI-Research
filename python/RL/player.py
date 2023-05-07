@@ -130,17 +130,17 @@ class Player:
             bullet.render(screen, self.bullet_image, bullet.x, bullet.y)
 
     def get_states(self):
-        bullet_states = tuple(bullet.get_states() for bullet in self.bullets)
         return (
-            self.x, 
-            self.y, 
-            self.x_velocity,
-            self.max_speed,
-            self.lives, 
-            self.score, 
+            (
+                self.x, 
+                self.y, 
+                self.x_velocity,
+                self.max_speed,
+            ),
             self.dead, 
             self.respawn_timer, 
-            self.firing_rate, 
-            self.firing_cap,
-            bullet_states
+            (
+                self.firing_rate, 
+                len(self.bullets)
+            ),
         )
