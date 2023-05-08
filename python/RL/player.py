@@ -21,6 +21,12 @@ class Bullet:
 
     def render(self, screen, image, x, y):
         screen.blit(image, (x, y))
+        
+    def get_states(self):
+        return (
+            self.x,
+            self.y,
+        )
 
 class Player:
     def __init__(self, screen_size):
@@ -45,12 +51,13 @@ class Player:
 
     def level_up(self, level):
         self.bullets = []
-        self.lives += 1
         self.firing_rate *= 0.9
         self.firing_cap = self.firing_rate
         self.acceleration_rate *= 1.2
         self.max_speed *= 1.2
         self.score += 100 * level
+        if level % 3 == 0:
+            self.lives += 1
 
     def die(self):
         self.lives -= 1
@@ -61,8 +68,8 @@ class Player:
         self.score -= 100
         self.dead = True
         # set image to explosion
-        self.image = pygame.image.load('assets/explosion.png')
-        self.image = pygame.transform.scale(self.image, (64, 64))
+        #self.image = pygame.image.load('assets/explosion.png')
+        #self.image = pygame.transform.scale(self.image, (64, 64))
 
     def collide(self, enemy):
         if (self.x + 16 > enemy.x and self.x < enemy.x + 48 or \
@@ -121,3 +128,19 @@ class Player:
         
         for bullet in self.bullets:
             bullet.render(screen, self.bullet_image, bullet.x, bullet.y)
+
+    def get_states(self):
+        return (
+            (
+                self.x, 
+                self.y, 
+                self.x_velocity,
+                self.max_speed,
+            ),
+            self.dead, 
+            self.respawn_timer, 
+            (
+                self.firing_rate, 
+                len(self.bullets)
+            ),
+        )
