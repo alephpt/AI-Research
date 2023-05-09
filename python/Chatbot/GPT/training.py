@@ -233,7 +233,7 @@ def main():
         print("\tTraining Data:\t\t", training_data.shape, training_data.dtype)
         print("\tValidation Data:\t", validation_data.shape, validation_data.dtype)
         start_loss = estimate_loss()
-        print("\tCurrent Loss: \t" + str(start_loss) + "\n")
+        print("\tCurrent Loss: \t\t" + str(start_loss) + "\n")
 
         elapsed_t = time.time()
         start_time = elapsed_t
