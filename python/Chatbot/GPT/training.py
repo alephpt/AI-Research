@@ -160,9 +160,9 @@ def main():
     continue_training = True
     model_loaded = False
     eval_iterations = 50
-    max_iterations = 3000
-    learning_rate = 0.00000332
-    batch_size = 256
+    max_iterations = 100
+    learning_rate = 0.000774
+    batch_size = 101
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
