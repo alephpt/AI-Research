@@ -160,9 +160,9 @@ def main():
     continue_training = True
     model_loaded = False
     eval_iterations = 50
-    max_iterations = 100
-    learning_rate = 0.000774
-    batch_size = 101
+    max_iterations = 500
+    learning_rate = 0.0005
+    batch_size = 188
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
@@ -179,11 +179,9 @@ def main():
     decode = lambda x: ''.join([itos[i] for i in x])
     encoded = encode("Never Outshine the Master\n")
 
+    # basic encoder/decoder test
     print(encoded)
     print(decode(encoded))
-
-    print(''.join(chars[3:]))
-    print("Vocab size: " + str(vocab_size) + "\n")
 
     # load model if it exists
     if os.path.isfile(model_path):
@@ -196,7 +194,7 @@ def main():
     if continue_training or not model_loaded:
         import gc
         print("Vocab size: " + str(vocab_size))
-        print("\nGrammar:\n", ''.join(chars[3:]), "\n")
+        print("Grammar:\n", ''.join(chars[3:]), "\n")
 
         def get_batch(training_split):
             data = training_data if training_split == "train" else validation_data
