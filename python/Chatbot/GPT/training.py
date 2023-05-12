@@ -162,8 +162,8 @@ class BigramModel(nn.Module):
 def main():
     continue_training = True
     model_loaded = False
-    eval_iterations = 25
-    max_iterations = 500
+    eval_iterations = 10
+    max_iterations = 1000
     learning_rate = 0.000234
     batch_size = 32
     block_size = 1024
