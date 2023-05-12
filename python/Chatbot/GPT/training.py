@@ -39,6 +39,9 @@ def construct_training_data(strings, encode):
     data = torch.tensor(encode(strings), dtype=torch.long)
     print("\tData Loaded:\t\t", data.dtype, data.shape)
 
+    # Shuffle the Data before splitting
+    data = data[torch.randperm(data.size(0))]
+
     # Split Data
     training_split = int(len(data) * 0.9)
     training_data = data[:training_split]
@@ -159,10 +162,10 @@ class BigramModel(nn.Module):
 def main():
     continue_training = True
     model_loaded = False
-    eval_iterations = 50
+    eval_iterations = 25
     max_iterations = 500
-    learning_rate = 0.0005
-    batch_size = 188
+    learning_rate = 0.000234
+    batch_size = 32
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
