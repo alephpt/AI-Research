@@ -1,7 +1,7 @@
 import os, re, torch, time
-import os, re, torch, time
 import torch.nn as nn
 from torch.nn import functional as F
+from torch.utils.data import random_split
 
 dropout = 0.1
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -39,13 +39,15 @@ def construct_training_data(strings, encode):
     data = torch.tensor(encode(strings), dtype=torch.long)
     print("\tData Loaded:\t\t", data.dtype, data.shape)
 
-    # Shuffle the Data before splitting
-    data = data[torch.randperm(data.size(0))]
+    # Split Data by a random 1/8ths
+    validation_size = int(len(data) * 0.125)
 
-    # Split Data
-    training_split = int(len(data) * 0.9)
-    training_data = data[:training_split]
-    validation_data = data[training_split:]
+    # Split Data into Training and Validation
+    training_data, validation_data = random_split(data, [len(data) - validation_size, validation_size])
+
+    # convert to torch tensors
+    training_data = torch.tensor(training_data, dtype=torch.long)
+    validation_data = torch.tensor(validation_data, dtype=torch.long)
 
     return training_data, validation_data
 
@@ -162,10 +164,10 @@ class BigramModel(nn.Module):
 def main():
     continue_training = True
     model_loaded = False
-    eval_iterations = 10
-    max_iterations = 1000
-    learning_rate = 0.000234
-    batch_size = 32
+    eval_iterations = 20
+    max_iterations = 2000
+    learning_rate = 0.00007332
+    batch_size = 128
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
