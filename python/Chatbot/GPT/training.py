@@ -165,16 +165,16 @@ def main():
     continue_training = True
     model_loaded = False
     eval_iterations = 20
-    max_iterations = 2000
-    learning_rate = 0.00007332
-    batch_size = 128
+    max_iterations = 500
+    learning_rate = 0.000432
+    batch_size = 256
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
     chars = sort_tokens(strings)
     vocab_size = len(chars)
-    model_path = "large_gpt_model.pt"
-    save_path = "generated_lg.txt"
+    model_path = "large_gpt_model2.pt"
+    save_path = "generated_lg2.txt"
     model = BigramModel(block_size, vocab_size, n_embeds)
     m = model.to(device)
     optimizer = torch.optim.Adam(m.parameters(), lr=learning_rate)
