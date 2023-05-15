@@ -164,10 +164,10 @@ class BigramModel(nn.Module):
 def main():
     continue_training = True
     model_loaded = False
-    eval_iterations = 20
-    max_iterations = 500
-    learning_rate = 0.000432
-    batch_size = 256
+    eval_iterations = 100
+    max_iterations = 1000
+    learning_rate = 0.000332
+    batch_size = 64
     block_size = 1024
     n_embeds = 256
     strings = gather_input_data()
@@ -269,6 +269,7 @@ def main():
         training_loss = end_loss['train'] - start_loss['train']
         validation_loss = end_loss['valid'] - start_loss['valid']
         print("\nTraining Completed at " + str(time.strftime("%H:%M:%S", time.gmtime(time.time()))) + "\n")
+        print("\tFinal Loss: \t\t" + str(end_loss))
         print("\tTotal Training Loss: " + str(training_loss))
         print("\tTotal Validation Loss: " + str(validation_loss))
         print("\tTotal Training Time: " + str(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))) + "\n")
