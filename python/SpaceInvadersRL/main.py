@@ -53,6 +53,7 @@ class QLearningAgent:
 def main():
     game = Game()
     testing = False
+    epochs = 20
     
     # Game Development
     if testing: 
@@ -68,13 +69,11 @@ def main():
                 agent.q_table = eval(f.read())
             
         total_reward = 0
-        for epoch in range(20):
-            # save previous q table
-            with open('table.qtf', 'w') as f:
-                f.write(str(agent.q_table))
+        for epoch in range(epochs):
+            print('Episode: {}/{} Started'.format(epoch, epochs))
             match_reward = 0
             while game.running:
-                game.clock.tick(8000)
+                game.clock.tick(800)
                 state = game.get_states()
                 action = agent.get_action(state)
                 reward = game.step(action) // 1000 
@@ -83,8 +82,12 @@ def main():
                 agent.update_exploration_rate(epoch)
                 match_reward += reward
             total_reward += match_reward
-            print('Episode: {}/{}, Score: {}, Reward: {}/{}'.format(epoch, 1000, game.player.score, match_reward, total_reward))
+            print('Episode: {}/{} Ended. Level: {}, Score: {}, Reward: {}/{}'.format(epoch, epochs, game.level, game.player.score, match_reward, total_reward))
             game.reset()
+            
+            # save q table
+            with open('table.qtf', 'w') as f:
+                f.write(str(agent.q_table))
     
 if __name__ == "__main__":
     main()

@@ -38,20 +38,6 @@ class Game:
         self.timer = 0
         self.clock = pygame.time.Clock()
         self.gui = GUI(self.screen_size, self.player.lives, self.level, self.player.score)
-        self.prev_score = 0
-    
-    def step(self, actions): 
-        self.process_actions(actions)
-        self.update()
-        self.draw()
-        #find how close the player is to the enemies in the x direction
-        dx = math.fabs(self.player.x - self.enemies.enemies[0].x if len(self.enemies.enemies) > 0 else 0)
-        adx = math.fabs(self.player.x - self.enemies.attackers[0].x if len(self.enemies.attackers) > 0 else 0)
-        reward = (((self.screen_size[0] - dx) * (1 + len(self.player.bullets))) + # reward for being close to enemies and shooting
-                  (self.enemies.attacking * self.level * ((adx / self.screen_size[0] * 100))) - # reward for moving away from attackers
-                  (len(self.player.bullets) * 10) - (self.timer / 100)) * (1 - self.player.dead) # negative reward for shooting and dying
-        self.prev_score = self.player.score
-        return reward
     
     def process_actions(self, action):
         if action == 0:
@@ -64,26 +50,30 @@ class Game:
             self.player.x_velocity = self.player.x_velocity * 0.1
         if action == 3:
             self.player.shoot()
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                self.running = False
     
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
                 
-            # # if keystroke is pressed check whether its right or left
-            # if event.type == pygame.KEYDOWN :
-            #     if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-            #         if self.player.x_velocity > -self.player.max_speed:
-            #             self.player.x_velocity += -self.player.acceleration_rate
-            #     if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-            #         if self.player.x_velocity < self.player.max_speed:
-            #             self.player.x_velocity += self.player.acceleration_rate
-            # if event.type == pygame.KEYUP or event.type == pygame.K_a or event.type == pygame.K_d:
-            #     if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_w, pygame.K_s]:
-            #         self.player.x_velocity = self.player.x_velocity * 0.1
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_SPACE:
-            #         self.player.shoot()
+            # if keystroke is pressed check whether its right or left
+            if event.type == pygame.KEYDOWN :
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                    if self.player.x_velocity > -self.player.max_speed:
+                        self.player.x_velocity += -self.player.acceleration_rate
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                    if self.player.x_velocity < self.player.max_speed:
+                        self.player.x_velocity += self.player.acceleration_rate
+            if event.type == pygame.KEYUP or event.type == pygame.K_a or event.type == pygame.K_d:
+                if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_w, pygame.K_s]:
+                    self.player.x_velocity = self.player.x_velocity * 0.1
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.player.shoot()
     
     def update(self):
         if len(self.enemies.enemies) == 0:
@@ -111,11 +101,23 @@ class Game:
         states = (*self.player.get_states(), *self.enemies.get_states())
         return states
 
+    def step(self, actions): 
+        self.process_actions(actions)
+        self.update()
+        self.draw()
+        #find how close the player is to the enemies in the x direction
+        dx = math.fabs(self.player.x - self.enemies.enemies[0].x if len(self.enemies.enemies) > 0 else 0)
+        adx = math.fabs(self.player.x - self.enemies.attackers[0].x if len(self.enemies.attackers) > 0 else 0)
+        reward = (((self.screen_size[0] - dx) * (1 + len(self.player.bullets))) + # reward for being close to enemies and shooting
+                  (self.enemies.attacking * self.level * ((adx / self.screen_size[0] * 100))) - # reward for moving away from attackers
+                  (len(self.player.bullets) * 10) - (self.timer / 100)) * (1 - self.player.dead) # negative reward for shooting and dying
+        return reward
+
     def run(self):
-        self.clock.tick(8000)
         self.handle_input()
         self.update()
         self.draw()
+        self.clock.tick(60)
         
     def reset(self):
         self.level = 1
