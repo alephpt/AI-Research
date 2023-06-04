@@ -129,7 +129,5 @@ class Enemies:
     def get_states(self):
         enemy_states = tuple(enemy.get_states() for enemy in self.enemies)
         return (
-            self.x_velocity,
-            self.y_velocity,
-            enemy_states,
+            *enemy_states,
         )

@@ -138,9 +138,7 @@ class Player:
                 self.max_speed,
             ),
             self.dead, 
-            self.respawn_timer, 
             (
-                self.firing_rate, 
                 len(self.bullets)
             ),
         )

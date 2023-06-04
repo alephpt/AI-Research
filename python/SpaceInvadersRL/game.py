@@ -104,7 +104,6 @@ class Game:
     def step(self, actions): 
         self.process_actions(actions)
         self.update()
-        self.draw()
         #find how close the player is to the enemies in the x direction
         dx = math.fabs(self.player.x - self.enemies.enemies[0].x if len(self.enemies.enemies) > 0 else 0)
         adx = math.fabs(self.player.x - self.enemies.attackers[0].x if len(self.enemies.attackers) > 0 else 0)
