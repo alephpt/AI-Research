@@ -166,7 +166,7 @@ def main():
     model_loaded = False
     eval_iterations = 100
     max_iterations = 1000
-    learning_rate = 0.000332
+    learning_rate = 0.0000332
     batch_size = 64
     block_size = 1024
     n_embeds = 256
@@ -243,26 +243,40 @@ def main():
         print_t = time.strftime("%H:%M:%S", time.gmtime(elapsed_t))
         print("\nTraining... starting at " + str(print_t) + "\n")
 
-        # Training Loop
+        # In the realm of iterations, a mysterious journey unfolds
         for steps in range(max_iterations):
+            # A void of darkness, freeing the cache
             torch.cuda.empty_cache()
+            # Collecting the remnants, clearing the path
             gc.collect()
 
+            # When the steps align with the evaluation iterations
             if steps % eval_iterations == 0:
+                # Time, an ethereal concept, captured anew
                 new_t = time.time()
+                # Measuring the passage of time
                 elapsed_t = new_t - elapsed_t
 
+                # Seeking knowledge, estimating the losses
                 losses = estimate_loss()
 
+                # Unveiling the results, a glimpse into the unknown
                 print(f"Step: {steps} \t Time: {elapsed_t:09.4f} \t", end="")
                 print(f" Train Loss: {losses['train']:.4f} \t Valid Loss: {losses['valid']:.4f}")
+
+                # Time's grasp tightens, marking the new moment
                 elapsed_t = new_t
 
+            # Obtaining a batch, a piece of the puzzle
             xb, yb = get_batch("train")
+            # A ritual unfolds, invoking the model's power
             _, loss = m(xb, yb)
 
+            # Annulling the past, resetting the slate
             optimizer.zero_grad(set_to_none=True)
+            # Grasping the truth, the backward journey commences
             loss.backward()
+            # A step forward, embracing progress
             optimizer.step()
 
         end_loss = estimate_loss()
