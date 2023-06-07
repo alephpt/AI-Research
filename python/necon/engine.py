@@ -14,3 +14,6 @@ class Engine:
         self.clock.tick(30)
         self.screen.fill(self.fill_color)
         pygame.display.flip()
+        
+    def draw(self, obj):
+        obj.draw(self.screen)

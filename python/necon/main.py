@@ -1,35 +1,36 @@
 import pygame
 from engine import Engine
-from blit import Circle, Triangle
+from blit import Shape
 
 screen_x, screen_y = (1200,800)
 
 def main():
     engine = Engine("Necon", (screen_x, screen_y))
     engine.fill_color = (0,0,0)
-
-    player = Triangle((screen_x/2, screen_y/2), (screen_x/2, screen_y/2), (255, 95, 125))
+    player = Shape((screen_x / 2, screen_y / 2), (100,100), (screen_x, screen_y), (255,255,255))
 
     while engine.running:
-        engine.clock.tick(60)
-
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 engine.running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    engine.running = False
-                    # elif event.key == pygame.K_w:
-                    #     player.move(0, -5)
-                    # elif event.key == pygame.K_s:
-                    #     player.move(0, 5)
-                    # elif event.key == pygame.K_a:
-                    #     player.move(-5, 0)
-                    # elif event.key == pygame.K_d:
-                    #     player.move(5, 0)
 
-        player.draw(engine.screen)
-        engine.run()
+        if pygame.key.get_pressed()[pygame.K_w]:
+            player.accelerate(1)
+        if pygame.key.get_pressed()[pygame.K_s]:
+            player.accelerate(-1)            
+        if pygame.key.get_pressed()[pygame.K_a]:
+            player.turn(-1)
+        elif pygame.key.get_pressed()[pygame.K_d]:
+            player.turn(1)
+        else:
+            player.unturn()
+
+        engine.screen.fill(engine.fill_color)
+        engine.draw(player)
+        
+        engine.clock.tick(60)
+        pygame.display.flip()
+
         
     pygame.quit()
     
