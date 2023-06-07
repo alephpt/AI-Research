@@ -16,8 +16,11 @@ def main():
 
         if pygame.key.get_pressed()[pygame.K_w]:
             player.accelerate(1)
-        if pygame.key.get_pressed()[pygame.K_s]:
-            player.accelerate(-1)            
+        elif pygame.key.get_pressed()[pygame.K_s]:
+            player.accelerate(-1)  
+        else:
+            player.decelerate()    
+                      
         if pygame.key.get_pressed()[pygame.K_a]:
             player.turn(-1)
         elif pygame.key.get_pressed()[pygame.K_d]:

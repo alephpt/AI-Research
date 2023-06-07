@@ -76,6 +76,12 @@ class Shape:
         if self.velocity < -self.max_velocity:
             self.velocity = -self.max_velocity
     
+    def decelerate(self):
+        if self.velocity > 0:
+            self.velocity -= 0.01
+        if self.velocity < 0:
+            self.velocity += 0.01
+    
     def turn(self, amount):
         self.rotation_speed += amount / 100
         if self.rotation_speed > self.max_rotation_speed:
