@@ -5,7 +5,7 @@ import random, os
 # implement Reinforcement Learning to learn how to play the space invaders knock off
 # use the Q-learning algorithm to learn how to play the game
 class QLearningAgent:
-    def __init__(self, n_states):
+    def __init__(self):
         # Q-table (state, action) -> value
         self.learning_rate = 0.05
         # discount factor (how much we care about future rewards)
@@ -47,6 +47,7 @@ class QLearningAgent:
 
     # update exploration rate
     def update_exploration_rate(self, epoch):
+        # decrease exploration rate linearly over time
         self.exploration_rate = 0.01 + (1.0 - 0.01) * np.exp(-self.exploration_decay_rate * epoch)
 
 
@@ -62,7 +63,7 @@ def main():
     # Reinforcement Learning
     else:
         print('Reinforcement Learning Started')
-        agent = QLearningAgent(len(game.get_states()))
+        agent = QLearningAgent()
 
         # open q table and assign it to agent
         if os.path.exists('table.qtf'):
