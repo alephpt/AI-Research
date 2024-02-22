@@ -124,7 +124,7 @@ class Individual:
     def mate(self, other):
         self.energy -= 1
 
-        if self.sexuality == Sexuality.Abstainant:
+        if self.sexuality == Sexuality.Abstinent:
             return
 
         self.partner = other.id
