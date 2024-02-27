@@ -28,15 +28,11 @@ def main():
 
         screen.fill((0, 0, 0))
 
-        for food in foods:
-            food.draw(screen)
-
         for individual in individuals:
+            individual.update(foods, employers, individuals)
             individual.draw(screen)
-            
-        for employer in employers:
-            employer.draw(screen)
 
+            
         pygame.display.flip()
         clock.tick(60)
 
