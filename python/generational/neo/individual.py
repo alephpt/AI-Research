@@ -7,7 +7,7 @@ MALE_REPRODUCTIVE_CHANCE = 0.4
 FEMALE_REPRODUCTIVE_CHANCE = 0.8
 ATTRACTIVE_REDUCTION_FACTOR = 0.5
 BIOLOGY = ["Male", "Female"]
-Q_TABLE = np.zeros((3, 3)) # Can want to eat, work, or mate
+Q_TABLE = np.zeros((3, 2)) # Can want to eat, work, or mate
 
 
 # Do we want to add these, or do we want to see what happens without them?
@@ -19,18 +19,20 @@ Q_TABLE = np.zeros((3, 3)) # Can want to eat, work, or mate
 
 # Define the Individual class
 class Individual:
+    
     def __init__(self, id, w, h):
+        #print("Creating Individual", id)
         self.id = id
         self.x = random.randint(0, w - 10)
         self.y = random.randint(0, h - 10)
         self.reward = 0
         self.energy = 100
-        self.fitness = 100
         self.wakefulness = 100
         self.satisfaction = 100             # Goal is to have the highest satisfaction possible
         self.lifetime = 0
         self.money = 0
-        self.sex_appeal = (self.fitness * 0.5 + self.money * 0.5 + self.satisfaction * 0.5 + self.energy * 0.5) // 2
+        self.fitness = 0
+        self.sex_appeal = self.sexAppeal()
         self.alive = True
         self.sleeping = False               # Introduce 5 options?  eat, work, sleep, mate, nothing
         self.sex = random.choice(BIOLOGY)   # Random
@@ -43,15 +45,17 @@ class Individual:
         self.q_table = Q_TABLE
         self.actions = ["eat", "work", "mate"]
         self.chosen_action = None
-        self.chosen_meal = None
+        self.chosen_target = None
         self.age = 0
+        self.learning_rate = 0.1
+        self.size = 7
         
     # UTILITY FUNCTIONS        
     def draw(self, screen):
         if self.sex == "Male":
-            pygame.draw.polygon(screen, self.color_rgb, [(self.x, self.y), (self.x + 7, self.y + 14), (self.x - 7, self.y + 14)])
+            pygame.draw.polygon(screen, self.color_rgb, [(self.x, self.y), (self.x + self.size, self.y + (self.size * 2)), (self.x - self.size, self.y + (self.size * 2))])
         else:    
-            pygame.draw.circle(screen, self.color_rgb, (self.x, self.y), 7)
+            pygame.draw.circle(screen, self.color_rgb, (self.x, self.y), self.size)
     
     def chooseBestAction(self):
         flat_index = np.argmax(self.q_table)
@@ -60,6 +64,7 @@ class Individual:
     
     def chooseRandomAction(self):
         self.chosen_action = random.choice(self.actions)
+        return self.chosen_action
  
     # We want to add 360 to the movement and the ability to accelerate and decelerate       
     def moveTo(self, target):
@@ -75,6 +80,7 @@ class Individual:
         self.energy += food.energy * random.randint(-1, 3)
         self.fitness += food.fitness * random.randint(-2, 1)
         self.satisfaction += food.satisfaction * random.randint(0, 1)
+        food.ate = True
     
     def work(self, job):
         self.money += job.pay
@@ -83,14 +89,13 @@ class Individual:
         self.fitness += job.fitness
     
     def mate(self, partner):
-        # Add a factor for the attractiveness of the partner based on fitness and money
         self.satisfaction += (partner.satisfaction + partner.fitness + partner.energy) // 6
         self.energy -= (partner.fitness + partner.energy) // 3
         self.fitness += partner.fitness * random.randint(0, 1)
-        # Add a factor for reproduction based on male and female reproductive chances and the attractiveness of the partner, plus fertility and age
         
     def die(self):
         self.alive = False
+        self.updateQTable()
         # Add inheritance for the children of the individual based on the wealth and satisfaction of the individual
 
     #####################
@@ -107,18 +112,31 @@ class Individual:
     def hungered(self):
         return self.satisfaction < self.fitness + self.energy    # if our satisfaction is less than our fitness and energy, we are hungry
 
+    # our partner needs to at least be more than half as attractive as we are
+    def sexAppeal(self):
+        return (self.fitness * 0.5 + self.money * 0.5 + self.satisfaction * 0.5 + self.energy * 0.5) // 2
     
     def attractedTo(self, partner):
-        return ((self.sex_appeal < (partner.sex_appeal * 1.5)) and (self.sex_appeal > (partner.sex_appeal / 1.5)))
+        return partner.sex_appeal > self.sex_appeal * ATTRACTIVE_REDUCTION_FACTOR
     
+    def updateQTable(self):
+        action_index = self.actions.index(self.chosen_action)
+        current_q_value = self.q_table[action_index]
+        max_future_q_value = np.max(self.q_table)
+        new_q_value = (1 - self.learning_rate) * current_q_value + self.learning_rate * (self.reward + 0.9 * max_future_q_value)
+        self.q_table[action_index] = new_q_value 
+        self.reward = 0
+        self.chosen_action = None
+        self.chosen_target = None
+        
     
     # Standard Loop Flow
     def sleep(self):
-        self.wakefulness += 10                          # While we sleep, we gain wakefulness
-        self.satisfaction += random.randint(-1, 3)      # we have some random satisfaction +/-
-        self.energy += 1                                # we gain some energy
+        self.wakefulness += random.randint(7, 11)       # While we sleep, we gain wakefulness
+        self.satisfaction += random.randint(-2, 3)      # we have some random satisfaction +/-
+        self.energy += random.randint(5, 12)            # we gain some energy
         
-        if self.wakefulness >= 93:                      # 93 - 103 is the max range for wakefulness       
+        if self.wakefulness >= 93:                      # 93 - 103 is the max range for wakefulness    
             self.fitness -= 100 - self.wakefulness      # fitness is reduced by the amount of wakefulness that is under 100
             self.sleeping = False                       # if we are awake, we are not sleeping
             return
@@ -127,23 +145,17 @@ class Individual:
         if self.alive:
             # Increase the lifetime, have some random satisfaction and check if they are sleeping
             self.lifetime += 1
-            self.satisfaction += np.random.randint(-1, 3)
 
             if self.sleeping or self.wakefulness < 0:
                 return self.sleep()
                 
             self.wakefulness -= 1
-            self.energy -= 1        # should this be based on fitness, age, diet, sleep, and satisfaction
-            self.satisfaction -= 1  # Should we introduce randomness here each turn, or based on some factor like 'emotion' ??
-            self.fitness -= 1       # Should this be factored by age && diet && exercise/work amounts?
-            self.money -= 1         # Should we add some logic here?
             
-            # Update Sex Appeal
-            self.sex_appeal = (self.fitness * 0.5 + self.money * 0.5 + self.satisfaction * 0.5 + self.energy * 0.5) // 2
+            self.sex_appeal = self.sexAppeal()
 
             if self.energy < 0 or self.satisfaction < 0 or self.fitness < 0: # they can die from lack of energy, satisfaction, or fitness
                 self.age = self.years()
-                self.reward *= (self.satisfaction * self.age)
+                self.reward = (self.satisfaction * self.age) + self.fitness + self.money # Add factor for lineage / n^descendants
                 self.die()
         
         return self.alive
@@ -154,17 +166,19 @@ class Individual:
         if not self.exist():
             return
         
+        #print("Individual", self.id, "is updating")
+        
         # gain reward based on fitness, energy, money, and lifetime
-        self.reward += self.fitness + self.energy + self.money + self.lifetime + self.satisfaction
             
         # If we do not have a chosen action, we will choose a random action, or we will choose the action with the highest Q value
         if self.chosen_action is None:
             self.chosen_action = self.chooseRandomAction() if np.random.uniform(0, 1) < 0.5 else self.chooseBestAction() # Need to ramp this up to 1.0 over time
+            #print("Individual", self.id, "is choosing an action", self.chosen_action)
             
         ### EAT ###
         # If we have a chosen action, we will perform that action
         if self.chosen_action == "eat":
-            if not self.chosen_meal:
+            if not self.chosen_target or self.chosen_target.ate:
                 closest_meal = min(foods, key=lambda food: abs(self.x - food.x) + abs(self.y - food.y))
                 best_meal = max(foods, key=lambda food: food.energy)
                 cheapest_meal = min(foods, key=lambda food: food.cost)
@@ -173,35 +187,49 @@ class Individual:
                 #       Maybe we add another row to the Q_TABLE for the individuals options to choose meals
                 # determine desire to eat based on energy, fitness, and satisfaction
                 if self.lowEndurance():
-                    self.chosen_meal = closest_meal
+                    self.chosen_target = closest_meal
                 elif self.lowFunds():
-                    self.chosen_mean = cheapest_meal
+                    self.chosen_target = cheapest_meal
                 elif self.hungered():
-                    self.chosen_meal = best_meal
+                    self.chosen_target = best_meal
                 else:
-                    self.chosen_meal = random.choice([closest_meal, cheapest_meal, best_meal])
-                    
-            if abs(self.x - self.chosen_meal.x) < 10 and abs(self.y - self.chosen_meal.y) < 10:
-                self.eat(self.chosen_meal)
-                self.chosen_action = None
-                self.chosen_meal = None
+                    self.chosen_target = random.choice([closest_meal, cheapest_meal, best_meal])
+            
+            if self.money < self.chosen_target.cost:
+                if self.energy < self.chosen_target.energy:
+                    self.die()
+                else:
+                    self.updateQTable()
+                    return
+            
+            if abs(self.x - self.chosen_target.x) < self.size and abs(self.y - self.chosen_target.y) < self.size:
+                self.eat(self.chosen_target)
+                self.updateQTable()
             else:
-                self.moveTo(self.chosen_meal)
+                self.moveTo(self.chosen_target)
         
         ### WORK ###
         elif self.chosen_action == "work":
             closest_job = min(jobs, key=lambda job: abs(self.x - job.x) + abs(self.y - job.y))
+            easiest_job = min(jobs, key=lambda job: job.energy)
+            best_job = max(jobs, key=lambda job: job.pay) # Need to add aspect for experience
             
-            # In theory we could establish an economy based on work experience, market demands, and desire to work
-            # likely would be correlated to fitness and energy
-            
+            # Choose best job if the energy is higher than the wealth
+            if self.energy > self.money:
+                self.chosen_target = best_job
+            # Choose easiest job if the energy is lower than the satisfaction
+            elif self.energy < self.satisfaction:
+                self.chosen_target = easiest_job
+            else:
+                self.chosen_target = closest_job
             
             # check if the job is close enough to work
-            if abs(self.x - closest_job.x) < 10 and abs(self.y - closest_job.y) < 10:
-                self.work(jobs)
-                self.chosen_action = None
-            else:
-                self.moveTo(closest_job)
+            if abs(self.x - self.chosen_target.x) < self.size and abs(self.y - self.chosen_target.y) < self.size:
+                self.work(self.chosen_target)
+                self.updateQTable()
+                return
+            
+            self.moveTo(closest_job)
         
         ### SEX ###
         elif self.chosen_action == "mate":
@@ -221,9 +249,8 @@ class Individual:
                 return
             
             # if we have a partner, who also wants to mate we will move to the partner
-            if abs(self.x - self.partner.x) < 10 and abs(self.y - self.partner.y) < 10:
+            if abs(self.x - self.partner.x) < self.size and abs(self.y - self.partner.y) < self.size:
                 self.mate(self.partner) # TODO: Add Reproductivity and other factors like finance, fitness, busy-ness, etc
-                self.chosen_action = None
                 
                 # Break up if not attracted (# maybe we add factors like kids, age, etc)
                 if not self.attractedTo(self.partner) or not self.partner.attractedTo(self):
@@ -231,7 +258,8 @@ class Individual:
                     self.partner.satisfaction -= random.uniform(-20, 5)
                     self.partner.partner = None
                     self.partner = None
-                
+
+                self.updateQTable()
                 return
             
             # If we got here, we are not close enough to our partner to mate

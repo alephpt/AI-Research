@@ -11,6 +11,7 @@ class Food:
         self.satisfaction = self.energy // 4
         self.color = (0, 255, 0)
         self.size = 5
+        self.ate = False
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
