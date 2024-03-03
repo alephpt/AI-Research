@@ -49,13 +49,24 @@ class Individual:
         self.age = 0
         self.learning_rate = 0.1
         self.size = 7
+        self.cause_of_death = None
+        self.work_xp = 0
+        self.meals = 0
+        self.sexual_partners = 0
+        self.children = 0
+        self.offspring = []
         
     # UTILITY FUNCTIONS        
     def draw(self, screen):
+        color = self.color_rgb
+        
+        if not self.alive:
+            color = colorMap["Russet"] 
+
         if self.sex == "Male":
-            pygame.draw.polygon(screen, self.color_rgb, [(self.x, self.y), (self.x + self.size, self.y + (self.size * 2)), (self.x - self.size, self.y + (self.size * 2))])
+            pygame.draw.polygon(screen, color, [(self.x, self.y), (self.x + self.size, self.y + (self.size * 2)), (self.x - self.size, self.y + (self.size * 2))])
         else:    
-            pygame.draw.circle(screen, self.color_rgb, (self.x, self.y), self.size)
+            pygame.draw.circle(screen, color, (self.x, self.y), self.size)
     
     def chooseBestAction(self):
         flat_index = np.argmax(self.q_table)
@@ -70,6 +81,8 @@ class Individual:
     def moveTo(self, target):
         self.x += 1 if self.x < target.x else -1 if self.x > target.x else 0
         self.y += 1 if self.y < target.y else -1 if self.y > target.y else 0
+        self.energy -= 1
+        self.fitness += 1
     
     def years(self):
         return self.lifetime / 365
@@ -86,14 +99,15 @@ class Individual:
         self.money += job.pay
         self.energy += job.energy * random.randint(-2, 1)
         self.satisfaction += job.satisfaction
-        self.fitness += job.fitness
+        self.fitness += job.fitness * random.randint(-1, 2)
     
     def mate(self, partner):
         self.satisfaction += (partner.satisfaction + partner.fitness + partner.energy) // 6
         self.energy -= (partner.fitness + partner.energy) // 3
         self.fitness += partner.fitness * random.randint(0, 1)
         
-    def die(self):
+    def die(self, cause_of_death="Unknown"): # TODO: Implement 'Chance of Random Death'
+        self.cause_of_death = cause_of_death
         self.alive = False
         self.updateQTable()
         # Add inheritance for the children of the individual based on the wealth and satisfaction of the individual
@@ -132,33 +146,53 @@ class Individual:
     
     # Standard Loop Flow
     def sleep(self):
+        self.sleeping = True
+        
         self.wakefulness += random.randint(7, 11)       # While we sleep, we gain wakefulness
         self.satisfaction += random.randint(-2, 3)      # we have some random satisfaction +/-
-        self.energy += random.randint(5, 12)            # we gain some energy
+        self.energy += random.randint(5, 7)             # we gain some energy
         
         if self.wakefulness >= 93:                      # 93 - 103 is the max range for wakefulness    
             self.fitness -= 100 - self.wakefulness      # fitness is reduced by the amount of wakefulness that is under 100
             self.sleeping = False                       # if we are awake, we are not sleeping
             return
     
+    ######################
+    ##       EXIST      ##
+    ######################
+        
     def exist(self):
         if self.alive:
             # Increase the lifetime, have some random satisfaction and check if they are sleeping
             self.lifetime += 1
+            self.age = self.years()
 
+            # Can refactor this to be in a function without redundancy
             if self.sleeping or self.wakefulness < 0:
                 return self.sleep()
                 
             self.wakefulness -= 1
             
+            # Can refactor this to be a simple function call
             self.sex_appeal = self.sexAppeal()
 
-            if self.energy < 0 or self.satisfaction < 0 or self.fitness < 0: # they can die from lack of energy, satisfaction, or fitness
-                self.age = self.years()
-                self.reward = (self.satisfaction * self.age) + self.fitness + self.money # Add factor for lineage / n^descendants
-                self.die()
-        
+            # This can be a function as well
+            self.reward = (self.satisfaction * self.age) + self.fitness + self.money # Add factor for lineage / n^descendants
+
+            # they can die from lack of energy, satisfaction, or fitness
+            if self.energy < 0:
+                self.die("fatigue")
+            if self.satisfaction < 0:
+                self.die("depression")
+            if self.fitness < 0:
+                self.die("disease")
+            
         return self.alive
+    
+    
+    #######################
+    ##       UPDATE      ##
+    #######################
     
     # Main Loop Function
     def update(self, foods, jobs, partners):
@@ -202,7 +236,7 @@ class Individual:
                     self.updateQTable()
                     return
             
-            if abs(self.x - self.chosen_target.x) < self.size and abs(self.y - self.chosen_target.y) < self.size:
+            if self.x == self.chosen_target.x and self.y == self.chosen_target.y:
                 self.eat(self.chosen_target)
                 self.updateQTable()
             else:
@@ -224,7 +258,7 @@ class Individual:
                 self.chosen_target = closest_job
             
             # check if the job is close enough to work
-            if abs(self.x - self.chosen_target.x) < self.size and abs(self.y - self.chosen_target.y) < self.size:
+            if self.x == self.chosen_target.x and self.y == self.chosen_target.y:
                 self.work(self.chosen_target)
                 self.updateQTable()
                 return
@@ -249,7 +283,7 @@ class Individual:
                 return
             
             # if we have a partner, who also wants to mate we will move to the partner
-            if abs(self.x - self.partner.x) < self.size and abs(self.y - self.partner.y) < self.size:
+            if self.x == self.partner.x and self.y == self.partner.y:
                 self.mate(self.partner) # TODO: Add Reproductivity and other factors like finance, fitness, busy-ness, etc
                 
                 # Break up if not attracted (# maybe we add factors like kids, age, etc)
