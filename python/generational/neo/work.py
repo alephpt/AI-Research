@@ -8,7 +8,7 @@ class Work:
         self.energy = -random.randint(1, 20)
         self.pay = self.energy * -2
         self.satisfaction = self.energy ** 2
-        self.fitness = self.satisfaction // 4
+        self.fitness = random.randint(1 * (self.energy + self.satisfaction), 10 * (self.energy + self.satisfaction))
         self.color = (178, 178, 178)
         self.size = 10
         

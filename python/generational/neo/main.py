@@ -5,8 +5,8 @@ from work import Work
 import os
 
 EPOCHS = 10
-WIDTH = 1200
-HEIGHT = 800
+WIDTH = 1600
+HEIGHT = 1200
 
 
 def logIndividuals(individuals):
@@ -14,16 +14,20 @@ def logIndividuals(individuals):
     
     for individual in individuals:
         ascii_text_color = "\033[1;32;40m" if individual.alive else "\033[1;31;40m"
+        target_or_cause_text = "Target:" if individual.alive else "Cause of Death:"
+        target_or_cause_value = individual.chosen_action if individual.alive else individual.cause_of_death
         
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print(ascii_text_color)
-        print("Individual: ", individual.id)
-        print("Sleeping" if individual.sleeping else "Awake")
-        print("Target: ", individual.chosen_action)
-        print("Satisfaction: ", individual.satisfaction)
+        print("Individual: ", individual.id, " (", individual.sex, ")")
+        if individual.alive:
+            print("Sleeping" if individual.sleeping else "Awake")
+        print(target_or_cause_text, target_or_cause_value)
+        print("Age: ", individual.age)
         print("Energy: ", individual.energy)
         print("Wealth: ", individual.money)
-        print("Age: ", individual.age)
+        print("Fitness: ", individual.fitness)
+        print("Satisfaction: ", individual.satisfaction)
         print("Reward: ", individual.reward)
         print("\033[0;37;40m")
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")

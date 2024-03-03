@@ -5,7 +5,7 @@ class Food:
     def __init__(self, w, h):
         self.x = random.randint(0, w - 10)
         self.y = random.randint(0, h - 10)
-        self.energy = random.randint(1, 10)
+        self.energy = random.randint(10, 100)
         self.cost = self.energy * 2
         self.fitness = self.energy // 2
         self.satisfaction = self.energy // 4
