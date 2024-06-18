@@ -2,7 +2,7 @@ import random
 import string
 
 # Target string we want to guess
-TARGET = "Hello, World!"
+TARGET = "Hello, Genetic Learning!"
 TARGET_LEN = len(TARGET)
 
 # Genetic algorithm parameters
