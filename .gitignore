@@ -24,3 +24,5 @@ Cpp/CARL/Alpha_Dev/x64/Debug/*
 .vscode/
 .vscode/*
 falcon-40b
+*.pt
+*.qtf
