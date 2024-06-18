@@ -8,3 +8,19 @@
 Cpp/CARL/Alpha_Dev/x64/*
 Cpp/CARL/Alpha\ Dev/x64/*
 `.\Cpp\CARL\Alpha_Dev\x64\*`
+Cpp/packages/
+Cpp/packages/*
+Cpp/CARL/packages/
+Cpp/CARL/packages/*
+Cpp/CARL/Concept/packages/
+Cpp/CARL/Concept/packages/*
+python/Chatbot/Chat_Bot/chat_model/
+python/Chatbot/Chat_Bot/chat_model/*
+Cpp/CARL/Concept/packages/
+Cpp/CARL/Concept/packages/*
+Cpp/CARL/Alpha_Dev/x64/Debug/
+Cpp/CARL/Alpha_Dev/x64/Debug/*
+*DS_Store
+.vscode/
+.vscode/*
+falcon-40b
