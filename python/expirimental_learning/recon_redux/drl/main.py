@@ -112,12 +112,8 @@ def train_dqn():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
 
-        # load saved data from file
-
-
-
-        # sample random minibatch of transitions
-        
+        if os.path.exists('model.pth'):
+            model.load_state_dict(torch.load('model.pth'))
 
         for epoch in range(NUM_EPOCHS):
             agents = [Agent(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(NUM_AGENTS)]
@@ -127,11 +123,6 @@ def train_dqn():
 
             with Pool(NUM_PROCESSES) as pool:
                 while any(agent.is_alive() for agent in agents):
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            pygame.quit()
-                            return
-
                     agents = pool.starmap(agent_update, [(agent, model, grid) for agent in agents])
 
                     # Visualization
@@ -151,20 +142,21 @@ def train_dqn():
 
                     # Display stats
                     alive_agents = sum(agent.is_alive() for agent in agents)
-                    avg_energy = np.mean([agent.energy for agent in agents if agent.is_alive()])
-                    avg_money = np.mean([agent.money for agent in agents if agent.is_alive()])
+                    if alive_agents > 0:
+                        avg_energy = np.mean([agent.energy for agent in agents if agent.is_alive()])
+                        avg_money = np.mean([agent.money for agent in agents if agent.is_alive()])
+                    else:
+                        avg_energy = 0.0
+                        avg_money = 0.0
 
                     stats_text = f'Epoch: {epoch + 1}/{NUM_EPOCHS} - Alive Agents: {alive_agents} - Avg Energy: {avg_energy:.2f} - Avg Money: {avg_money:.2f}'
                     stats_surface = font.render(stats_text, True, (255, 255, 255))
 
-                    ## Cut the rendering to a fraction of the sampling rate to speed up the simulation
-                    if epoch % 20 == 0:
-                        screen.blit(stats_surface, (10, 10))
-                        pygame.display.flip()
+                    screen.blit(stats_surface, (10, 10))
+                    pygame.display.flip()
 
-        # Save data to file
-
-
+            # save the model
+            torch.save(model.state_dict(), 'model.pth')
 
 if __name__ == "__main__":
     pygame.display.set_caption('Deep Q-Learning Simulation')
