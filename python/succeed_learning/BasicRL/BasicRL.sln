@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "BasicRL", "BasicRL\BasicRL.pyproj", "{A40A9C1A-FCC6-49B3-9734-7CF16718EFF0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A40A9C1A-FCC6-49B3-9734-7CF16718EFF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A40A9C1A-FCC6-49B3-9734-7CF16718EFF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1038DA9C-4ECA-449D-917A-1A120FCB7306}
+	EndGlobalSection
+EndGlobal
