@@ -9,7 +9,7 @@ from multiprocessing import Pool
 
 # Pygame setup
 pygame.init()
-SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 800
+SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1200
 GRID_SIZE = 100
 CELL_SIZE = SCREEN_WIDTH // GRID_SIZE
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -20,7 +20,7 @@ font = pygame.font.SysFont(None, 24)
 NUM_AGENTS = 100
 NUM_EPOCHS = 100
 ENERGY_COST = 0.1
-NUM_PROCESSES = 4  # Number of parallel processes
+NUM_PROCESSES = 24  # Number of parallel processes
 
 class Agent:
     def __init__(self, x, y):
@@ -30,8 +30,15 @@ class Agent:
         self.money = 0
 
     def move(self, dx, dy):
-        self.x = max(0, min(GRID_SIZE - 1, self.x + dx))
-        self.y = max(0, min(GRID_SIZE - 1, self.y + dy))
+        new_x = self.x + dx
+        new_y = self.y + dy
+        
+        # Ensure agents stay within bounds
+        if 0 <= new_x < GRID_SIZE:
+            self.x = new_x
+        if 0 <= new_y < GRID_SIZE:
+            self.y = new_y
+        
         self.energy -= np.hypot(dx, dy) * ENERGY_COST
 
     def eat(self):
@@ -98,48 +105,68 @@ def train_dqn():
     memory = deque(maxlen=10000)
     batch_size = 64
     gamma = 0.99
+    running = True
 
-    for epoch in range(NUM_EPOCHS):
-        agents = [Agent(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(NUM_AGENTS)]
-        grid = [['empty'] * GRID_SIZE for _ in range(GRID_SIZE)]
-        spawn_jobs_and_food(grid)
-        epoch_alive_agents = NUM_AGENTS
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                running = False
 
-        with Pool(NUM_PROCESSES) as pool:
-            while any(agent.is_alive() for agent in agents):
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        return
+        # load saved data from file
 
-                agents = pool.starmap(agent_update, [(agent, model, grid) for agent in agents])
 
-                # Visualization
-                screen.fill((0, 0, 0))
-                for x in range(GRID_SIZE):
-                    for y in range(GRID_SIZE):
-                        if grid[x][y] == 'food':
-                            pygame.draw.rect(screen, (0, 255, 0), (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-                        elif grid[x][y] == 'job':
-                            pygame.draw.rect(screen, (0, 0, 255), (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-                for agent in agents:
-                    if agent.is_alive():
-                        pygame.draw.rect(screen, (255, 0, 0), (agent.x * CELL_SIZE, agent.y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-                    else:
-                        epoch_alive_agents -= 1
+        # sample random minibatch of transitions
+        
 
-                # Display stats
-                alive_agents = sum(agent.is_alive() for agent in agents)
-                avg_energy = np.mean([agent.energy for agent in agents if agent.is_alive()])
-                avg_money = np.mean([agent.money for agent in agents if agent.is_alive()])
+        for epoch in range(NUM_EPOCHS):
+            agents = [Agent(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(NUM_AGENTS)]
+            grid = [['empty'] * GRID_SIZE for _ in range(GRID_SIZE)]
+            spawn_jobs_and_food(grid)
+            epoch_alive_agents = NUM_AGENTS
 
-                stats_text = f'Epoch: {epoch + 1}/{NUM_EPOCHS} - Alive Agents: {alive_agents} - Avg Energy: {avg_energy:.2f} - Avg Money: {avg_money:.2f}'
-                stats_surface = font.render(stats_text, True, (255, 255, 255))
-                screen.blit(stats_surface, (10, 10))
+            with Pool(NUM_PROCESSES) as pool:
+                while any(agent.is_alive() for agent in agents):
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            return
 
-                pygame.display.flip()
+                    agents = pool.starmap(agent_update, [(agent, model, grid) for agent in agents])
+
+                    # Visualization
+                    screen.fill((0, 0, 0))
+                    for x in range(GRID_SIZE):
+                        for y in range(GRID_SIZE):
+                            if grid[x][y] == 'food':
+                                pygame.draw.rect(screen, (0, 255, 0), (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+                            elif grid[x][y] == 'job':
+                                pygame.draw.rect(screen, (0, 0, 255), (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+
+                    for agent in agents:
+                        if agent.is_alive():
+                            pygame.draw.rect(screen, (255, 0, 0), (agent.x * CELL_SIZE, agent.y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+                        else:
+                            epoch_alive_agents -= 1
+
+                    # Display stats
+                    alive_agents = sum(agent.is_alive() for agent in agents)
+                    avg_energy = np.mean([agent.energy for agent in agents if agent.is_alive()])
+                    avg_money = np.mean([agent.money for agent in agents if agent.is_alive()])
+
+                    stats_text = f'Epoch: {epoch + 1}/{NUM_EPOCHS} - Alive Agents: {alive_agents} - Avg Energy: {avg_energy:.2f} - Avg Money: {avg_money:.2f}'
+                    stats_surface = font.render(stats_text, True, (255, 255, 255))
+
+                    ## Cut the rendering to a fraction of the sampling rate to speed up the simulation
+                    if epoch % 20 == 0:
+                        screen.blit(stats_surface, (10, 10))
+                        pygame.display.flip()
+
+        # Save data to file
+
+
 
 if __name__ == "__main__":
+    pygame.display.set_caption('Deep Q-Learning Simulation')
     train_dqn()
     pygame.quit()
