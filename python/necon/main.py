@@ -15,9 +15,9 @@ def main():
                 engine.running = False
 
         if pygame.key.get_pressed()[pygame.K_w]:
-            player.accelerate(1)
+            player.accelerate(.5)
         elif pygame.key.get_pressed()[pygame.K_s]:
-            player.accelerate(-1)  
+            player.accelerate(-.5)  
         else:
             player.decelerate()    
                       

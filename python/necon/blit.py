@@ -10,7 +10,8 @@ class Shape:
         self.rotation = 0
         self.rotation_speed = 0
         self.max_rotation_speed = 5
-        self.velocity = 0
+        self.velocity_x = 0
+        self.velocity_y = 0
         self.max_velocity = 10
         self.p1 = (self.x, self.y - (self.height / 2))
         self.p2 = (self.x + (self.width / 2), self.y + (self.height / 2))
@@ -21,40 +22,40 @@ class Shape:
         # check if the shape has hit the edge of the screen
         if self.p1[0] > self.max_x:
             self.x -= self.p1[0] - self.max_x
-            self.velocity = 0
+            self.velocity_x = 0
         if self.p2[0] > self.max_x:
             self.x -= self.p2[0] - self.max_x
-            self.velocity = 0
+            self.velocity_x = 0
         if self.p3[0] > self.max_x:
             self.x -= self.p3[0] - self.max_x
-            self.velocity = 0
+            self.velocity_x = 0
         if self.p1[0] < 0:
             self.x -= self.p1[0]
-            self.velocity = 0
+            self.velocity_x = 0
         if self.p2[0] < 0:
             self.x -= self.p2[0]
-            self.velocity = 0
+            self.velocity_x = 0
         if self.p3[0] < 0:
             self.x -= self.p3[0]
-            self.velocity = 0
+            self.velocity_x = 0
         if self.p1[1] > self.max_y:
             self.y -= self.p1[1] - self.max_y
-            self.velocity = 0
+            self.velocity_y = 0
         if self.p2[1] > self.max_y:
             self.y -= self.p2[1] - self.max_y
-            self.velocity = 0
+            self.velocity_y = 0
         if self.p3[1] > self.max_y:
             self.y -= self.p3[1] - self.max_y
-            self.velocity = 0
+            self.velocity_y = 0
         if self.p1[1] < 0:
             self.y -= self.p1[1]
-            self.velocity = 0
+            self.velocity_y = 0
         if self.p2[1] < 0:
             self.y -= self.p2[1]
-            self.velocity = 0
+            self.velocity_y = 0
         if self.p3[1] < 0:
             self.y -= self.p3[1]
-            self.velocity = 0
+            self.velocity_y = 0
     
     # updates p1, p2, p3 based on the current center x,y and rotation
     def update_points(self):
@@ -70,17 +71,27 @@ class Shape:
         self.check_bounds()
     
     def accelerate(self, amount):
-        self.velocity -= amount / 100
-        if self.velocity > self.max_velocity:
-            self.velocity = self.max_velocity
-        if self.velocity < -self.max_velocity:
-            self.velocity = -self.max_velocity
+        self.velocity_x += math.sin(self.rotation) * amount
+        self.velocity_y += math.cos(self.rotation) * amount
+        speed = math.sqrt(self.velocity_x ** 2 + self.velocity_y ** 2)
+        if speed > self.max_velocity:
+            scale = self.max_velocity / speed
+            self.velocity_x *= scale
+            self.velocity_y *= scale
+        if speed < -self.max_velocity / 2:
+            scale = (-self.max_velocity / 2) / speed
+            self.velocity_x *= scale
+            self.velocity_y *= scale
     
     def decelerate(self):
-        if self.velocity > 0:
-            self.velocity -= 0.01
-        if self.velocity < 0:
-            self.velocity += 0.01
+        if self.velocity_x > 0:
+            self.velocity_x -= 0.1
+        if self.velocity_x < 0:
+            self.velocity_x += 0.1
+        if self.velocity_y > 0:
+            self.velocity_y -= 0.1
+        if self.velocity_y < 0:
+            self.velocity_y += 0.1
     
     def turn(self, amount):
         self.rotation_speed += amount / 100
@@ -95,9 +106,9 @@ class Shape:
         if self.rotation_speed < 0:
             self.rotation_speed += 0.01
     
-    def move(self, forward):
-        self.y -= math.cos(self.rotation) * -forward
-        self.x += math.sin(self.rotation) * -forward
+    def move(self):
+        self.y -= self.velocity_y
+        self.x += self.velocity_x
         
         self.update_points()
     
@@ -107,5 +118,5 @@ class Shape:
     
     def draw(self, screen):
         self.rotate(self.rotation_speed)
-        self.move(self.velocity)
+        self.move()
         pygame.draw.lines(screen, self.color, True, [self.p1, self.p2, self.p3], 1)
