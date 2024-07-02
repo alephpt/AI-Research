@@ -1,48 +1,8 @@
 
 from enum import Enum
-from placement import Placement
+from DGL.micro import Placement, Status, Target, Action
 import random
 import math
-
-# TODO: Add Color Factor or Text Status
-# These contribute to our State Space
-# But we do not want to map states to variables
-class Status(Enum):
-    Dead = -1
-    Sleeping = 0 #TODO: Implement 'Home' Unit
-    Eating = 1
-    Working = 2
-    Sex = 3 #TODO: Integrate at Home Unit
-    Alive = 7
-    Horny = 4
-    Broke = 5
-    Hungry = 6
-    # Could potentially add a 'harvest' status which could allow for 'shopping' or 'farming' or 'hunting' or 'gathering'
-
-    __str__ = lambda self: self.name
-
-class Action(Enum):
-    Move = 0
-    Eat = 1
-    Work = 2
-    Sleep = 3
-    Mate = 4 # Could grow this out into seeking a mate and/or sex and/or 'mate_found'
-    Harvest = 5 # Could grow this out into Harvesting Type
-
-    __str__ = lambda self: self.name
-
-class Target(Enum):
-    Food = 0
-    Work = 1
-    Mate = 2
-    Home = 3
-
-    __str__ = lambda self: self.name
-
-    @staticmethod
-    def random():
-        return random.choice([Target.Food, Target.Work, Target.Mate, Target.Home])
-
 
                 #  HERE   UPLEFT     LEFT   BACKLEFT   DOWN   DOWNRIGHT  RIGHT  UPRIGHT   UP 
 directions_map = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
@@ -85,12 +45,15 @@ def calculateDirection(x, y, tX, tY):
 
     return vector(x, y, magnitude(dX, dY))
 
+cost_of_service = 5 # TODO: Let every Agent set their own cost of food
 
 # TODO: Implement a way to 'find the next target'
 class Agent(Placement):
     def __init__(self, x, y, size, map_size, unit_type):
         super().__init__(x, y, size, unit_type)
         self.map_size = map_size    
+        self.age = 0
+        self.happiness = 0
         self.sex = random.choice(['M', 'F'])
         self.energy = 75 # Should we clamp energy
         self.wealth = 25 # Should we add 'economic' factors? .. If we add a "legal" requirement, will it figure it out? 
@@ -101,6 +64,20 @@ class Agent(Placement):
         self.target = None
         self.target_direction_vector = (0, 0)
 
+    def work(self):
+        if self.energy >= 10:
+            self.wealth += 10
+            self.energy -= 5
+
+    def eat(self):
+        if self.wealth >= cost_of_service:
+            self.wealth -= cost_of_service
+            self.energy += 10 # TODO: HUGE TEST - In Isolation, determine if fixed values or random values are better
+            self.happiness += 1
+    
+    def sex(self):
+        self.energy -= 10
+        self.happiness += 5 # Integrate a large amount of Chance here
 
     def calculateTargetReward(self, target):
         '''
@@ -140,7 +117,16 @@ class Agent(Placement):
         # TODO: Test if Status Order changes the simulation outcomes
         if status == Status.Working:
             reward += 1
-        
+
+        # TODO: Add a randomness for 'happiness factor' to the macro genetic scale 
+        #       where some agents care more about different things
+    
+        # Happier Lives are better
+        reward += self.happiness
+
+        # Longer Lives are better
+        reward += self.age
+
         return {
             'reward': reward,
             'target_direction_vector': target_direction_vector
@@ -170,6 +156,8 @@ class Agent(Placement):
     def update(self, findTarget):
         if self.status == Status.Dead:
             return
+        
+        self.age += 1
         
 
         if self.target is None:

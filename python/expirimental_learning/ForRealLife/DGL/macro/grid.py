@@ -1,4 +1,4 @@
-from cell import Cell
+from DGL.meso import Cell
 
 class Grid:
     def __init__(self, count, size, screen):

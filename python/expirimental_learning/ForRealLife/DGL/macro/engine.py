@@ -1,9 +1,9 @@
 import pygame
-from grid import Grid
-from society import Society
+from .grid import Grid
+from .society import Society
 
 grid_size = 10
-screen_size = 800
+screen_size = 1240
 background = (24, 24, 24)
 n_jobs = 1
 n_food = 1
@@ -38,6 +38,7 @@ class Engine:
         self.screen.fill(background)
         self.society.draw()
         self.grid.draw()
+        self.society.drawStatus()
         pygame.display.flip()
 
     def run(self):

@@ -1,7 +1,7 @@
-from engine import Engine
+import DGL
 
 
 if __name__ == '__main__':
-    engine = Engine()
+    engine = DGL.Engine()
     engine.genesis()
     engine.run()

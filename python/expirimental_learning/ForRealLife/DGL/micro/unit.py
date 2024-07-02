@@ -7,4 +7,5 @@ class Unit(Enum):
     Work = (128, 128, 0)
     Food = (0, 128, 0)
     Mating = (128, 0, 128)
+    Home = (128, 128, 128) ##=>> We are not implementing this until units can not die a little bit later
     # TODO: Add 'Home'

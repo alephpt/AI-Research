@@ -1,15 +1,13 @@
+# Creating The Matrix
+## Deep Genetic Learning Outline
 
-
-
-### Outline
-
-Concept:
+### Concept:
   - Can we simulate society without telling the agent how to exist within it?
   - Can we define rules for a society 'member' to exist within?
   - What sort of free agents would emerge in society e.g. 
         what would be varrying 'optimal' ways of "scoring high"?
 
-Rules:
+### Rules:
 - Agents require food to Survive
 - Food costs 5 Money and provide 10 Energy
 - Work costs 5 Energy and provide 10 Money
@@ -17,18 +15,18 @@ Rules:
 - Agents can die if they run out of Energy
 - Agents can be male or female
 
-- Deep Reinforcement Learning for Agents Behavior
+#### Deep Reinforcement Learning for Agents Behavior
    - Learn to Navigate
    - Learn to Survive
    - Learn to Reproduce
    - Reward Agents based on 'Happiness', second to 'Survival'
        - Reward = Lifespan + Happiness
 
-Generations of Agents
+#### Generations of Agents
 - Genetic Algorithm for Population Evolution
    -  Fill half of the population, with half of the furthest generation
 
-Future Potential Implementations:
+### Future Potential Implementations:
 - Jobs provide Income for Some and Food for Others.. 
     by implementing a chance to trade, 
     and allowing them to pick one or the other : Vendor or Buyer

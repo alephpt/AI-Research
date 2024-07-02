@@ -1,8 +1,10 @@
 import pygame
 
+from .status import Status
+
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
- 
+
 class Placement:
     def __init__(self, x, y, size, unit_type):
         self.x = x
@@ -18,8 +20,8 @@ class Placement:
         return self.y * self.size + self.x
 
     def draw(self, screen):
-        #print(f"Drawing {self.unit_type.name} at ({self.x}, {self.y})")
-        pygame.draw.rect(screen, self.unit_type.value, (self.x * self.size, self.y * self.size, self.size, self.size))
+        color = self.status.combine(self.unit_type) if type(self.status) == Status else self.unit_type.value
+        pygame.draw.rect(screen, color, (self.x * self.size, self.y * self.size, self.size, self.size))
 
         label = pygame.font.Font(None, 24).render(f"{self.unit_type.name}", True, (255, 255, 255))
         lx_position = realPosition(self.x, self.size, label.get_width())

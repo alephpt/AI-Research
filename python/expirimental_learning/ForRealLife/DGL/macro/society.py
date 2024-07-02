@@ -1,6 +1,6 @@
-from placement import Placement
-from agent import Agent, Status, Action, Target
-from unit import Unit
+import pygame
+from DGL.meso import Agent
+from DGL.micro import Unit, Placement, Status, Target
 from multiprocessing import Pool
 from enum import Enum
 import random
@@ -44,9 +44,26 @@ class Society:
         self.screen = screen
         self.grid_size = grid_size
         self.cell_size = cell_size
-        # TODO: Fix duplicate placements bug
 
+        # TODO: Fix duplicate placements bug
         self.jobs, self.food, self.population = self.populate(n_population, n_jobs, n_food)
+
+        self.n_alive = n_population
+        self.avg_age = 0        # Time  
+        self.avg_happiness = 0  # Satisfaction
+        self.avg_health = 0     # Energy Level
+        self.avg_wealth = 0     # Money
+        self.avg_reward = 0     # Reward
+
+    def updateStatistics(self):
+        self.n_alive = len([agent for agent in self.population if agent.status != Status.Dead])
+        if self.n_alive == 0:
+            return
+        self.avg_age = sum([agent.age for agent in self.population]) / self.n_alive 
+        self.avg_happiness = sum([agent.happiness for agent in self.population]) / self.n_alive
+        self.avg_health = sum([agent.energy for agent in self.population]) / self.n_alive
+        self.avg_wealth = sum([agent.wealth for agent in self.population]) / self.n_alive
+        self.avg_reward = sum([agent.reward for agent in self.population]) / self.n_alive
     
     def findTarget(self, target):
         if target == Target.Food:
@@ -80,6 +97,8 @@ class Society:
         # for food in self.food:
         #     food.update
 
+        self.updateStatistics()
+
     # Main Generator
     def populate(self, n_population, n_jobs, n_food):
         agency = (Genesis.Agents, n_population)
@@ -93,7 +112,27 @@ class Society:
 
         jobs, food, population = results
         return jobs, food, population
-        
+    
+    def drawStatus(self):
+        sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward"]
+        values = [Status.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward]
+        font = pygame.font.Font(None, 22)
+
+        # Transparent Frame
+        new_surface = pygame.Surface((2.5 * self.cell_size, 7 * 22))
+        new_surface.set_alpha(100)
+        new_surface.fill((0, 0, 0))
+        self.screen.blit(new_surface, ((self.grid_size - 2.5) * self.cell_size - 22, 11))
+
+        height_offset = 24
+        for i, (section, value) in enumerate(zip(sections, values)):
+            section = font.render(f"{section}:", True, (222, 222, 222))
+            value = font.render(f"{value:.5}", True, (255, 255, 255))
+            width_offset = value.get_width() + 16
+            self.screen.blit(section, ((self.grid_size - 2.5) * self.cell_size, i * 22 + height_offset))
+            self.screen.blit(value, (self.grid_size * self.cell_size - width_offset - 22, i * 22 + height_offset))
+
+
 
     def draw(self):
         #print('Drawing Society')
