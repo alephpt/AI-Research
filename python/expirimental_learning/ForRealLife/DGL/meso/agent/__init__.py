@@ -1,24 +1,27 @@
-
-from DGL.micro import Placement, Status, Target, Settings
-from .direction import Direction, directions_map
+from .action import Action
+from .status import Status
+from .target import Target
 from .reward import calculateReward
+
+import DGL.micro as micro
 import random
 
+settings = micro.Settings
 
 # TODO: Implement a way to 'find the next target'
-class Agent(Placement):
+class Agent(micro.Placement):
     def __init__(self, x, y, unit_type):
         super().__init__(x, y, unit_type)
-        self.map_size = Settings.MAP_SIZE.value  
+        self.map_size = settings.MAP_SIZE.value  
         self.age = 0
         self.happiness = 0
         self.sex = random.choice(['M', 'F'])
-        self.energy = Settings.INITIAL_E.value # Should we clamp energy
-        self.wealth = Settings.INITIAL_W.value # Should we add 'economic' factors? .. If we add a "legal" requirement, will it figure it out? 
+        self.energy = settings.INITIAL_E.value # Should we clamp energy
+        self.wealth = settings.INITIAL_W.value # Should we add 'economic' factors? .. If we add a "legal" requirement, will it figure it out? 
         self.status = Status.Alive
         self.magnitude = 0
         self.reward = 0
-        self.chosen_direction = Direction.random()
+        self.chosen_direction = Action.randomDirection()
         self.target = None
         self.target_direction_vector = (0, 0)
 
@@ -29,8 +32,8 @@ class Agent(Placement):
             self.energy -= 5
 
     def eat(self):
-        if self.wealth >= Settings.COST_OF_GOODS.value:
-            self.wealth -= Settings.COST_OF_GOODS.value
+        if self.wealth >= settings.COST_OF_GOODS.value:
+            self.wealth -= settings.COST_OF_GOODS.value
             self.energy += 10 # TODO: HUGE TEST - In Isolation, determine if fixed values or random values are better
             self.happiness += 1
     
@@ -48,7 +51,7 @@ class Agent(Placement):
     # TODO: Integrate with Queue Table
     def move(self):
         self.energy -= 1
-        dx, dy = directions_map[self.chosen_direction.value]
+        dx, dy = self.chosen_direction.Vector()
 
         if 0 <= self.x + dx <= self.map_size - 1 and 0 <= self.y + dy <= self.map_size - 1:
             self.x += dx
@@ -67,15 +70,14 @@ class Agent(Placement):
 
     # Needs to be as random as possible to explore all possible states
     def chooseRandomAction(self, findTarget):
-        self.target = findTarget(Target.random()) # TODO: Move this outside of the function
+        self.chosen_direction = Action.randomDirection()
+        self.target = findTarget(Target.random()) 
 
         if self.target is None:
+            print(f"Agent {self} has no target")
             self.target = self
 
-        # Action
-        # Left, Right, Up, Down
-        # Change States
-        self.chosen_direction = Direction.random()
+
 
     # This update function should way potential opportunities, and pick a course of actions,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
@@ -86,10 +88,8 @@ class Agent(Placement):
         self.age += 1
         
 
-        if self.target is None:
+        if self.target is None or random.uniform(0.0, 1.0) < settings.IMPULSIVITY.value:
             self.chooseRandomAction(findTarget)
-
-        self.chosen_direction = Direction.random()
 
         # Choose the best action
         # TODO: Look ahead at the next square based on the Q Table OR Do a Random Walk
@@ -107,7 +107,7 @@ class Agent(Placement):
         self.reward += reward_obj['reward']
 
         # Longer Lives are better
-        self.reward += 1 * Settings.LIFETIME_REWARD_SCALAR.value
+        self.reward += 1 * settings.LIFETIME_REWARD_SCALAR.value
 
         # Update the state space
         self.updateState()

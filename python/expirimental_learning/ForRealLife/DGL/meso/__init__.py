@@ -1,2 +1,3 @@
-from .agent.reward import Agent
-from .cell import Cell
+from .azimuth import Azimuth
+from .tables import QTable
+from .agent import *

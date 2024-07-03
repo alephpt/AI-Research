@@ -1,6 +1,6 @@
 import pygame
-from DGL.meso import Agent
-from DGL.micro import Unit, Placement, Status, Target
+from DGL.meso import Agent, Status, Target
+from DGL.micro import Unit, Placement, Settings
 from multiprocessing import Pool
 from enum import Enum
 import random
@@ -40,30 +40,12 @@ def _helper(fn, n, grid_size, cell_size):
 
 # Will eventually host the genetic learning algorithm and epoch loop
 class Society:
-    def __init__(self, grid_size, cell_size, screen, n_population, n_jobs, n_food):
+    def __init__(self, screen, ):
         self.screen = screen
-        self.grid_size = grid_size
-        self.cell_size = cell_size
 
         # TODO: Fix duplicate placements bug
-        self.jobs, self.food, self.population = self.populate(n_population, n_jobs, n_food)
+        self.jobs, self.food, self.population = self.populate()
 
-        self.n_alive = n_population
-        self.avg_age = 0        # Time  
-        self.avg_happiness = 0  # Satisfaction
-        self.avg_health = 0     # Energy Level
-        self.avg_wealth = 0     # Money
-        self.avg_reward = 0     # Reward
-
-    def updateStatistics(self):
-        self.n_alive = len([agent for agent in self.population if agent.status != Status.Dead])
-        if self.n_alive == 0:
-            return
-        self.avg_age = sum([agent.age for agent in self.population]) / self.n_alive 
-        self.avg_happiness = sum([agent.happiness for agent in self.population]) / self.n_alive
-        self.avg_health = sum([agent.energy for agent in self.population]) / self.n_alive
-        self.avg_wealth = sum([agent.wealth for agent in self.population]) / self.n_alive
-        self.avg_reward = sum([agent.reward for agent in self.population]) / self.n_alive
     
     def findTarget(self, target):
         if target == Target.Food:
@@ -79,8 +61,6 @@ class Society:
             return None
 
     def update(self):
-        print('Updating Society')
-
         population_alive = all([agent.status != Status.Dead for agent in self.population])
 
         # We should only hit this if all agents are dead
@@ -90,7 +70,7 @@ class Society:
             return
 
         for agent in self.population:
-            print(agent)
+            #print(agent)
             agent.update(self.findTarget)
         # for job in self.jobs:
         #     job.update()
@@ -100,18 +80,17 @@ class Society:
         self.updateStatistics()
 
     # Main Generator
-    def populate(self, n_population, n_jobs, n_food):
-        agency = (Genesis.Agents, n_population)
-        employment = (Genesis.Jobs, n_jobs)
-        sustenance = (Genesis.Food, n_food)
+    def populate(self):
+        agency = (Genesis.Agents, Settings.N_POPULATION.value)
+        employment = (Genesis.Jobs, Settings.N_JOBS.value)
+        sustenance = (Genesis.Food, Settings.N_FOOD.value)
 
         with Pool() as pool:
-            args = [(fn, arg, self.grid_size, self.cell_size) for fn, arg in (employment, sustenance, agency)]
+            args = [employment, sustenance, agency]
             results = pool.starmap(_helper, args)
             print(results)
 
-        jobs, food, population = results
-        return jobs, food, population
+        return results
     
     def drawStatus(self):
         sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward"]

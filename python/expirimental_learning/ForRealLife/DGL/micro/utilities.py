@@ -23,4 +23,10 @@ def calculateDirection(x, y, tX, tY):
 
     return vector(x, y, magnitude(dX, dY))
 
-
+def p(x1, y1, x2, y2):
+    '''
+    Calculate the Directional Magnitude of a Vector'''
+    dx = x2 - x1
+    dy = y2 - y1
+    magnitude = (dx ** 2 + dy ** 2) ** 0.5
+    return (dx / magnitude, dy / magnitude), magnitude

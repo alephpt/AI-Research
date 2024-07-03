@@ -1,16 +1,14 @@
 import pygame
 
-from .status import Status
-from .settings import Settings
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
 
 class Placement:
-    def __init__(self, x, y, unit_type):
+    def __init__(self, x, y, cell_size, unit_type):
         self.x = x
         self.y = y
-        self.size = Settings.CELL_SIZE.value
+        self.size = cell_size
         self.unit_type = unit_type
         self.status = 'static'
 
@@ -21,7 +19,7 @@ class Placement:
         return self.y * self.size + self.x
 
     def draw(self, screen):
-        color = self.status.combine(self.unit_type) if type(self.status) == Status else self.unit_type.value
+        color = self.status.combine(self.unit_type) if str(type(self.status)) == "Status" else self.unit_type.value
         pygame.draw.rect(screen, color, (self.x * self.size, self.y * self.size, self.size, self.size))
 
         label = pygame.font.Font(None, 24).render(f"{self.unit_type.name}", True, (255, 255, 255))

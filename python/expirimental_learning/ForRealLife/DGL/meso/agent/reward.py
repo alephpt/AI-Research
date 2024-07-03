@@ -1,13 +1,13 @@
 
-from .direction import p
 from .status import Status
+import DGL.micro as micro
 
 ## Reward Functions for our Agent
 def calculateTargetReward(magnitude, target, x, y):
     '''
     Calculates the reward based on the distance to the target'''
     previous_magnitude = magnitude
-    target_direction_vector, magnitude = p(x, y, target.x, target.y)
+    target_direction_vector, magnitude = micro.p(x, y, target.x, target.y)
     return (magnitude, magnitude - previous_magnitude, target_direction_vector)
 
 def calculateReward(target, status):

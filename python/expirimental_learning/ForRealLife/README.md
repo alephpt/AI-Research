@@ -27,8 +27,14 @@
    -  Fill half of the population, with half of the furthest generation
 
 ## TODOs
+ -[X] Add an 'Impulse Factor' to the Agent
  -[ ] Be able to 'hone' target
  -[ ] Be able to acheive interaction with a cell
+ -[ ] Configure Table for State: Action determination
+    -[ ] Integrate State as Key
+    -[ ] Define Action Table
+    -[ ] Determine Reward factor for for 'Best Action'
+ 
 
 ### Future Potential Implementations:
 - Jobs provide Income for Some and Food for Others.. 
@@ -55,4 +61,5 @@
     - Conflict
     - Exhaustion
 - Implementing a Navigation Function for Turning and Velocity
-    - Allow Children to Inherit Parent Traits
+    - Allow Children to Inherit Parent Traits\
+- Create a Throttle mechanism (GUI) for changing parameters in real time.

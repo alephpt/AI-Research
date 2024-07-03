@@ -1,11 +1,10 @@
-from DGL.meso import Cell
+from DGL.meso import Azimuth
+from DGL.micro import Settings
 
 class Grid:
-    def __init__(self, count, size, screen):
-        self.grid_size = count
-        self.cell_size = size
+    def __init__(self, screen):
         self.screen = screen
-        self.cells = [[Cell(x, y, size) for x in range(count)] for y in range(count)]
+        self.cells = [[Azimuth(x, y) for x in range(Settings.GRID_SIZE.value)] for y in range(Settings.GRID_SIZE.value)]
 
     ## TODO: IMPLEMENT ALL MAJOR LOCATIONAL BASED UPDATE FUNCTIONS HERE, Can Be Callbacks if Necessary
     def update(self):
