@@ -46,6 +46,8 @@
 - Agents get tired and need sleep
 - Agents can starve
 - Agents can create a business and become an employer
+    - Agents can Buy and Sell Food, as well as gift (add Generosity and Hustle Factors) - Possibly integrity
+    - Agents can sell Nothing of Value (add Cunningness and Naivity)
 - Agents can create food and sell it to other Agents
 - Food and Businesses can have a 'quality' or 'tier' 
 - Agents can 'mate' which bonds them together, and multiplies utility && expenses

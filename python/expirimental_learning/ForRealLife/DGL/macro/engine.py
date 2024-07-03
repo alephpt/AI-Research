@@ -26,12 +26,6 @@ class Engine:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
 
-    def genesis(self):
-        self.society.populate(n_jobs, n_food, n_population)
-
-    def repopulate(self):
-        return self.society.populate(n_jobs, n_food, n_population)
-
     def update(self):
         self.society.update()
         #self.grid.update()
@@ -44,8 +38,6 @@ class Engine:
         pygame.display.flip()
 
     def run(self):
-        self.genesis()
-
         while self.running:
             self.clock.tick(Settings.FPS.value)
             self.events()

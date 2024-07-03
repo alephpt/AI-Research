@@ -1,14 +1,17 @@
 import pygame
+from .settings import Settings
+import random
 
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
 
 class Placement:
-    def __init__(self, x, y, cell_size, unit_type):
-        self.x = x
-        self.y = y
-        self.size = cell_size
+    def __init__(self, unit_type):
+        # TODO: Fix this to make sure there is no overlap in the placements
+        self.x = random.randint(0, Settings.GRID_SIZE.value - 1)
+        self.y = random.randint(0, Settings.GRID_SIZE.value - 1)
+        self.size = Settings.CELL_SIZE.value
         self.unit_type = unit_type
         self.status = 'static'
 

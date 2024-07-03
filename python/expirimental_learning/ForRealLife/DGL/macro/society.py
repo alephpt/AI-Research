@@ -1,35 +1,8 @@
 import pygame
-from DGL.meso import Agent, Status, Target
-from DGL.micro import Unit, Placement, Settings
+from .genesis import Genesis
+from DGL.meso import Status, Target
 from multiprocessing import Pool
-from enum import Enum
 import random
-
-
-   ##############
-   ## GENESIS ##
-   #############
-
-# Macros for Society Genesis
-def createAgents(n_population, grid_size, cell_size):
-    return [Agent(random.randint(0, grid_size - 1), random.randint(0, grid_size - 1), cell_size, grid_size, random.choice([Unit.Male, Unit.Female])) \
-        for _ in range(n_population)]
-
-def createJobs(n_jobs, grid_size, cell_size):
-    return [Placement(random.randint(0, grid_size - 1), random.randint(0, grid_size - 1), cell_size, Unit.Work) \
-        for _ in range(n_jobs)]
-
-def createFood(n_food, grid_size, cell_size):
-    return [Placement(random.randint(0, grid_size - 1), random.randint(0, grid_size - 1), cell_size, Unit.Food) \
-        for _ in range(n_food)]
-
-class Genesis(Enum):
-    Agents = createAgents
-    Jobs = createJobs
-    Food = createFood
-
-def _helper(fn, n, grid_size, cell_size):
-    return fn(n, grid_size, cell_size)
 
 
 # Implement our Dictionary of Placement Types for Society Evolution.
@@ -40,13 +13,15 @@ def _helper(fn, n, grid_size, cell_size):
 
 # Will eventually host the genetic learning algorithm and epoch loop
 class Society:
-    def __init__(self, screen, ):
+    def __init__(self, screen):
         self.screen = screen
 
         # TODO: Fix duplicate placements bug
-        self.jobs, self.food, self.population = self.populate()
+        self.repopulate()
 
-    
+    def repopulate(self):
+        self.population, self.jobs, self.food  = Genesis.creation()
+
     def findTarget(self, target):
         if target == Target.Food:
             return random.choice(self.food)
@@ -79,19 +54,6 @@ class Society:
 
         self.updateStatistics()
 
-    # Main Generator
-    def populate(self):
-        agency = (Genesis.Agents, Settings.N_POPULATION.value)
-        employment = (Genesis.Jobs, Settings.N_JOBS.value)
-        sustenance = (Genesis.Food, Settings.N_FOOD.value)
-
-        with Pool() as pool:
-            args = [employment, sustenance, agency]
-            results = pool.starmap(_helper, args)
-            print(results)
-
-        return results
-    
     def drawStatus(self):
         sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward"]
         values = [Status.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward]
