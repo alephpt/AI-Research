@@ -26,6 +26,10 @@
 - Genetic Algorithm for Population Evolution
    -  Fill half of the population, with half of the furthest generation
 
+## TODOs
+ -[ ] Be able to 'hone' target
+ -[ ] Be able to acheive interaction with a cell
+
 ### Future Potential Implementations:
 - Jobs provide Income for Some and Food for Others.. 
     by implementing a chance to trade, 

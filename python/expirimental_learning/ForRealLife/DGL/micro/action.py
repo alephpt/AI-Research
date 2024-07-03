@@ -1,5 +1,6 @@
 from enum import Enum
 
+# These help us observe what the agent is doing
 class Action(Enum):
     Move = 0
     Eat = 1

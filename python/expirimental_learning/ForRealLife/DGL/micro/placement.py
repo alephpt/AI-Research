@@ -1,15 +1,16 @@
 import pygame
 
 from .status import Status
+from .settings import Settings
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
 
 class Placement:
-    def __init__(self, x, y, size, unit_type):
+    def __init__(self, x, y, unit_type):
         self.x = x
         self.y = y
-        self.size = size
+        self.size = Settings.CELL_SIZE.value
         self.unit_type = unit_type
         self.status = 'static'
 

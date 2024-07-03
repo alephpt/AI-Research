@@ -1,22 +1,24 @@
 import pygame
 from .grid import Grid
 from .society import Society
+from DGL.micro import Settings
 
-grid_size = 10
-screen_size = 1240
-background = (24, 24, 24)
-n_jobs = 1
-n_food = 1
-n_population = 2
+grid_size = Settings.GRID_SIZE.value
+screen_size = Settings.SCREEN_SIZE.value
+cell_size = Settings.CELL_SIZE.value
+background = Settings.BACKGROUND_COLOR.value
+n_jobs = Settings.N_JOBS.value
+n_food = Settings.N_FOOD.value
+n_population = Settings.N_POPULATION.value
 
 class Engine:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('For Real Life!?')
         self.running = True
-        self.screen = pygame.display.set_mode((screen_size, screen_size))
-        self.grid = Grid(grid_size, screen_size // grid_size, self.screen)
-        self.society = Society(grid_size, screen_size // grid_size, self.screen, n_population, n_jobs, n_food)
+        self.screen = pygame.display.set_mode((screen_size, screen_size)) # Could abstract this out further - but not necessary
+        self.grid = Grid(self.screen)
+        self.society = Society(self.screen)
         self.clock = pygame.time.Clock()
 
     def events(self):
@@ -42,8 +44,10 @@ class Engine:
         pygame.display.flip()
 
     def run(self):
+        self.genesis()
+
         while self.running:
-            self.clock.tick(15) # 60 FPS
+            self.clock.tick(Settings.FPS.value)
             self.events()
             self.update()
             self.draw()
