@@ -1,6 +1,7 @@
 
 from DGL.micro import Placement, Status, Target, Settings
 from .direction import Direction, directions_map
+from .reward import calculateReward
 import random
 
 
@@ -52,46 +53,7 @@ class Agent(Placement):
         if 0 <= self.x + dx <= self.map_size - 1 and 0 <= self.y + dy <= self.map_size - 1:
             self.x += dx
             self.y += dy
-        
-
-    def calculateTargetReward(self, target):
-        '''
-        Calculates the reward based on the distance to the target'''
-        previous_magnitude = self.magnitude
-        target_direction_vector, magnitude = calculateDirection(self.x, self.y, target.x, target.y)
-        return (magnitude, magnitude - previous_magnitude, target_direction_vector)
-
-    def calculateReward(self, target, status):
-        reward = 0
-
-        # If the distance towards the correct target is less
-        magnitude, target_reward, target_direction_vector = self.calculateTargetReward(target)
-        reward += target_reward
-
-        # If energy goes up
-        if status == Status.Eating:
-            reward
-
-        # If wealth goes up
-        # TODO: Test if Status Order changes the simulation outcomes
-        if status == Status.Working:
-            reward += 1
-
-        # TODO: Add a randomness for 'happiness factor' to the macro genetic scale 
-        #       where some agents care more about different things
-    
-        # Happier Lives are better
-        reward += self.happiness
-
-        # Longer Lives are better
-        reward += self.age
-
-        return {
-            'magnitude': magnitude,
-            'reward': reward,
-            'target_direction_vector': target_direction_vector
-        }
-
+  
     def updateState(self):
         # Update the State Space
         if self.energy < 0:
@@ -138,7 +100,7 @@ class Agent(Placement):
         
         # Calculate Collissions
         # Calculate Rewards
-        reward_obj = self.calculateReward(self.target, self.status)
+        reward_obj = calculateReward(self.target, self.status)
         self.magnitude = reward_obj['magnitude']
         self.target_direction_vector = reward_obj['target_direction_vector']    # We update this here, only AFTER we move
         self.reward += reward_obj['reward']

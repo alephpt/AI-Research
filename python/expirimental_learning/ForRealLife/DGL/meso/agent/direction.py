@@ -1,10 +1,8 @@
 from enum import Enum
 import random
 
-                #  HERE   UPLEFT     LEFT   BACKLEFT   DOWN   DOWNRIGHT  RIGHT  UPRIGHT   UP 
-directions_map = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
 
-# Movement Options
+# Movement Option by Name
 class Direction(Enum):
     UpLeft = 0
     Left = 1
@@ -18,3 +16,16 @@ class Direction(Enum):
     @staticmethod
     def random():
         return random.choice([Direction.UpLeft, Direction.Left, Direction.BackLeft, Direction.Down, Direction.DownRight, Direction.Right, Direction.UpRight, Direction.Up])
+    
+
+## These are the directions that we can move in
+                #  HERE   UPLEFT     LEFT   BACKLEFT   DOWN   DOWNRIGHT  RIGHT  UPRIGHT   UP 
+directions_map = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
+
+
+# Calculate the Directional Magnitude of a Vector
+def p(x1, y1, x2, y2):
+    dx = x2 - x1
+    dy = y2 - y1
+    magnitude = (dx ** 2 + dy ** 2) ** 0.5
+    return (dx / magnitude, dy / magnitude), magnitude

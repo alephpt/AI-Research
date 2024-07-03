@@ -1,2 +1,2 @@
-from .agent.agent import Agent
+from .agent.reward import Agent
 from .cell import Cell
