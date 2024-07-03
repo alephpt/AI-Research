@@ -1,6 +1,8 @@
 from enum import Enum
 import random
 
+# TODO: Determine if we can completely refactor this one out.
+
 #TODO: Implement 'Home' Unit
 class Target(Enum):
     Food = 0

@@ -13,3 +13,4 @@ class Settings(Enum):
     INITIAL_E = 25  # What is the ideal energy level? We started at 25. 
     INITIAL_W = 50  # We want to see how far we can take this down. We started at 50.
     COST_OF_GOODS = 5 # TODO: Let every Agent set their own cost of food
+    LIFETIME_REWARD_SCALAR = 10     # What incentives work best? Random bonus factors for genetic purposes sounds like a win.

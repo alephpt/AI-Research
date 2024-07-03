@@ -1,5 +1,6 @@
 
 from .direction import p
+from .status import Status
 
 ## Reward Functions for our Agent
 def calculateTargetReward(magnitude, target, x, y):
@@ -10,6 +11,8 @@ def calculateTargetReward(magnitude, target, x, y):
     return (magnitude, magnitude - previous_magnitude, target_direction_vector)
 
 def calculateReward(target, status):
+    '''
+    Used to tell us how rewarding a potential action could be'''
     reward = 0
 
     # If the distance towards the correct target is less
@@ -27,12 +30,6 @@ def calculateReward(target, status):
 
     # TODO: Add a randomness for 'happiness factor' to the macro genetic scale 
     #       where some agents care more about different things
-
-    # Happier Lives are better
-    reward += self.happiness
-
-    # Longer Lives are better
-    reward += self.age
 
     return {
         'magnitude': magnitude,

@@ -54,11 +54,14 @@ class Agent(Placement):
             self.x += dx
             self.y += dy
   
+    # Currently only checks if we are dead or not
     def updateState(self):
         # Update the State Space
         if self.energy < 0:
             print(f"Agent {self} has died")
             self.status = Status.Dead
+
+        # We need to determine how to reward our self for what we are doing
 
         # Update the Q Table
 
@@ -74,7 +77,8 @@ class Agent(Placement):
         # Change States
         self.chosen_direction = Direction.random()
 
-    # Update
+    # This update function should way potential opportunities, and pick a course of actions,
+    # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
     def update(self, findTarget):
         if self.status == Status.Dead:
             return
@@ -87,16 +91,13 @@ class Agent(Placement):
 
         self.chosen_direction = Direction.random()
 
-
         # Choose the best action
         # TODO: Look ahead at the next square based on the Q Table OR Do a Random Walk
         # This has to be before the move to ensure the target exists
-        
 
             ## Percent of Randomness
             # We have the ability to move in a direction with some randomness
         self.move()
-
         
         # Calculate Collissions
         # Calculate Rewards
@@ -104,6 +105,9 @@ class Agent(Placement):
         self.magnitude = reward_obj['magnitude']
         self.target_direction_vector = reward_obj['target_direction_vector']    # We update this here, only AFTER we move
         self.reward += reward_obj['reward']
+
+        # Longer Lives are better
+        self.reward += 1 * Settings.LIFETIME_REWARD_SCALAR.value
 
         # Update the state space
         self.updateState()

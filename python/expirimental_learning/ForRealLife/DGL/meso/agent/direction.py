@@ -4,6 +4,9 @@ import random
 
 # Movement Option by Name
 class Direction(Enum):
+    '''
+    Enumerate the Directions that an Agent can move in. 8-Way Movement.
+    '''
     UpLeft = 0
     Left = 1
     BackLeft = 2
@@ -23,8 +26,9 @@ class Direction(Enum):
 directions_map = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
 
 
-# Calculate the Directional Magnitude of a Vector
 def p(x1, y1, x2, y2):
+    '''
+    Calculate the Directional Magnitude of a Vector'''
     dx = x2 - x1
     dy = y2 - y1
     magnitude = (dx ** 2 + dy ** 2) ** 0.5
