@@ -28,8 +28,9 @@ class MoveAction(Enum):
             MoveAction.UpRight, 
             MoveAction.Up])
     
-    def __eq__(self, other):
-        return other in self.__members__.values()
+    def  __eq__(self, value: object) -> bool:
+        return super().__eq__(value)
+
 
     def Vector(self):
         return MoveActions_map[self.value]
@@ -49,11 +50,11 @@ class Action(Enum):
     __str__ = lambda self: self.name
 
     def __eq__(self, other):
-        return other in self.__members__.values()
+        return self.value == other.value
 
     @staticmethod
     def random():
-        return random.choice([Action.Move.random(), Action.Eat, Action.Work, Action.Sleep, Action.Mate])
+        return random.choice([MoveAction.random(), Action.Eat, Action.Work, Action.Sleep, Action.Mate])
     
     @staticmethod
     def randomDirection():

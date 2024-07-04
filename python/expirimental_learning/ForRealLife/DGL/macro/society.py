@@ -1,9 +1,12 @@
 import pygame
 from .genesis import Genesis
+from .dna import Genome
 from DGL.meso import Status, Target
-from multiprocessing import Pool
+from DGL.micro import Settings
 import random
 
+cell_size = Settings.CELL_SIZE.value
+grid_size = Settings.GRID_SIZE.value
 
 # Implement our Dictionary of Placement Types for Society Evolution.
 
@@ -12,8 +15,9 @@ import random
   ###############
 
 # Will eventually host the genetic learning algorithm and epoch loop
-class Society:
+class Society(Genome):
     def __init__(self, screen):
+        super().__init__()
         self.screen = screen
 
         # TODO: Fix duplicate placements bug
@@ -60,18 +64,18 @@ class Society:
         font = pygame.font.Font(None, 22)
 
         # Transparent Frame
-        new_surface = pygame.Surface((2.5 * self.cell_size, 7 * 22))
+        new_surface = pygame.Surface((2.5 * cell_size, 7 * 22))
         new_surface.set_alpha(100)
         new_surface.fill((0, 0, 0))
-        self.screen.blit(new_surface, ((self.grid_size - 2.5) * self.cell_size - 22, 11))
+        self.screen.blit(new_surface, ((grid_size - 2.5) * cell_size - 22, 11))
 
         height_offset = 24
         for i, (section, value) in enumerate(zip(sections, values)):
             section = font.render(f"{section}:", True, (222, 222, 222))
-            value = font.render(f"{value:.5}", True, (255, 255, 255))
+            value = font.render(f"{value}", True, (255, 255, 255))
             width_offset = value.get_width() + 16
-            self.screen.blit(section, ((self.grid_size - 2.5) * self.cell_size, i * 22 + height_offset))
-            self.screen.blit(value, (self.grid_size * self.cell_size - width_offset - 22, i * 22 + height_offset))
+            self.screen.blit(section, ((grid_size - 2.5) * cell_size, i * 22 + height_offset))
+            self.screen.blit(value, (grid_size * cell_size - width_offset - 22, i * 22 + height_offset))
 
 
 

@@ -7,10 +7,17 @@
 #  Keys are possible states, and outputs are optimal weights for determining
 #           the best action to take in that state.
 #
+
+# State Space Includes
+#   - Current Magnitude
+
+
 class QTable:
     def __init__(self):
         self.q_table = {}
         self.q_table['state'] = 0
+
+
 
 ##  THIS ALLOWS FOR AGENTS TO DETERMINE PREFERENCES OVER GENERATIONS
 ##                  State->Mate Space

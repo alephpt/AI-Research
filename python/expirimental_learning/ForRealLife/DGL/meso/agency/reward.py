@@ -4,10 +4,13 @@ from DGL.micro import Settings, p
 from .action import Action
 
 ## Reward Functions for our Agent
-def calculateTargetReward(prev_mag, target, x, y):
+def calculateTargetReward(previous_magnitude, target, x, y):
     '''
     Calculates the reward based on the distance to the target'''
-    previous_magnitude = prev_mag
+    if previous_magnitude is 0:
+        target_direction_vector, magnitude = p(x, y, target.x, target.y)
+        return (magnitude, magnitude, target_direction_vector)
+
     target_direction_vector, magnitude = p(x, y, target.x, target.y)
     return (magnitude, magnitude - previous_magnitude, target_direction_vector)
 
