@@ -1,6 +1,6 @@
 import random
 from DGL.meso import Agent, Work, Eatery
-from DGL.micro import Unit, Placement, Settings
+from DGL.micro import Settings
 from multiprocessing import Pool
 from enum import Enum
 
@@ -9,32 +9,27 @@ from enum import Enum
    ## GENESIS ##
    #############
 
-# Macros for Society Genesis
-def createAgents():
-    return [Agent() for _ in range(Settings.N_POPULATION.value)]
+def helper(t, n, dedup):
+    subscribed = [t(i) for i in range(n)]
 
-def createJobs():
-    return [Work() for _ in range(Settings.N_JOBS.value)]
+    for subscriber in subscribed:
+        # If we have a duplicate, we need to generate a new subscriber
+        while subscriber.index() in dedup:
+            subscriber = t()
 
-def createFood():
-    return [Eatery() for _ in range(Settings.N_FOOD.value)]
+        dedup.add(subscriber.index())
+        continue
 
-def helper(f):
-    return f()
+    return subscribed
 
 class Genesis(Enum):
-    Agency = createAgents
-    Workforce = createJobs
-    Nutrition = createFood
-
-
     # Main Generator
     @staticmethod
-    def creation():
-        params = [Genesis.Agency, Genesis.Workforce, Genesis.Nutrition]
+    def creation(dedup_set):
+        tn = [(Agent, Settings.N_POPULATION.value), (Work, Settings.N_JOBS.value), (Eatery, Settings.N_FOOD.value)]
 
         with Pool() as pool:
-            results = pool.starmap(helper, [(f,) for f in params])
+            results = pool.starmap(helper, [(t, n, dedup_set) for t, n in tn])
         
         agents, jobs, food = results
         return agents, jobs, food

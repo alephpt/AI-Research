@@ -1,8 +1,8 @@
 import pygame
 from .genesis import Genesis
 from .dna import Genome
-from DGL.meso import Status, Target
-from DGL.micro import Settings
+from DGL.meso import Status
+from DGL.micro import Settings, Unit
 import random
 
 cell_size = Settings.CELL_SIZE.value
@@ -17,27 +17,21 @@ grid_size = Settings.GRID_SIZE.value
 # Will eventually host the genetic learning algorithm and epoch loop
 class Society(Genome):
     def __init__(self, screen):
-        super().__init__()
         self.screen = screen
+        super().__init__()
+        self.flattened_cells = set()
+        print('Creating Society with Grid Size:', grid_size)
+        self.cells = [Unit(y * grid_size + x, x, y) for x in range(grid_size) for y in range(grid_size)]
 
         # TODO: Fix duplicate placements bug
         self.repopulate()
 
     def repopulate(self):
-        self.population, self.jobs, self.food  = Genesis.creation()
+        self.population, self.jobs, self.food  = Genesis.creation(self.flattened_cells)
+        
 
-    def findTarget(self, target):
-        if target == Target.Food:
-            return random.choice(self.food)
-        elif target == Target.Work:
-            return random.choice(self.jobs)
-        # TODO: Implement these later
-        # elif target == Target.Mate:
-        #     return 
-        # elif target == Target.Home:
-        #     return random.choice([agent for agent in self.population if agent.status == Status.Alive])
-        else:
-            return None
+    def findTarget(self):
+        return random.choice(self.food)
 
     def update(self):
         population_alive = all([agent.status != Status.Dead for agent in self.population])
@@ -48,14 +42,13 @@ class Society(Genome):
             #self.jobs, self.food, self.population = self.repopulate()
             return
 
+        # This is where we need to update the state of all of the cells
         for agent in self.population:
-            #print(agent)
             agent.update(self.findTarget)
-        # for job in self.jobs:
-        #     job.update()
-        # for food in self.food:
-        #     food.update
-
+        
+        for unit in self.cells:
+                unit.update()
+    
         self.updateStatistics()
 
     def drawStatus(self):
@@ -87,3 +80,5 @@ class Society(Genome):
             food.draw(self.screen)
         for agent in self.population:
             agent.draw(self.screen)
+        for unit in self.cells:
+            unit.draw(self.screen)

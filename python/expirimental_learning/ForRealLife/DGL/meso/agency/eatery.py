@@ -1,8 +1,10 @@
-from DGL.micro import Unit, Placement, Settings
+from DGL.micro import Unit, UnitType, Settings
 
-class Eatery(Placement):
-    def __init__(self):
-        super().__init__(Unit.Work)
+class Eatery(Unit):
+    def __init__(self, idx):
+        x = Settings.randomLocation()
+        y = Settings.randomLocation()
+        super().__init__(idx, x, y, UnitType.Work)
         self.available_food = Settings.AVAILABLE_FOOD.value
         self.hungered = []
 

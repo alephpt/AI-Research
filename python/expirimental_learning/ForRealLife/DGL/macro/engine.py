@@ -1,5 +1,6 @@
 import pygame
-from .grid import Grid
+
+from DGL.micro import LogLevel, Log
 from .society import Society
 from DGL.micro import Settings
 
@@ -17,7 +18,6 @@ class Engine:
         pygame.display.set_caption('For Real Life!?')
         self.running = True
         self.screen = pygame.display.set_mode((screen_size, screen_size)) # Could abstract this out further - but not necessary
-        self.grid = Grid(self.screen)
         self.society = Society(self.screen)
         self.clock = pygame.time.Clock()
 
@@ -33,11 +33,11 @@ class Engine:
     def draw(self):
         self.screen.fill(background)
         self.society.draw()
-        self.grid.draw()
         self.society.drawStatus()
         pygame.display.flip()
 
     def run(self):
+        Log(LogLevel.VERBOSE, "Running DGL Engine")
         while self.running:
             self.clock.tick(Settings.FPS.value)
             self.events()

@@ -50,7 +50,7 @@ class Action(Enum):
     __str__ = lambda self: self.name
 
     def __eq__(self, other):
-        return self.value == other.value
+        return self.value == other.value or self.isType(other)
 
     @staticmethod
     def random():

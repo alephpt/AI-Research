@@ -1,8 +1,10 @@
-from DGL.micro import Unit, Placement, Settings
+from DGL.micro import Unit, UnitType, Settings
 
-class Work(Placement):
-    def __init__(self):
-        super().__init__(Unit.Work)
+class Work(Unit):
+    def __init__(self, idx):
+        x = Settings.randomLocation()
+        y = Settings.randomLocation()
+        super().__init__(idx, x, y, UnitType.Work)
         self.n_employees = 0
         self.max_employees = Settings.MAX_EMPLOYEES.value
         self.employees = []
