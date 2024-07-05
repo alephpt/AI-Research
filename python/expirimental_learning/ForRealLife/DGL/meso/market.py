@@ -3,7 +3,7 @@ from .agency.state import State
 
 class Market(Unit):
     def __init__(self, idx):
-        super().__init__(idx, UnitType.Work)
+        super().__init__(idx, UnitType.Market)
         self.n_employees = 0
         self.n_clients = 0
         self.max_employees = Settings.MAX_EMPLOYEES.value

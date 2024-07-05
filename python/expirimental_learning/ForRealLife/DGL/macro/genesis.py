@@ -5,17 +5,19 @@ from multiprocessing import Pool
 from enum import Enum
 
 
+idx_size = Settings.GRID_SIZE.value ** 2
+
    ##############
    ## GENESIS ##
    #############
 
 def helper(t, n, dedup):
-    subscribed = [t(i) for i in range(n)]
+    subscribed = [t(random.randint(0, idx_size)) for _ in range(n)]
 
     for subscriber in subscribed:
         # If we have a duplicate, we need to generate a new subscriber
         while subscriber.index() in dedup:
-            subscriber = t()
+            subscriber = t(random.randint(0, idx_size))
 
         dedup.add(subscriber.index())
         continue

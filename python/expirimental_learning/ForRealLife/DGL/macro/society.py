@@ -21,7 +21,7 @@ class Society(Genome):
         self.screen = screen
         super().__init__()
         print('Creating Society with Grid Size:', grid_size)
-        self.cells = Unit.set()
+        self.cells = Unit.set() # Set of all cells in the grid 
 
 
         # TODO: Fix duplicate placements bug
@@ -29,7 +29,7 @@ class Society(Genome):
 
     def repopulate(self):
         Log(LogLevel.VERBOSE, "Repopulating Society")
-        self.population, self.jobs, self.food  = Genesis.creation(self.cells)
+        self.population, self.markets, self.houses  = Genesis.creation(self.cells)
 
     def update(self):
         Log(LogLevel.VERBOSE, "Updating Society")
@@ -41,12 +41,12 @@ class Society(Genome):
             #self.jobs, self.food, self.population = self.repopulate()
             return
 
-        # This is where we need to update the state of all of the cells
+        # This is where we need to update the state of all of the cells << This is the main loop
         for agent in self.population:
             agent.update()
         
         for unit in self.cells:
-                unit.update()
+            unit.update()
     
         self.updateStatistics()
 
@@ -73,10 +73,10 @@ class Society(Genome):
 
     def draw(self):
         Log(LogLevel.VERBOSE, "Drawing Society")
-        # for job in self.jobs:
-        #     job.draw(self.screen)
-        # for food in self.food:
-        #     food.draw(self.screen)
+        for market in self.markets:
+            market.draw(self.screen)
+        for house in self.houses:
+            house.draw(self.screen)
         for agent in self.population:
             agent.draw(self.screen)
         for unit in self.cells:

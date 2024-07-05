@@ -10,8 +10,7 @@ class UnitType(Enum):
     Available = (64, 64, 64)
     Male = (128, 0, 0)
     Female = (0, 0, 128)
-    Work = (128, 128, 0)
-    Food = (0, 128, 0)
+    Market = (128, 128, 0)
     Home = (128, 128, 128) 
 
 def realPosition(azimuth, size, offset): 
@@ -59,7 +58,7 @@ class Unit:
             pygame.draw.rect(screen, self.type.value, rect, 1)
             return
         
-        if self.type in [UnitType.Male, UnitType.Female, UnitType.Work, UnitType.Food]:
+        if self.type in [UnitType.Male, UnitType.Female, UnitType.Market, UnitType.Home]:
             pygame.draw.rect(screen, self.type.value, rect)
 
             label = pygame.font.Font(None, 24).render(f"{self.type.name}", True, (255, 255, 255))

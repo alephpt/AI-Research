@@ -1,9 +1,11 @@
 from DGL.micro import Unit, UnitType, Settings
+from .state import State
 
 class Home(Unit):
     def __init__(self, idx):
-        super().__init__(idx, UnitType.Work)
+        super().__init__(idx, UnitType.Home)
         self.max_sleep = Settings.MAX_SLEEP.value
+        self.state = State.Static
         self.home = []
 
     def getFood(self, agent):
