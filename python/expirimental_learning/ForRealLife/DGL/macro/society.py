@@ -1,9 +1,10 @@
 import pygame
+
+from DGL.micro import Log, LogLevel
 from .genesis import Genesis
 from .dna import Genome
-from DGL.meso import Status
+from DGL.meso import State
 from DGL.micro import Settings, Unit
-import random
 
 cell_size = Settings.CELL_SIZE.value
 grid_size = Settings.GRID_SIZE.value
@@ -19,22 +20,20 @@ class Society(Genome):
     def __init__(self, screen):
         self.screen = screen
         super().__init__()
-        self.flattened_cells = set()
         print('Creating Society with Grid Size:', grid_size)
-        self.cells = [Unit(y * grid_size + x, x, y) for x in range(grid_size) for y in range(grid_size)]
+        self.cells = Unit.set()
+
 
         # TODO: Fix duplicate placements bug
         self.repopulate()
 
     def repopulate(self):
-        self.population, self.jobs, self.food  = Genesis.creation(self.flattened_cells)
-        
-
-    def findTarget(self):
-        return random.choice(self.food)
+        Log(LogLevel.VERBOSE, "Repopulating Society")
+        self.population, self.jobs, self.food  = Genesis.creation(self.cells)
 
     def update(self):
-        population_alive = all([agent.status != Status.Dead for agent in self.population])
+        Log(LogLevel.VERBOSE, "Updating Society")
+        population_alive = all([agent.state != State.Dead for agent in self.population])
 
         # We should only hit this if all agents are dead
         if not population_alive:
@@ -44,7 +43,7 @@ class Society(Genome):
 
         # This is where we need to update the state of all of the cells
         for agent in self.population:
-            agent.update(self.findTarget)
+            agent.update()
         
         for unit in self.cells:
                 unit.update()
@@ -53,7 +52,7 @@ class Society(Genome):
 
     def drawStatus(self):
         sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward"]
-        values = [Status.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward]
+        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward]
         font = pygame.font.Font(None, 22)
 
         # Transparent Frame
@@ -73,11 +72,11 @@ class Society(Genome):
 
 
     def draw(self):
-        #print('Drawing Society')
-        for job in self.jobs:
-            job.draw(self.screen)
-        for food in self.food:
-            food.draw(self.screen)
+        Log(LogLevel.VERBOSE, "Drawing Society")
+        # for job in self.jobs:
+        #     job.draw(self.screen)
+        # for food in self.food:
+        #     food.draw(self.screen)
         for agent in self.population:
             agent.draw(self.screen)
         for unit in self.cells:

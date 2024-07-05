@@ -1,4 +1,4 @@
-from DGL.meso import Status
+from DGL.meso import State
 
 # TODO: Implement Utility functions that allow for the creation of a new generation of agents
 # TODO: Integrate the Genome into the Genetic Evolution of the Society
@@ -46,13 +46,13 @@ class Genome:
         self.n_generations = 0
 
     def updateStatistics(self):
-        if 0 == len([agent for agent in self.population if agent.status != Status.Dead]):
+        if 0 == len([agent for agent in self.population if agent.state != State.Dead]):
             return
         
         self.reset()
 
         for agent in self.population:
-            if agent.status == Status.Dead:
+            if agent.state == State.Dead:
                 continue
             
             self.n_alive += 1

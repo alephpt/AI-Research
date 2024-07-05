@@ -1,5 +1,5 @@
 import random
-from DGL.meso import Agent, Work, Eatery
+from DGL.meso import Agent, Market, Home
 from DGL.micro import Settings
 from multiprocessing import Pool
 from enum import Enum
@@ -26,7 +26,7 @@ class Genesis(Enum):
     # Main Generator
     @staticmethod
     def creation(dedup_set):
-        tn = [(Agent, Settings.N_POPULATION.value), (Work, Settings.N_JOBS.value), (Eatery, Settings.N_FOOD.value)]
+        tn = [(Agent, Settings.N_POPULATION.value), (Market, Settings.N_JOBS.value), (Home, Settings.N_HOUSES.value)]
 
         with Pool() as pool:
             results = pool.starmap(helper, [(t, n, dedup_set) for t, n in tn])

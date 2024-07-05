@@ -4,13 +4,8 @@ from DGL.micro import LogLevel, Log
 from .society import Society
 from DGL.micro import Settings
 
-grid_size = Settings.GRID_SIZE.value
 screen_size = Settings.SCREEN_SIZE.value
-cell_size = Settings.CELL_SIZE.value
 background = Settings.BACKGROUND_COLOR.value
-n_jobs = Settings.N_JOBS.value
-n_food = Settings.N_FOOD.value
-n_population = Settings.N_POPULATION.value
 
 class Engine:
     def __init__(self):
@@ -26,10 +21,6 @@ class Engine:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
 
-    def update(self):
-        self.society.update()
-        #self.grid.update()
-
     def draw(self):
         self.screen.fill(background)
         self.society.draw()
@@ -38,9 +29,11 @@ class Engine:
 
     def run(self):
         Log(LogLevel.VERBOSE, "Running DGL Engine")
+
         while self.running:
             self.clock.tick(Settings.FPS.value)
             self.events()
-            self.update()
+            self.society.update()
             self.draw()
+            
         pygame.quit()

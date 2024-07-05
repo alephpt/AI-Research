@@ -19,10 +19,16 @@ class DecisionNetwork:
 
         # These are our input conditions
         self.state_space = {
+            # TODO: IT WOULD BE INTERESTING TO SCALE ACROSS AGE
             "magnitude": 0,  ## We need to find the best magnitude
             "energy": 0,
             "wealth": 0,
-            "action": "none"       
+            "happiness": 0,
+            "status": "none",               # This is the current "State" of the agent - "What we are actually 'doing'"
+            "action": "none",               # Moving, Eating, Working, Sleeping, Mating, Nothing
+            "target_type": "none",          # What Unit Type are we looking for
+            "target_magnitude": 0,          # How far away is the target
+            "succeed": False                # This tells us the state of our current action - Big Negative if we fail
         }
 
         # these are our 'target' conditions
@@ -34,7 +40,8 @@ class DecisionNetwork:
             "none": 0
         }
 
-        # These are our output parameters
+        # These are our output parameters that dictate the 'missing' Status parameters.. 
+        # We want it to learn to choose once, and then 'stick' or 'none'
         self.action_space = {
             "find_food": 0,
             "find_work": 0,
