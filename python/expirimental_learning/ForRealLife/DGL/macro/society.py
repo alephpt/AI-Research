@@ -3,7 +3,7 @@ import pygame
 from .genetics import Genome
 from DGL.meso import Grid
 from DGL.meso.agency import State
-from DGL.micro import Settings, Log, LogLevel
+from DGL.micro import Settings, Log, LogLevel, UnitType
 
 cell_size = Settings.CELL_SIZE.value
 grid_size = Settings.GRID_SIZE.value
@@ -40,33 +40,39 @@ class Society(Genome):
         self.grid.repopulate()
         self.selected = None
 
+    def selectT(self, set, x, y):
+        for unit in set:
+            if unit.x == x and unit.y == y:
+                self.selected = unit
+                return True
+            
+        return False
+
     def selectUnit(self, mouse_pos):
+        '''
+        Gives us the ability to select a cell from the UI'''
         x, y = mouse_pos
         x = x // Settings.CELL_SIZE.value
         y = y // Settings.CELL_SIZE.value
+        index = y * Settings.GRID_SIZE.value + x
 
-        for market in self.grid.markets:
-            if market.x == x and market.y == y:
-                Log(LogLevel.INFO, f"Selected Market at {x}, {y}")
-                self.selected = market
-                return
+        # This may not work if a unit has moved to this location, but is not at this index
+        if self.grid.cells[index].type == UnitType.Available:
+            Log(LogLevel.INFO, f"Selected Available at {x}, {y}")
+            return
+
+        if self.selectT(self.grid.markets, x, y):
+            Log(LogLevel.INFO, f"Selected Market at {x}, {y}")
+            return
         
-        for house in self.grid.homes:
-            if house.x == x and house.y == y:
-                Log(LogLevel.INFO, f"Selected House at {x}, {y}")
-                self.selected = house
-                return
+        if self.selectT(self.grid.homes, x, y):
+            Log(LogLevel.INFO, f"Selected Home at {x}, {y}")
+            return
         
-        for agent in self.grid.agents:
-            if agent.x == x and agent.y == y:
-                Log(LogLevel.INFO, f"Selected Agent at {x}, {y}")
-                self.selected = agent
-                return
-            
-        for unit in self.grid.cells:
-            if unit.x == x and unit.y == y:
-                self.selected = unit
-                return 
+        if self.selectT(self.grid.agents, x, y):
+            Log(LogLevel.INFO, f"Selected Agent at {x}, {y}")
+            return
+
         Log(LogLevel.INFO, f"Selected Cell at {x}, {y}")
 
     # TODO: Move this to the engine
