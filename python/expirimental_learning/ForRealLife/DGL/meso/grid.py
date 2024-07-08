@@ -13,6 +13,8 @@ grid_size = Settings.GRID_SIZE.value
 
 
 def helper(t, n):
+    '''
+    Generates a set, and then attempts to dedplucate the set, by checking the index of each unit.'''
     generated = set([t(random.randint(0, idx_size - 1)) for _ in range(n)])
     resolved = set()
 
@@ -60,50 +62,31 @@ class Grid:
             if agent.state == State.Dead:
                 self.agents.remove(agent)
                 continue
-                
+
+            if agent.type in [UnitType.Male, UnitType.Female]:
+                # TODO: Determine if we are 'broke' or 'hungry'
+                if self.cells[agent.index()].type == UnitType.Market:
+                    # We need to determine Hungry, Broke, Working, or Buying Food
+                    Log(LogLevel.INFO, f"Agent {agent} is at Market {self.cells[agent.index()].idx}")
+                elif self.cells[agent.index()].type == UnitType.Home:
+                    Log(LogLevel.INFO, f"Agent {agent} is at Home {self.cells[agent.index()].idx}")
+                    
             agent.updateValues()
 
     def availableCell(self, idx):
         return self.cells[idx].type == UnitType.Available
 
-    def sanitizeSet(self, unit_set, unit_type, f):
-        '''
-        This helps to deduplicate indexes in a set of units, by checking for duplicates and replacing them.'''
-        new_set = set()
-
-        for unit in unit_set:
-            if isinstance(unit_type, UnitType) and unit.type == unit_type or \
-                isinstance(unit_type, list) and unit.type in unit_type:
-                while not self.availableCell(unit.idx):
-                    Log(LogLevel.DEBUG, f"Duplicate {unit_type} found at {unit.idx}.")
-                    unit = f(random.randint(0, idx_size - 1))
-
-            new_set.add(unit)
-
-        return new_set
-
-    def dedupliPlace(self, unit_set):
-        '''
-        This is a parallelized buffer for the sanitizing a generated set of units.
-
-        This iterates through the generated set of Agends, Markets and Homes, and checks for duplicate indexes, in parallel.
-        If a duplicate is found, it generates a new unit, and replaces the duplicate. with the help of the sanitizeSet method.
-        '''
-        agents, markets, homes = deepcopy(unit_set)
-        star_map = [(agents, UnitType.HUMAN, Agent), (markets, UnitType.Market, Market), (homes, UnitType.Home, Home)]
-
-        with Pool() as pool:
-            res = pool.starmap(self.sanitizeSet, star_map)
-            
-        return res
-    
     def emplaceUnits(self, unit_set, f):
-        for unit in unit_set:
+        unit_copy = deepcopy(unit_set)
+
+        for unit in unit_copy:
             while not self.availableCell(unit.idx):
                 Log(LogLevel.DEBUG, f"Duplicate {unit.type} found at {unit.idx}.")
                 unit = f(random.randint(0, idx_size - 1))
 
             self.cells[unit.idx] = unit
+        
+        return unit_copy
 
     def populate(self):
         '''
@@ -113,11 +96,11 @@ class Grid:
         with Pool() as pool:
             res = pool.starmap(helper, star_map)
 
-        self.agents, self.markets, self.homes = self.dedupliPlace(res)
+        agents, markets, homes = res
 
-        self.emplaceUnits(self.agents, Agent)
-        self.emplaceUnits(self.markets, Market)
-        self.emplaceUnits(self.homes, Home)
+        agents = self.emplaceUnits(agents, Agent)
+        markets = self.emplaceUnits(markets, Market)
+        homes = self.emplaceUnits(homes, Home)
 
-        return res
+        return agents, markets, homes
         

@@ -39,9 +39,9 @@ class Settings(Enum):
 
     # MESO-MACRO SETTINGS
     N_JOBS = 1                                  # This throttles supply and demand for food and money
-    N_POPULATION = 5
+    N_POPULATION = 2
 
-    N_HOUSES = 2
+    N_HOUSES = 1
     MAX_SLEEP = 6                        # Let's allow for this to be traced later
     RESTING_VALUE = 5
     RESTING_COST = 3                            # This could be a bit more dynamic - clamped to a small range
@@ -67,7 +67,7 @@ class Settings(Enum):
 
     # AGENT SETTINGS
     COST_OF_GOODS = 5                           # TODO: Let every Agent set their own cost of food
-    INITIAL_E = 1400                              # Default Energy Level -   Agents should inherit this with their DNA -  What is the ideal energy level? We started at 25. 
+    INITIAL_E = 100                              # Default Energy Level -   Agents should inherit this with their DNA -  What is the ideal energy level? We started at 25. 
     INITIAL_W = 50                              # Default Money Level -    Agents should inherit this with their DNA -   We want to see how far we can take this down. We started at 50.
     LIFETIME_REWARD_SCALAR = 10                 # Incentivizes living longer - this should start as 10:1 energy cost - # Maybe we add Random bonus factor for genetic alterations.
     IMPULSIVITY = 0.5                           # How likely are you to make a random decision? - We started at 0.5 and need to end with near absolute

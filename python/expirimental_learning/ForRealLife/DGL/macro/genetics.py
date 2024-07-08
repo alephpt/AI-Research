@@ -1,4 +1,5 @@
 from DGL.meso.agency import State
+from DGL.micro import LogLevel, Log
 
 # TODO: Implement Utility functions that allow for the creation of a new generation of agents
 # TODO: Integrate the Genome into the Genetic Evolution of the Society
@@ -51,7 +52,7 @@ class Genome:
         
         self.reset()
 
-        for agent in self.population:
+        for agent in self.grid.agents:
             if agent.state == State.Dead:
                 continue
             
@@ -79,6 +80,10 @@ class Genome:
 
             self.min_reward = min(self.min_reward, agent.reward)
             self.max_reward = max(self.max_reward, agent.reward)
+
+        if 0 == self.n_alive:
+            Log(LogLevel.INFO, "No Agents are Alive")
+            return
 
         self.avg_age = self.total_age // self.n_alive
         self.avg_happiness = self.total_happiness // self.n_alive

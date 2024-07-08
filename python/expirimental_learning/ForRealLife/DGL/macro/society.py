@@ -22,7 +22,6 @@ class Society(Genome):
         print('Creating Society with Grid Size:', grid_size)
         self.grid = Grid()
         self.selected = None
-        self.population = self.grid.alive()
 
     def update(self):
         Log(LogLevel.VERBOSE, "Updating Society")
@@ -31,11 +30,15 @@ class Society(Genome):
         # We should only hit this if all agents are dead
         if not population_alive:
             print('Population is Dead')
-            #self.jobs, self.food, self.population = self.repopulate()
+            self.resetGrid()
             return
 
         self.grid.update()
         self.updateStatistics()
+
+    def resetGrid(self):
+        self.grid.repopulate()
+        self.selected = None
 
     def selectUnit(self, mouse_pos):
         x, y = mouse_pos
@@ -45,27 +48,31 @@ class Society(Genome):
         for market in self.grid.markets:
             if market.x == x and market.y == y:
                 Log(LogLevel.INFO, f"Selected Market at {x}, {y}")
-                return market
+                self.selected = market
+                return
         
         for house in self.grid.homes:
             if house.x == x and house.y == y:
                 Log(LogLevel.INFO, f"Selected House at {x}, {y}")
-                return house
+                self.selected = house
+                return
         
         for agent in self.grid.agents:
             if agent.x == x and agent.y == y:
                 Log(LogLevel.INFO, f"Selected Agent at {x}, {y}")
-                return agent
+                self.selected = agent
+                return
             
         for unit in self.grid.cells:
             if unit.x == x and unit.y == y:
-                return unit
+                self.selected = unit
+                return 
         Log(LogLevel.INFO, f"Selected Cell at {x}, {y}")
 
     # TODO: Move this to the engine
     def gui(self):
         sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward", 'Selected']
-        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward, self.selected]
+        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward, self.selected.__class__.__name__]
         font = pygame.font.Font(None, 22)
 
         # Transparent Frame

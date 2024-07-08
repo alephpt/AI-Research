@@ -27,6 +27,9 @@ class Agent(Azimuth):
         self.moving = False
         self.success = False
 
+    def index(self):
+        return self.y * map_size + self.x
+
     def takeStep(self):
     # Calculate Rewards
         reward_obj = calculateReward(self.magnitude, self.x, self.y, self.target, self.direction)
@@ -37,6 +40,7 @@ class Agent(Azimuth):
 
     # These three functions form the foundations of our future for the Genetic Learning Algorithm
     def work(self):
+        Log(LogLevel.VERBOSE, f"Agent {self} is working")
         if self.energy >= 10:
             self.wealth += Settings.WORK_REWARD.value
             self.energy -= Settings.WORK_COST.value

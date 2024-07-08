@@ -3,11 +3,15 @@ from .agency import MoveAction, State
 from DGL.micro import Unit, UnitType, Settings, Log, LogLevel
 import random
 
+global gender_count
+gender_count = 0
 
 # State Space ? Q
 class Azimuth(Unit): 
     def __init__(self, idx):
-        super().__init__(idx, random.choice([UnitType.Male, UnitType.Female]))
+        global gender_count 
+        super().__init__(idx, UnitType.Male if gender_count % 2 == 0 else UnitType.Female)
+        gender_count += 1
         self.magnitude = 0
         self.target = MoveAction.random()
         self.target_direction = self.target.xy()
@@ -15,7 +19,7 @@ class Azimuth(Unit):
         self.state = State.random()
     
     def __str__(self):
-        return f"[{self.idx}]-({self.x},{self.y}) - {self.state} :: '{type(self.target)}' :: "
+        return f"[{self.idx}]-({self.x},{self.y}) - {self.state} :: '{self.target}' :: "
     
     def updateAzimuth(self, reward_obj):
         self.magnitude = reward_obj['magnitude']
