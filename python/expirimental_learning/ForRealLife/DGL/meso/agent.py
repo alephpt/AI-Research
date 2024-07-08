@@ -1,4 +1,4 @@
-from DGL import Log, LogLevel
+from DGL.micro import Log, LogLevel
 from .agency import State, calculateReward
 from .azimuth import Azimuth
 
@@ -101,7 +101,7 @@ class Agent(Azimuth):
             dx, dy = self.target.xy()
 
             # Make sure we are within bounds
-            if 0 <= self.x + dx <= self.map_size - 1 and 0 <= self.y + dy <= self.map_size - 1:
+            if 0 <= self.x + dx <= map_size - 1 and 0 <= self.y + dy <= map_size - 1:
                 self.x += dx
                 self.y += dy
         

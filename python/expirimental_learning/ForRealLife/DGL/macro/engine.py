@@ -1,8 +1,7 @@
 import pygame
 
 from .society import Society
-from DGL import LogLevel, Log
-from DGL.micro import Settings
+from DGL.micro import Settings, LogLevel, Log
 
 screen_size = Settings.SCREEN_SIZE.value
 background = Settings.BACKGROUND_COLOR.value

@@ -15,7 +15,7 @@ class LogLevel(Enum):
 
 class Log:
     def __init__(self, level, message):
-        if level == LogLevel.CRITICAL:
+        if level == LogLevel.FATAL:
             print(f" [{level}] :: {message}")
             exit(1)
 

@@ -1,10 +1,9 @@
 import pygame
 
 from .genetics import Genome
-from DGL import Log, LogLevel
 from DGL.meso import Grid
 from DGL.meso.agency import State
-from DGL.micro import Settings
+from DGL.micro import Settings, Log, LogLevel
 
 cell_size = Settings.CELL_SIZE.value
 grid_size = Settings.GRID_SIZE.value

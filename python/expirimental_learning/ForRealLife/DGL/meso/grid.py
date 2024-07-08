@@ -2,7 +2,9 @@ from copy import deepcopy
 from multiprocessing import Pool
 import random
 
-from . import Agent, Market, Home
+from .market import Market
+from .agent import Agent
+from .agency import Home
 from .agency import State
 from DGL.micro import Unit, Settings, UnitType, Log, LogLevel
 

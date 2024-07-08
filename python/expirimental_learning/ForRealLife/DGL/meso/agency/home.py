@@ -1,5 +1,5 @@
 from DGL.micro import Unit, UnitType, Settings
-from .agency.state import State
+from . import State
 
 class Home(Unit):
     def __init__(self, idx):

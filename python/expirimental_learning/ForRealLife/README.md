@@ -57,7 +57,7 @@ Working Space:
     -[ ] Integrate State as Key
     -[ ] Define Action Table
     -[ ] Determine Reward factor for for 'Best Action'
- 
+ -[ ] Make type safe
 
 ### Future Potential Implementations:
 - Jobs provide Income for Some and Food for Others.. 
