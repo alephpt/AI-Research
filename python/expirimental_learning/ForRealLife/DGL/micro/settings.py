@@ -35,7 +35,7 @@ class Settings(Enum):
     SCREEN_SIZE = 1000
     BACKGROUND_COLOR = (24, 24, 24)
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
-    FPS = 30
+    FPS = 10
 
     # MESO-MACRO SETTINGS
     N_JOBS = 1                                  # This throttles supply and demand for food and money
