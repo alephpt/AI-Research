@@ -9,7 +9,7 @@ class Market(Unit):
         self.n_exchanges = 0 
         self.exchanges = [] # We can implement this later to allow merchants and buyers to have an ongoing exchange.. maybe even a preference for a certain merchant
         self.max_employees = Settings.MAX_EMPLOYEES.value
-        self.status = State.Static
+        self.state = State.Static
 
     def exchange(self, buyer, seller):
         buyer.money -= Settings.FOOD_COST.value

@@ -1,6 +1,8 @@
 from enum import Enum
-
+from .utilities import Log
 from .settings import LogLevel, Settings
+from DGL.meso import Agent, Market
+from DGL.meso.agency import Home
 import pygame
 
 class UnitType(Enum):
@@ -10,8 +12,18 @@ class UnitType(Enum):
     Available = (64, 64, 64)
     Male = (128, 0, 0)
     Female = (0, 0, 128)
+    HUMAN = [Male, Female]
     Market = (128, 128, 0)
     Home = (128, 128, 128) 
+
+def toClass(self):
+    type_name = self.__name__
+    if type_name == "Agent":
+        return Agent
+    if type_name == "Market":
+        return Market
+    if type_name == "Home":
+        return Home
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
@@ -42,7 +54,11 @@ class Unit:
         return hash((self.x, self.y))
     
     def __eq__(self, other):
-        print("[Unit] :: Comparing {self} to {other}")
+        if not isinstance(other, Unit):
+            Log(LogLevel.FATAL, f"[Unit] :: !! FATAL !!  Cannot compare Unit to {type(other)}.")
+
+        # THIS IS NOT BROKEN IF IT FAILS.
+        Log(LogLevel.INFO, f"[Unit] :: Comparing {self.type}-{self.idx} to {other.type}-{other.idx}. Cannot compare Unit to {type(other)}.")
         return isinstance(other, Unit) and self.x == other.x and self.y == other.y and self.idx == other.idx
     
     def update(self):

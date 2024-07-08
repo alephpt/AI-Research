@@ -1,5 +1,5 @@
 from copy import deepcopy
-from multiprocessing import Pool
+from multiprocessing import Array, Pool
 import random
 
 from .market import Market
@@ -10,6 +10,26 @@ from DGL.micro import Unit, Settings, UnitType, Log, LogLevel
 
 idx_size = Settings.GRID_SIZE.value ** 2
 grid_size = Settings.GRID_SIZE.value
+
+
+def helper(t, n):
+    generated = set([t(random.randint(0, idx_size - 1)) for _ in range(n)])
+    
+    Log(LogLevel.VERBOSE, f"Generated {len(generated)} {t.__name__}s.")
+
+    for unitA in generated:
+        for unitB in generated:
+            if unitA.idx == unitB.idx:
+                Log(LogLevel.DEBUG, f"Duplicate {t.__name__}s found at {unitA.idx}.")
+                generated.remove(unitA)
+
+                while unitA.idx == unitB.idx:
+                    unitA = t(random.randint(0, idx_size - 1))
+
+                generated.add(unitA)
+        
+    return generated
+
 
 
 # The actions of the agents depends more on the world around them, than what they are doing
@@ -35,6 +55,12 @@ class Grid:
         for agent in self.agents:
             agent.draw(screen)
 
+        for market in self.markets:
+            market.draw(screen)
+
+        for home in self.homes:
+            home.draw(screen)
+
     def update(self):
         #Log(LogLevel.DEBUG, f"Updating Grid of size {len(self.cells)}")
        # Log(LogLevel.DEBUG, f"Population: {len(self.agents)}")
@@ -47,31 +73,39 @@ class Grid:
                 
             agent.updateValues()
 
-    def helper(self, t, n):
-        generated = [t(random.randint(0, idx_size - 1)) for _ in range(n)]
-        
-        Log(LogLevel.VERBOSE, f"Generated {len(generated)} {t.__name__}s")
-        Log(LogLevel.VERBOSE, f"{len(self.cells)} cells in grid of size {grid_size}x{grid_size}")
+    def availableCell(self, idx):
+        return self.cells[idx].type == UnitType.Available
 
-        for unit in generated:
-            Log(LogLevel.VERBOSE, f"Placing {unit.type} at {unit.x}, {unit.y} with index {unit.idx}")
-            
-            # We make sure we have an available cell to place the unit
-            while self.cells[unit.idx].type != UnitType.Available:
-                unit = t(random.randint(0, idx_size - 1))
-                Log(LogLevel.VERBOSE, f"Retrying placement of {unit.type} at {unit.x}, {unit.y} with index {unit.idx}")
-            
-            # We place the unit in the cell
-            self.cells[unit.idx] = unit
+    def sanitizeSet(self, unit_set, unit_type, f):
+        new_set = set()
 
-        return generated
+        for unit in unit_set:
+            if isinstance(unit_type, UnitType) and unit.type == unit_type or \
+                isinstance(unit_type, list) and unit.type in unit_type:
+                while not self.availableCell(unit.idx):
+                    Log(LogLevel.DEBUG, f"Duplicate {unit_type} found at {unit.idx}.")
+                    unit = f(random.randint(0, idx_size - 1))
+
+    # Temporary parallel write buffer for deduplicating indexes
+    def dedupliPlace(self, unit_set):
+        agents, markets, homes = deepcopy(unit_set)
+        star_map = [(agents, UnitType.HUMAN, Agent), (markets, UnitType.Market, Market), (homes, UnitType.Home, Home)]
+        with Pool() as pool:
+            res = pool.starmap(self.sanitizeSet, star_map)
+            
+        return res
+          
+
+            
 
     def populate(self):
         star_map = [(Agent, Settings.N_POPULATION.value), (Market, Settings.N_JOBS.value), (Home, Settings.N_HOUSES.value)]
 
         with Pool() as pool:
-            res = pool.starmap(self.helper, star_map)
-            #pool.close()
+            res = pool.starmap(helper, star_map)
+
+        self.agents, self.markets, self.homes = self.dedupliPlace(res)
+
 
         return res
         
