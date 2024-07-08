@@ -1,8 +1,6 @@
 from enum import Enum
 from .utilities import Log
 from .settings import LogLevel, Settings
-from DGL.meso import Agent, Market
-from DGL.meso.agency import Home
 import pygame
 
 class UnitType(Enum):
@@ -15,15 +13,6 @@ class UnitType(Enum):
     HUMAN = [Male, Female]
     Market = (128, 128, 0)
     Home = (128, 128, 128) 
-
-def toClass(self):
-    type_name = self.__name__
-    if type_name == "Agent":
-        return Agent
-    if type_name == "Market":
-        return Market
-    if type_name == "Home":
-        return Home
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
