@@ -53,7 +53,11 @@ class Grid:
         for cell in self.cells:
             cell.draw(screen)
 
-    def update(self):
+    # TODO: Refine this, or replace it in 'production' with a per-agent target
+    def selectTarget(self, target):
+        '''We make all of the agents follow a single target'''
+
+    def update(self, selected):
         #Log(LogLevel.DEBUG, f"Updating Grid of size {len(self.cells)}")
        # Log(LogLevel.DEBUG, f"Population: {len(self.agents)}")
 
@@ -63,6 +67,12 @@ class Grid:
                 self.agents.remove(agent)
                 continue
 
+            # Set a selected type
+            if selected is not None:
+                agent.target = selected
+                agent.target_direction = agent.target.xy()
+
+            # Determine if the Agent is at a Market or Home
             if agent.type in [UnitType.Male, UnitType.Female]:
                 # TODO: Determine if we are 'broke' or 'hungry'
                 if self.cells[agent.index()].type == UnitType.Market:

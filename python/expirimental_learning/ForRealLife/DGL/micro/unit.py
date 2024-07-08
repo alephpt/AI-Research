@@ -39,6 +39,9 @@ class Unit:
     def set():
         return {Unit(i) for i in range(Settings.GRID_SIZE.value ** 2)}
 
+    def xy(self):
+        return self.x, self.y
+
     def __hash__(self) -> int:
         return hash((self.x, self.y))
     

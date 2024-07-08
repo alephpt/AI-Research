@@ -27,12 +27,13 @@ class Agent(Azimuth):
         self.moving = False
         self.success = False
 
+    
     def index(self):
         return self.y * map_size + self.x
 
     def takeStep(self):
     # Calculate Rewards
-        reward_obj = calculateReward(self.magnitude, self.x, self.y, self.target, self.direction)
+        reward_obj = calculateReward(self.magnitude, self.x, self.y, self.target)
         self.updateAzimuth(reward_obj)
 
         # Longer Lives are better
@@ -75,10 +76,9 @@ class Agent(Azimuth):
             self.chooseRandomAction()
             self.moving = True
         else:
-            Log(LogLevel.VERBOSE, f"Agent {self} is choosing a calculated action")
-            # Choose the best action
-            # TODO: Look ahead at the next square based on the Q Table OR Do a Random Walk
-            # This has to be before the move to ensure the target exists
+            Log(LogLevel.INFO, f"Agent {self} is choosing a calculated action")
+            # TODO: Look ahead at the next square based on the choice given from the Q Table
+            self.takeStep()
 
         # All of these get updated when they are doing something, or dead
         if self.state in [State.Dead, State.Sex, State.Working, State.Eating]:
@@ -99,7 +99,7 @@ class Agent(Azimuth):
             return
         
         # Update location if we are moving
-        if self.moving:
+        if self.moving and self.target is not None:
             Log(LogLevel.VERBOSE, f"{self.idx} - Moving to {self.target}@({self.target.xy()})")
             self.energy -= 1
             dx, dy = self.target.xy()

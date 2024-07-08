@@ -33,7 +33,7 @@ class Society(Genome):
             self.resetGrid()
             return
 
-        self.grid.update()
+        self.grid.update(self.selected)
         self.updateStatistics()
 
     def resetGrid(self):

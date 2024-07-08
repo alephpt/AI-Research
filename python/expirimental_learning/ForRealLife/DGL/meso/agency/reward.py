@@ -12,6 +12,13 @@ def calculateReward(prev_d, x, y, target):
     y: int - The y coordinate of the agent
     target: Unit - The target of the agent
             '''
+    if target is None:
+        return {
+            'magnitude': 0,
+            'reward': 0,
+            'target_direction_vector': (0, 0)
+        }
+
     # If the previous distance is 0, we are at the target
     if prev_d is 0:
         target_direction_vector, magnitude = p(x, y, target.x, target.y)

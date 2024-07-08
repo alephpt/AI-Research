@@ -13,8 +13,8 @@ class Azimuth(Unit):
         super().__init__(idx, UnitType.Male if gender_count % 2 == 0 else UnitType.Female)
         gender_count += 1
         self.magnitude = 0
-        self.target = MoveAction.random()
-        self.target_direction = self.target.xy()
+        self.target = None
+        self.target_direction = (0, 0)
         self.reward = 0             # This will be interesting considering the potential for a Unit State to handle an enumeration of states
         self.state = State.random()
     
@@ -23,20 +23,18 @@ class Azimuth(Unit):
     
     def updateAzimuth(self, reward_obj):
         self.magnitude = reward_obj['magnitude']
-        self.action = reward_obj['action']
-        self.reward += reward_obj['reward']
         self.target_direction = reward_obj['target_direction_vector']
+
+        if reward_obj['reward'] == 'here':
+            self.reward += 1000
+            # Change state from a moving state to an action state
+            return
 
     # Needs to be as random as possible to explore all possible states
     def chooseRandomAction(self):
-        self.target = MoveAction.random()
-        self.target_direction = self.target.xy()
         self.state = State.random()
         Log(LogLevel.VERBOSE, f"Agent {self} is moving to {self.target}")   
 
-        if self.target is None:
-            print(f"Agent {self} has no target")
-            self.target = self
 
     def findTarget(self, target):
         return self.target_direction
