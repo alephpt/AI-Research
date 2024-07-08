@@ -7,6 +7,9 @@
   - What sort of free agents would emerge in society e.g. 
         what would be varrying 'optimal' ways of "scoring high"?
 
+Visit the [Outline](https://github.com/alephpt/AI-Research/blob/main/python/expirimental_learning/ForRealLife/outline.md) for the full writeup. (subject to change)
+
+Brief:
 ### Rules:
 - Agents require food to Survive
 - Food costs 5 Money and provide 10 Energy
@@ -34,6 +37,8 @@
 - Genetic Algorithm for Population Evolution
    -  Fill half of the population, with half of the furthest generation
 
+
+Working Space:
 ## TODOs
  -[ ] Write paper on the concept of genetic reinforcement
  -[ ] Define Policies

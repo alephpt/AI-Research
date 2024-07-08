@@ -1,7 +1,7 @@
 import pygame
 
-from DGL.micro import LogLevel, Log
 from .society import Society
+from DGL import LogLevel, Log
 from DGL.micro import Settings
 
 screen_size = Settings.SCREEN_SIZE.value
@@ -20,11 +20,14 @@ class Engine:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.society.selectUnit(pygame.mouse.get_pos()) # Move this assignment to the Society class
+            
 
     def draw(self):
         self.screen.fill(background)
         self.society.draw()
-        self.society.drawStatus()
+        self.society.gui()
         pygame.display.flip()
 
     def run(self):

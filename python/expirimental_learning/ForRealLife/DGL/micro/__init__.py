@@ -1,3 +1,5 @@
-from .unit import Unit, UnitType
-from .settings import Settings, LogLevel
-from .utilities import *
+from .settings import Settings
+from .log import Log
+from .loglevel import LogLevel
+from .math import *
+from .unit import Unit

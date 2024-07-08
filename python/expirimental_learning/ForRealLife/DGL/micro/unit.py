@@ -71,4 +71,3 @@ class Unit:
 
             screen.blit(label, (lx_position, ly_position))
             screen.blit(state, (sx_position, sy_position))
-

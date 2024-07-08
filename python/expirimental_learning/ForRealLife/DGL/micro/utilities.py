@@ -1,5 +1,9 @@
 import math
 
+    #################
+    ## VECTOR MATH ##
+    #################
+
 def magnitude(x, y):
     '''
     Returns the magnitude of the vector'''

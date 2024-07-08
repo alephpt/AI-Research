@@ -1,30 +1,35 @@
-from DGL.micro.utilities.logger import Log, LogLevel
+from DGL import Log, LogLevel
 from .agency import State, calculateReward
 from .azimuth import Azimuth
 
 from DGL.micro import Settings, Unit
 import random
 
+map_size = Settings.GRID_SIZE.value  
+
 # TODO: Implement a way to 'find the next target'
 class Agent(Azimuth):
+    '''
+    params:
+    age, energy, wealth, state, generation, happiness, sleep_counter, success, moving, direction
+    '''
     def __init__(self, idx):
         super().__init__(idx)
+        self.age = 0 # If we add Age in it becomes a gradient
 
-        self.map_size = Settings.GRID_SIZE.value  
-        self.age = 0
+        # State Space
         self.energy = Settings.INITIAL_E.value # Should we clamp energy
-        self.wealth = Settings.INITIAL_W.value # Should we add 'economic' factors? .. If we add a "legal" requirement, will it figure it out? 
-        self.state = State.Alive
+        self.wealth = Settings.INITIAL_W.value # Should we add 'economic' factors? .. If we add a "legal" requirement, will it figure it out?
         self.generation = 0
         self.happiness = 0
+        self.food_counter = 0
         self.sleep_counter = 0
-        self.success = False
         self.moving = False
-        self.action = (0, 0)
+        self.success = False
 
     def takeStep(self):
     # Calculate Rewards
-        reward_obj = calculateReward(self.magnitude, self.x, self.y, self.target, self.action)
+        reward_obj = calculateReward(self.magnitude, self.x, self.y, self.target, self.direction)
         self.updateAzimuth(reward_obj)
 
         # Longer Lives are better
@@ -49,10 +54,13 @@ class Agent(Azimuth):
         self.energy -= Settings.SEX_COST.value
         self.happiness += Settings.SEX_PLEASURE_FACTOR.value  
 
-
     # This update function should way potential opportunities, and pick a course of actions,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
-    def update(self):
+    def updateValues(self):
+        '''
+        increases age, decreases energy, and moves the agent in a direction
+        '''
+        Log(LogLevel.VERBOSE, f"Agent {self} is updating values")
         self.age += 1
         self.energy -= 1
 
@@ -63,7 +71,7 @@ class Agent(Azimuth):
             self.chooseRandomAction()
             self.moving = True
         else:
-            print("Choosing Best Action")
+            Log(LogLevel.VERBOSE, f"Agent {self} is choosing a calculated action")
             # Choose the best action
             # TODO: Look ahead at the next square based on the Q Table OR Do a Random Walk
             # This has to be before the move to ensure the target exists
@@ -75,7 +83,7 @@ class Agent(Azimuth):
         
         # NOTE: They will get stuck here. We need to implement a target obj system
         if self.state == State.Sleeping:
-            Log(LogLevel.VERBOSE, f"Sleeping")
+            Log(LogLevel.VERBOSE, f"Agent {self} is resting")
             self.energy += Settings.RESTING_VALUE.value
         
             if self.sleep_counter < Settings.MAX_SLEEP.value:
@@ -86,15 +94,19 @@ class Agent(Azimuth):
                 self.sleep_counter = 0
             return
         
+        # Update location if we are moving
         if self.moving:
-            Log(LogLevel.VERBOSE, f"{self.index} - Moving to {self.target}@({self.target_direction_vector.Vector()})")
+            Log(LogLevel.VERBOSE, f"{self.idx} - Moving to {self.target}@({self.target.xy()})")
             self.energy -= 1
-            dx, dy = self.target_direction_vector.Vector()
+            dx, dy = self.target.xy()
 
+            # Make sure we are within bounds
             if 0 <= self.x + dx <= self.map_size - 1 and 0 <= self.y + dy <= self.map_size - 1:
                 self.x += dx
                 self.y += dy
         
+        # Check if we are dead yet
         if self.energy < 0:
             print(f"Agent {self} has died")
             self.state = State.Dead
+

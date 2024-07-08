@@ -1,17 +1,7 @@
 
 from DGL.micro import p
 
-## Reward Functions for our Agent
-def calculateTargetReward(previous_magnitude, target, x, y):
-    '''
-    Calculates the reward based on the distance to the target'''
-    if previous_magnitude is 0:
-        target_direction_vector, magnitude = p(x, y, target.x, target.y)
-        return (magnitude, magnitude, target_direction_vector)
-
-    target_direction_vector, magnitude = p(x, y, target.x, target.y)
-    return (magnitude, magnitude - previous_magnitude, target_direction_vector)
-
+## Reward Functions for our Agents Movement towards the Target
 def calculateReward(prev_d, x, y, target):
     '''
     'findBest' utility function to calculate the reward for the agent
@@ -22,10 +12,21 @@ def calculateReward(prev_d, x, y, target):
     y: int - The y coordinate of the agent
     target: Unit - The target of the agent
             '''
+    # If the previous distance is 0, we are at the target
+    if prev_d is 0:
+        target_direction_vector, magnitude = p(x, y, target.x, target.y)
+
+        return {
+            'magnitude': magnitude,
+            'reward': 'here', # We may experience a glitch here later but this could work temporarily
+            'target_direction_vector': target_direction_vector
+        }
+
     reward = 0
 
-    # Target reward is based on closing the distance to the target
-    magnitude, target_reward, target_direction_vector = calculateTargetReward(prev_d, target, x, y)
+    target_direction_vector, magnitude = p(target.x, target.y, target.x, target.y)
+
+    target_reward, target_direction_vector = (magnitude - prev_d, target_direction_vector)
     reward += target_reward
 
     return {

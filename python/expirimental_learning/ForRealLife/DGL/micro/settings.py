@@ -22,7 +22,7 @@ class LogLevel(Enum):
 
 # This will act as our global accessor for configurations and constants
 class Settings(Enum):
-    DEBUG_LEVEL = LogLevel.VERBOSE
+    DEBUG_LEVEL = LogLevel.DEBUG
 
     # RL Learning Rate
     ALPHA = 0.1

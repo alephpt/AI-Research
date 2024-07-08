@@ -1,10 +1,10 @@
 import pygame
 
-from DGL.micro import Log, LogLevel
-from .genesis import Genesis
-from .dna import Genome
-from DGL.meso import State
-from DGL.micro import Settings, Unit
+from .genetics import Genome
+from DGL import Log, LogLevel
+from DGL.meso import Grid
+from DGL.meso.agency import State
+from DGL.micro import Settings
 
 cell_size = Settings.CELL_SIZE.value
 grid_size = Settings.GRID_SIZE.value
@@ -21,19 +21,13 @@ class Society(Genome):
         self.screen = screen
         super().__init__()
         print('Creating Society with Grid Size:', grid_size)
-        self.cells = Unit.set() # Set of all cells in the grid 
-
-
-        # TODO: Fix duplicate placements bug
-        self.repopulate()
-
-    def repopulate(self):
-        Log(LogLevel.VERBOSE, "Repopulating Society")
-        self.population, self.markets, self.houses  = Genesis.creation(self.cells)
+        self.grid = Grid()
+        self.selected = None
+        self.population = self.grid.alive()
 
     def update(self):
         Log(LogLevel.VERBOSE, "Updating Society")
-        population_alive = all([agent.state != State.Dead for agent in self.population])
+        population_alive = all([agent.state != State.Dead for agent in self.grid.agents])
 
         # We should only hit this if all agents are dead
         if not population_alive:
@@ -41,18 +35,38 @@ class Society(Genome):
             #self.jobs, self.food, self.population = self.repopulate()
             return
 
-        # This is where we need to update the state of all of the cells << This is the main loop
-        for agent in self.population:
-            agent.update()
-        
-        for unit in self.cells:
-            unit.update()
-    
+        self.grid.update()
         self.updateStatistics()
 
-    def drawStatus(self):
-        sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward"]
-        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward]
+    def selectUnit(self, mouse_pos):
+        x, y = mouse_pos
+        x = x // Settings.CELL_SIZE.value
+        y = y // Settings.CELL_SIZE.value
+
+        for market in self.grid.markets:
+            if market.x == x and market.y == y:
+                Log(LogLevel.INFO, f"Selected Market at {x}, {y}")
+                return market
+        
+        for house in self.grid.homes:
+            if house.x == x and house.y == y:
+                Log(LogLevel.INFO, f"Selected House at {x}, {y}")
+                return house
+        
+        for agent in self.grid.agents:
+            if agent.x == x and agent.y == y:
+                Log(LogLevel.INFO, f"Selected Agent at {x}, {y}")
+                return agent
+            
+        for unit in self.grid.cells:
+            if unit.x == x and unit.y == y:
+                return unit
+        Log(LogLevel.INFO, f"Selected Cell at {x}, {y}")
+
+    # TODO: Move this to the engine
+    def gui(self):
+        sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward", 'Selected']
+        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward, self.selected]
         font = pygame.font.Font(None, 22)
 
         # Transparent Frame
@@ -73,11 +87,4 @@ class Society(Genome):
 
     def draw(self):
         Log(LogLevel.VERBOSE, "Drawing Society")
-        for market in self.markets:
-            market.draw(self.screen)
-        for house in self.houses:
-            house.draw(self.screen)
-        for agent in self.population:
-            agent.draw(self.screen)
-        for unit in self.cells:
-            unit.draw(self.screen)
+        self.grid.draw(self.screen)
