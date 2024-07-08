@@ -2,7 +2,7 @@ from DGL import Log, LogLevel
 from .agency import State, calculateReward
 from .azimuth import Azimuth
 
-from DGL.micro import Settings, Unit
+from DGL.micro import Settings
 import random
 
 map_size = Settings.GRID_SIZE.value  

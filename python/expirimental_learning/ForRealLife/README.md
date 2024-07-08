@@ -1,6 +1,14 @@
 # Creating The Matrix
 ## Deep Genetic Learning Outline
 
+## Goal
+ - Determine if an Agent can figure out how to survive, if the only two options are Eating and working - and the own two indicators of state are intiailly energy and money.
+ - Once an agent is able to survive, they should learn how to reproduce.
+ - Reproduction introduces the concept of a relationship, influence or attraction
+ - At this point we can scale work/eating into 'trade' with a deals 'cost':'return' being determined by their level of influence.
+ - At this point we can scale the agent to be able to create their own markets and homes base on their money + food and money + energy, respectively.
+ - We want to start with one, and allow for the agent to explore options of planting food genetically to see if they make a correlation as a society, or on accident.
+
 ### Concept:
   - Can we simulate society without telling the agent how to exist within it?
   - Can we define rules for a society 'member' to exist within?

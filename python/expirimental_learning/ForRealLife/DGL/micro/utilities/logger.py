@@ -1,9 +1,17 @@
-from DGL.micro import Settings, LogLevel
+from enum import Enum
+
+from DGL.micro import Settings
 
 
     ############
     ## LOGGER ##
     ############
+class LogLevel(Enum):
+    VERBOSE = 0
+    DEBUG = 1
+    INFO = 2
+    ERROR = 3
+    FATAL = 4
 
 class Log:
     def __init__(self, level, message):
