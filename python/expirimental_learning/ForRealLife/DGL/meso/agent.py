@@ -24,16 +24,20 @@ class Agent(Azimuth):
         self.happiness = 0
         self.food_counter = 0
         self.sleep_counter = 0
+        self.target = None
         self.moving = False
         self.success = False
-
+        self.markets = set() 
+        self.home = set()
     
     def index(self):
         return self.y * map_size + self.x
 
     def takeStep(self):
-    # Calculate Rewards
+        # Calculate Rewards
+
         reward_obj = calculateReward(self.magnitude, self.x, self.y, self.target)
+        Log(LogLevel.DEBUG, f"Agent {self} is taking a step with reward {reward_obj}")
         self.updateAzimuth(reward_obj)
 
         # Longer Lives are better
@@ -65,20 +69,22 @@ class Agent(Azimuth):
         '''
         increases age, decreases energy, and moves the agent in a direction
         '''
-        Log(LogLevel.VERBOSE, f"Agent {self} is updating values")
+        Log(LogLevel.DEBUG, f"Agent {self} is updating values")
         self.age += 1
         self.energy -= 1
 
         ## Percent of Randomness
         # We have the ability to move in a direction with some randomness
-        if self.state == State.Alive or self.target is None or random.uniform(0.0, 1.0) < Settings.IMPULSIVITY.value:
-            Log(LogLevel.VERBOSE, f"Agent {self} is choosing a random action")
-            self.chooseRandomAction()
+        if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.IMPULSIVITY.value:
+            Log(LogLevel.DEBUG, f"Agent {self} is choosing a random action")
+            self.chooseRandomState()
             self.moving = True
         else:
             Log(LogLevel.INFO, f"Agent {self} is choosing a calculated action")
             # TODO: Look ahead at the next square based on the choice given from the Q Table
             self.takeStep()
+
+
 
         # All of these get updated when they are doing something, or dead
         if self.state in [State.Dead, State.Sex, State.Working, State.Eating]:
@@ -86,23 +92,23 @@ class Agent(Azimuth):
             return
         
         # NOTE: They will get stuck here. We need to implement a target obj system
-        if self.state == State.Sleeping:
-            Log(LogLevel.VERBOSE, f"Agent {self} is resting")
-            self.energy += Settings.RESTING_VALUE.value
+        # if self.state == State.Sleeping:
+        #     Log(LogLevel.VERBOSE, f"Agent {self} is resting")
+        #     self.energy += Settings.RESTING_VALUE.value
         
-            if self.sleep_counter < Settings.MAX_SLEEP.value:
-                self.sleep_counter += 1
-                #self.sleep()
-            else:
-                self.state = State.Alive
-                self.sleep_counter = 0
-            return
+        #     if self.sleep_counter < Settings.MAX_SLEEP.value:
+        #         self.sleep_counter += 1
+        #         #self.sleep()
+        #     else:
+        #         self.state = State.Alive
+        #         self.sleep_counter = 0
+        #     return
         
         # Update location if we are moving
-        if self.moving and self.target is not None:
-            Log(LogLevel.VERBOSE, f"{self.idx} - Moving to {self.target}@({self.target.xy()})")
+        if self.moving and self.target_direction is not None:
+            Log(LogLevel.VERBOSE, f"Agent {self.idx} - Moving to ({self.target_direction})")
             self.energy -= 1
-            dx, dy = self.target.xy()
+            dx, dy = self.target_direction
 
             # Make sure we are within bounds
             if 0 <= self.x + dx <= map_size - 1 and 0 <= self.y + dy <= map_size - 1:

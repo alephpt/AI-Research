@@ -47,12 +47,12 @@ class Genome:
         self.n_generations = 0
 
     def updateStatistics(self):
-        if 0 == len([agent for agent in self.grid.agents if agent.state != State.Dead]):
+        if 0 == len([agent for agent in self.agents if agent.state != State.Dead]):
             return
         
         self.reset()
 
-        for agent in self.grid.agents:
+        for agent in self.agents:
             if agent.state == State.Dead:
                 continue
             

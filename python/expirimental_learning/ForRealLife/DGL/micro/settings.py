@@ -12,9 +12,10 @@ class LogLevel(Enum):
     VERBOSE = -1
     DEBUG = 0
     INFO = 1
-    WARNING = 2
-    ERROR = 3
-    FATAL = 4
+    ALERT = 2
+    WARNING = 3
+    ERROR = 4
+    FATAL = 5
 
     def __str__(self):
         return self.name
@@ -22,7 +23,7 @@ class LogLevel(Enum):
 
 # This will act as our global accessor for configurations and constants
 class Settings(Enum):
-    DEBUG_LEVEL = LogLevel.INFO
+    DEBUG_LEVEL = LogLevel.DEBUG
 
     # RL Learning Rate
     ALPHA = 0.1

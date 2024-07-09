@@ -8,45 +8,30 @@ from DGL.micro import Settings, Log, LogLevel, UnitType
 cell_size = Settings.CELL_SIZE.value
 grid_size = Settings.GRID_SIZE.value
 
-# Implement our Dictionary of Placement Types for Society Evolution.
-
   ###############
   ## EVOLUTION ##
   ###############
 
-# Will eventually host the genetic learning algorithm and epoch loop
-class Society(Genome):
+class World(Genome, Grid):
     def __init__(self, screen):
+        print('Creating World with Grid Size:', grid_size)
         self.screen = screen
         super().__init__()
-        print('Creating Society with Grid Size:', grid_size)
-        self.grid = Grid()
-        self.selected = None
+        Grid.__init__(self)
 
     def update(self):
-        Log(LogLevel.VERBOSE, "Updating Society")
-        population_alive = all([agent.state != State.Dead for agent in self.grid.agents])
+        Log(LogLevel.VERBOSE, "Updating World")
+        population_alive = all([agent.state != State.Dead for agent in self.agents])
 
         # We should only hit this if all agents are dead
         if not population_alive:
             print('Population is Dead')
-            self.resetGrid()
+            self.repopulate()
             return
 
-        self.grid.update(self.selected)
+        self.updateGrid(self.selected)
         self.updateStatistics()
 
-    def resetGrid(self):
-        self.grid.repopulate()
-        self.selected = None
-
-    def selectT(self, set, x, y):
-        for unit in set:
-            if unit.x == x and unit.y == y:
-                self.selected = unit
-                return True
-            
-        return False
 
     def selectUnit(self, mouse_pos):
         '''
@@ -57,21 +42,11 @@ class Society(Genome):
         index = y * Settings.GRID_SIZE.value + x
 
         # This may not work if a unit has moved to this location, but is not at this index
-        if self.grid.cells[index].type == UnitType.Available:
+        if self.cells[index].type == UnitType.Available:
             Log(LogLevel.INFO, f"Selected Available at {x}, {y}")
             return
 
-        if self.selectT(self.grid.markets, x, y):
-            Log(LogLevel.INFO, f"Selected Market at {x}, {y}")
-            return
-        
-        if self.selectT(self.grid.homes, x, y):
-            Log(LogLevel.INFO, f"Selected Home at {x}, {y}")
-            return
-        
-        if self.selectT(self.grid.agents, x, y):
-            Log(LogLevel.INFO, f"Selected Agent at {x}, {y}")
-            return
+        self.selected = self.cells[index]
 
         Log(LogLevel.INFO, f"Selected Cell at {x}, {y}")
 
@@ -98,5 +73,5 @@ class Society(Genome):
 
 
     def draw(self):
-        Log(LogLevel.VERBOSE, "Drawing Society")
-        self.grid.draw(self.screen)
+        Log(LogLevel.VERBOSE, "Drawing World")
+        self.drawCells()

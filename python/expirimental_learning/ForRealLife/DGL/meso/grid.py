@@ -38,8 +38,7 @@ class Grid:
     def __init__(self):
         self.cells = []
         self.agents = set()
-        self.markets = set()
-        self.homes = set()
+        self.selected = None
         self.repopulate()
 
     def alive(self):
@@ -47,17 +46,21 @@ class Grid:
 
     def repopulate(self):
         self.cells = [Unit(i) for i in range(idx_size)]
-        self.agents, self.markets, self.homes = self.populate()
+        self.agents, markets, homes = self.populate()
 
-    def draw(self, screen):
+        for agent in self.agents:
+            agent.markets = markets
+            agent.home = homes
+
+    def drawCells(self):
         for cell in self.cells:
-            cell.draw(screen)
+            cell.draw(self.screen)
 
     # TODO: Refine this, or replace it in 'production' with a per-agent target
     def selectTarget(self, target):
         '''We make all of the agents follow a single target'''
 
-    def update(self, selected):
+    def updateGrid(self, selected):
         #Log(LogLevel.DEBUG, f"Updating Grid of size {len(self.cells)}")
        # Log(LogLevel.DEBUG, f"Population: {len(self.agents)}")
 
@@ -71,6 +74,7 @@ class Grid:
             if selected is not None:
                 agent.target = selected
                 agent.target_direction = agent.target.xy()
+                # We actually need to determine the target direction aka Action Step agent.target.xy()
 
             # Determine if the Agent is at a Market or Home
             if agent.type in [UnitType.Male, UnitType.Female]:
