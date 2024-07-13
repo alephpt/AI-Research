@@ -19,7 +19,7 @@ class Azimuth(Unit):
         self.state = State.random()
     
     def __str__(self):
-        return f"AZMTH[{self.idx}]-({self.x},{self.y}) - {self.state} :: moving to '{self.target_direction}' :: "
+        return f"[AZMTH[{self.idx}]-({self.x},{self.y}) - {self.state} :: moving to '{self.target_direction}' :: \]"
     
     def updateAzimuth(self, reward_obj):
         self.magnitude = reward_obj['magnitude']
@@ -29,6 +29,7 @@ class Azimuth(Unit):
             self.target_reached = True # We should be able to factor this out by checking state
             self.reward += 1000
             # Change state from a moving state to an action state
+            # # TODO: We need to trigger a movement to some other state
             return
 
     # Needs to be as random as possible to explore all possible states

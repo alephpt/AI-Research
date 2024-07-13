@@ -15,20 +15,34 @@ import numpy
 
 class DecisionNetwork:
     def __init__(self):
-        self.target_table = {}
-
+        # TODO: IT WOULD BE INTERESTING TO SCALE ACROSS AGE
         # These are our input conditions
         self.state_space = {
-            # TODO: IT WOULD BE INTERESTING TO SCALE ACROSS AGE
-            "magnitude": 0,  ## We need to find the best magnitude
-            "energy": 0,
-            "wealth": 0,
-            "happiness": 0,
-            "status": "none",               # This is the current "State" of the agent - "What we are actually 'doing'"
-            "action": "none",               # Moving, Eating, Working, Sleeping, Mating, Nothing
-            "target_type": "none",          # What Unit Type are we looking for
-            "target_magnitude": 0,          # How far away is the target
-            "succeed": False                # This tells us the state of our current action - Big Negative if we fail
+            "choice": None,                 # Nothing, Working, Eating, Sleeping, Mating, 
+            "target_type": None,            # This tells us what we are looking for
+            "magnitude": 0,                 ## We need to find the best magnitude regardless
+            "succeed": False,               # This tells us the state of our current action - Big Negative if we fail
+            #"age": 0,                      ## This is a Gradient Decaying Multiplier
+            #"children": 0,                 ## This should be an Exponential Multiplier, but ONLY through the Genetic Algorithm
+
+
+
+    # -- In an economy we could have some characteristics of -------------------------------------------------------#
+    #       lower integrity having greater influence of higher returns from chances of mating and better trading statistics, 
+    #           and in return they work less often and mate more often (increasing expenses long term)              #
+    #         low integrity has a negativity happiness impact on self and others, and less attractive               #
+    #                                                                                                               #
+    #       high compassion means taking more losses in the short term, but having a greater happiness impact on self and others
+    #           and in return they work more often (more wealth) and partner with a single mate (less expenses, potential for generation wealth)
+    #      high compassion has a positivity happiness impact on self and others                                     #
+    #---------------------------------------------------------------------------------------------------------------#
+            "wealth": 0,        ## It Takes money to buy food, and work to make money
+            "energy": 0,        ## It Takes food to have energy, and takes energh to work
+            # "fatigue": 0,          # Increases with Work, and Mating, decreases with sleep, and compassion
+            # "happiness": 0,        ## Happiness is a reward multiplier
+            # "integrity": 0,        # decreases fatigue, and increases attraction
+            # "compassion": 0,       # increases happiness, and attraction - # we add the age to this each time we make a choice
+            # "attraction": 0,       # Increases when we make money, and when we are compassionate
         }
 
         # these are our 'target' conditions
@@ -67,7 +81,7 @@ class DecisionNetwork:
 ##                  State->Mate Space
 ## "[MateTable] is a table that maps states to 'choosing a mate'."
 #
-class MateNetwork:
+class MateNetwork:#
     def __init__(self):
         self.mate_table = {}
 

@@ -60,7 +60,7 @@ class Genome:
             self.n_generations = max(self.n_generations, agent.generation)
             
             self.total_age += agent.age
-            self.total_happiness += agent.happiness
+            #self.total_happiness += agent.happiness
             self.total_health += agent.energy
             self.total_wealth += agent.wealth
             self.total_reward += agent.reward
@@ -69,8 +69,8 @@ class Genome:
             self.avg_age += agent.age
             self.max_age = max(self.max_age, agent.age)
 
-            self.min_happiness = min(self.min_happiness, agent.happiness)
-            self.max_happiness = max(self.max_happiness, agent.happiness)
+            #self.min_happiness = min(self.min_happiness, agent.happiness)
+            #self.max_happiness = max(self.max_happiness, agent.happiness)
 
             self.min_health = min(self.min_health, agent.energy)
             self.max_health = max(self.max_health, agent.energy)
@@ -86,7 +86,7 @@ class Genome:
             return
 
         self.avg_age = self.total_age // self.n_alive
-        self.avg_happiness = self.total_happiness // self.n_alive
+        self.avg_happiness = 0 #self.total_happiness // self.n_alive
         self.avg_health = self.total_health // self.n_alive
         self.avg_wealth = self.total_wealth // self.n_alive
         self.avg_reward = self.total_reward // self.n_alive
