@@ -1,7 +1,7 @@
 from DGL.meso.agency import State
 from DGL.micro import LogLevel, Log
 
-# TODO: Implement Utility functions that allow for the creation of a new generation of agents
+# TODO: Implement Utility functions that allow for the creation of a new generation of units
 # TODO: Integrate the Genome into the Genetic Evolution of the Society
 # TODO: Create Batch Functions and Parallelize the Genetic Evolution of the Society
 class Genome:
@@ -14,6 +14,9 @@ class Genome:
     # 50% to be Split
     #    20% is Crossover of the Oldest and Top Performers
     #    30% is Crossover of random Slices of Worst Performers
+
+    def alive():
+        pass
 
     def reset(self):
         self.min_age = 0
@@ -47,42 +50,43 @@ class Genome:
         self.n_generations = 0
 
     def updateStatistics(self):
-        if 0 == len([agent for agent in self.agents if agent.state != State.Dead]):
+        if 0 == len(self.alive()):
             return
         
         self.reset()
 
-        for agent in self.agents:
-            if agent.state == State.Dead:
+        for unit in self.units:
+            if unit.state == State.Dead:
+                Log.Error(LogLevel.INFO, "Dead Unit Found. - signed, Anamolous.")
                 continue
             
             self.n_alive += 1
-            self.n_generations = max(self.n_generations, agent.generation)
+            self.n_generations = max(self.n_generations, unit.generation)
             
-            self.total_age += agent.age
-            #self.total_happiness += agent.happiness
-            self.total_health += agent.energy
-            self.total_wealth += agent.wealth
-            self.total_reward += agent.reward
+            self.total_age += unit.age
+            #self.total_happiness += unit.happiness
+            self.total_health += unit.energy
+            self.total_wealth += unit.wealth
+            self.total_reward += unit.reward
 
-            self.min_age = min(self.min_age, agent.age)
-            self.avg_age += agent.age
-            self.max_age = max(self.max_age, agent.age)
+            self.min_age = min(self.min_age, unit.age)
+            self.avg_age += unit.age
+            self.max_age = max(self.max_age, unit.age)
 
-            #self.min_happiness = min(self.min_happiness, agent.happiness)
-            #self.max_happiness = max(self.max_happiness, agent.happiness)
+            #self.min_happiness = min(self.min_happiness, unit.happiness)
+            #self.max_happiness = max(self.max_happiness, unit.happiness)
 
-            self.min_health = min(self.min_health, agent.energy)
-            self.max_health = max(self.max_health, agent.energy)
+            self.min_health = min(self.min_health, unit.energy)
+            self.max_health = max(self.max_health, unit.energy)
 
-            self.min_wealth = min(self.min_wealth, agent.wealth)
-            self.max_wealth = max(self.max_wealth, agent.wealth)
+            self.min_wealth = min(self.min_wealth, unit.wealth)
+            self.max_wealth = max(self.max_wealth, unit.wealth)
 
-            self.min_reward = min(self.min_reward, agent.reward)
-            self.max_reward = max(self.max_reward, agent.reward)
+            self.min_reward = min(self.min_reward, unit.reward)
+            self.max_reward = max(self.max_reward, unit.reward)
 
         if 0 == self.n_alive:
-            Log(LogLevel.INFO, "No Agents are Alive")
+            Log(LogLevel.INFO, "No Units are Alive")
             return
 
         self.avg_age = self.total_age // self.n_alive

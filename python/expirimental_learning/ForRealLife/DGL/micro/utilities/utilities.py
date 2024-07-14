@@ -32,7 +32,7 @@ def calculateDirection(x, y, tX, tY):
 def p(x1, y1, x2, y2):
     '''
     Calculate the Directional Magnitude of a Vector'''
-    Log(LogLevel.DEBUG, f"[p] - Calculating Directional Magnitude of a Vector: xy1:{x1, y1}, xy2:{x2, y2}")
+    Log(LogLevel.VERBOSE, "[p]", f"Calculating Directional Magnitude of a Vector: xy1:{x1, y1}, xy2:{x2, y2}")
     dx = x2 - x1
     dy = y2 - y1
 

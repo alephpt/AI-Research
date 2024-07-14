@@ -1,16 +1,16 @@
 
 from DGL.micro import p
 
-## Reward Functions for our Agents Movement towards the Target
+## Reward Functions for our Units Movement towards the Target
 def calculateReward(prev_d, x, y, target):
     '''
-    'findBest' utility function to calculate the reward for the agent
+    'findBest' utility function to calculate the reward for the unit
 
     Parameters:
     prev_d: float - The previous distance to the target
-    x: int - The x coordinate of the agent
-    y: int - The y coordinate of the agent
-    target: Unit - The target of the agent
+    x: int - The x coordinate of the unit
+    y: int - The y coordinate of the unit
+    target: Cell - The target of the unit
             '''
     if target is None:
         return {
@@ -33,7 +33,7 @@ def calculateReward(prev_d, x, y, target):
 
     target_direction_vector, magnitude = p(target.x, target.y, target.x, target.y)
 
-    target_reward, target_direction_vector = (magnitude - prev_d, target_direction_vector)
+    target_reward, target_direction_vector = (prev_d - magnitude, target_direction_vector)
     reward += target_reward
 
     return {

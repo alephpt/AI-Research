@@ -8,8 +8,10 @@ import random
 map_size = Settings.GRID_SIZE.value  
 
 # TODO: Implement a way to 'find the next target'
-class Agent(Azimuth):
+class Unit(Azimuth):
     '''
+    An Unit should define some 'state of being'.
+
     params:
     age, energy, wealth, state, generation, happiness, sleep_counter, success, moving, direction
     '''
@@ -24,11 +26,11 @@ class Agent(Azimuth):
         #self.happiness = 0
         #self.food_counter = 0
         #self.sleep_counter = 0
-        self.target = None
         self.success = False
         self.markets = set() 
-        self.home = set()
+        self.home = None
         self.moving = False         # We ONLY use this to update the Draw and 'Moving' Logics
+        self.state = State.random()
     
     def index(self):
         return self.y * map_size + self.x
@@ -39,16 +41,19 @@ class Agent(Azimuth):
     def takeStep(self):
         # Calculate Rewards
         reward_obj = self.rewardFactor(self.target)
-        Log(LogLevel.DEBUG, f"Agent {self} is taking a step towards {self.target.type} {reward_obj}")
+        Log(LogLevel.DEBUG, "Unit", f"\t{self.state} \
+                        \n\t\t\ttarget: {self.target.type if self.target.type else "None"} \
+                        \n\t\t\t[{self}] \
+                        \n\t\t\treward:{reward_obj}\n")
         self.updateAzimuth(reward_obj)
         self.moving = True
 
         # Longer Lives are better
-        self.reward += 1 * Settings.LIFETIME_REWARD_SCALAR.value
+        self.reward += int(Settings.LIFETIME_REWARD_SCALAR.value * 0.01)
 
     # These three functions form the foundations of our future for the Genetic Learning Algorithm
     def work(self):
-        Log(LogLevel.VERBOSE, f"Agent {self} is working")
+        Log(LogLevel.VERBOSE, "Unit", f"{self} is working")
         if self.energy >= 10:
             self.wealth += Settings.WORK_REWARD.value
             self.energy -= Settings.WORK_COST.value
@@ -69,12 +74,12 @@ class Agent(Azimuth):
     # Option 1: Iterate through all a select group of targets, and choose the one with the lowest magnitude
     # Option 2: Iterate through all possible targets, and choose the one with the highest reward
     def chooseBestTarget(self, targets, value_fn): # We are going to pass a callback in to allow for a dynamic reward function
-        Log(LogLevel.DEBUG, f"Agent {self} is choosing the best target:")
+        Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing the best target:")
         best_value = 0
         best_target = None
 
         for target in targets:
-            Log(LogLevel.DEBUG, f"\tTarget: {target}")
+            Log(LogLevel.VERBOSE, "Unit", f"\tTarget: {target}")
             value = value_fn(target)
 
             if value > best_value: # or value < 0: # This would account for a negative reward
@@ -85,11 +90,11 @@ class Agent(Azimuth):
 
 
     def chooseBestAction(self):
-        Log(LogLevel.DEBUG, f"Agent is looking at target {self.target}")
+        Log(LogLevel.VERBOSE, "Unit", f"is looking at target {self.target.type if self.target else 'undefined'}")
         
         if self.target is None:
             #
-            # Step 1. Let the agent choose a random target ?
+            # Step 1. Let the unit choose a random target ?
             #
             if self.state.needy():
                 if self.state in [State.Broke, State.Hungry]:
@@ -98,15 +103,14 @@ class Agent(Azimuth):
                     self.target = self.chooseBestTarget(self.home, lambda home: self.rewardFactor(home)['magnitude'])
 
             #
-            # Step 2. Let the agent choose the best target
+            # Step 2. Let the unit choose the best target
             # 
             else:
+                self.target = random.choice([*self.markets, *self.home])
 
-                self.target = random.choice(self.markets.union(self.home))
 
-
-                # Step 3. Let the agent choose when to change targets
-                # Step 4. Let the agent learn to choose the best target
+                # Step 3. Let the unit choose when to change targets
+                # Step 4. Let the unit learn to choose the best target
                 # Step 5. Always make it do a little bit of randomness
             return
 
@@ -118,36 +122,35 @@ class Agent(Azimuth):
             return
 
 
-    # This update function should way potential opportunities, and pick a course of actions,
+    # This update function should way potential opportcellies, and pick a course of actions,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
     def updateValues(self):
         '''
-        increases age, decreases energy, and moves the agent in a direction
+        increases age, decreases energy, and moves the unit in a direction
         '''
-        Log(LogLevel.DEBUG, f"Agent {self} is updating values")
+        Log(LogLevel.VERBOSE, "Unit", f"{self} is updating values")
         self.updateEnergy()
 
         ## Percent of Randomness
         # We have the ability to move in a direction with some randomness
         if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.IMPULSIVITY.value:
-            Log(LogLevel.DEBUG, f"Agent {self} is choosing a random action")
+            Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a random action")
             self.chooseRandomState()
-            self.moving = True
-        else:
-            self.chooseBestAction()
-            self.takeStep()
 
-            Log(LogLevel.INFO, f"Agent {self} is choosing a calculated action")
-            # TODO: Look ahead at the next square based on the choice given from the Q Table
+        # TODO: Look ahead at the next square based on the choice given from the Q Table
+        self.chooseBestAction()
+        self.takeStep()
+
+        Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a calculated action")
 
         # I think this is for 'catching' any potential lock states.
         if self.state in [State.Dead]:
-            Log(LogLevel.ERROR, f"Agent {self} caught in state: {self.state}")
+            Log(LogLevel.ERROR, "Unit:", f"{self} caught in state: {self.state}")
             return
         
         # NOTE: They will get stuck here. We need to implement a target obj system
         # if self.state == State.Sleeping:
-        #     Log(LogLevel.VERBOSE, f"Agent {self} is resting")
+        #     Log(LogLevel.VERBOSE, f"Unit {self} is resting")
         #     self.energy += Settings.RESTING_VALUE.value
         
         #     if self.sleep_counter < Settings.MAX_SLEEP.value:
@@ -160,10 +163,10 @@ class Agent(Azimuth):
         
         # Update location if we are moving
         if self.moving:
-            Log(LogLevel.VERBOSE, f"Agent {self.idx})")
+            Log(LogLevel.VERBOSE, "Unit", f"{self.idx})")
             
             if self.target_direction is not None:
-                Log(LogLevel.VERBOSE, f"Agent {self.idx} - Moving in ({self.target_direction})")
+                Log(LogLevel.VERBOSE, "Unit", f"{self.idx} - Moving in ({self.target_direction})")
                 self.energy -= 1
                 dx, dy = self.target_direction
 
@@ -176,6 +179,6 @@ class Agent(Azimuth):
         
         # Check if we are dead yet
         if self.energy < 0:
-            print(f"Agent {self} has died")
+            print(f"Unit {self} has died")
             self.state = State.Dead
 

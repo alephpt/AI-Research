@@ -1,16 +1,16 @@
-from DGL.micro import Unit, UnitType, Settings
+from DGL.micro import Cell, CellType, Settings
 from . import State
 
-class Home(Unit):
+class Home(Cell):
     def __init__(self, idx):
-        super().__init__(idx, UnitType.Home)
+        super().__init__(idx, CellType.Home)
         self.max_sleep = Settings.MAX_SLEEP.value
         self.state = State.Static
         self.home = []
 
-    def getFood(self, agent):
+    def getFood(self, unit):
         if self.available_food > len(self.home):
-            self.hungered.append(agent)
+            self.hungered.append(unit)
             return True
         return False
 

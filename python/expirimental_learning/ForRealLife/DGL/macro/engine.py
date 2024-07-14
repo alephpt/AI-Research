@@ -20,7 +20,7 @@ class Engine:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.world.selectUnit(pygame.mouse.get_pos()) # Move this assignment to the World class
+                self.world.selectCell(pygame.mouse.get_pos()) # Move this assignment to the World class
             
 
     def draw(self):
@@ -30,7 +30,7 @@ class Engine:
         pygame.display.flip()
 
     def run(self):
-        Log(LogLevel.VERBOSE, "Running DGL Engine")
+        Log(LogLevel.VERBOSE, "Ingine", "Running DGL Engine")
 
         while self.running:
             self.events()

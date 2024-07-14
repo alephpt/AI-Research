@@ -9,11 +9,11 @@ MOVE_MAP = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1)
 # Movement Option by Name
 class MoveAction(Enum):
     '''
-    Enumerate the Moves that an Agent can move in. 8-Way Movement.
+    Enumerate the Moves that an Unit can move in. 8-Way Movement.
 
     Objective: Can we, given a target, calculate the best 
     '''
-    NoWhere = -1
+    NoWhere = -1 # Should be a default or Chosen State, but never a consequence of some move
     UpLeft = 0
     Left = 1
     BackLeft = 2

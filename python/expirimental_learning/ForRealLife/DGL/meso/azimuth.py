@@ -1,34 +1,37 @@
 import pygame
 from .agency import MoveAction, State
-from DGL.micro import Unit, UnitType, Settings, Log, LogLevel
+from DGL.micro import Cell, CellType, Settings, Log, LogLevel
 import random
 
 global gender_count
 gender_count = 0
 
 # State Space ? Q
-class Azimuth(Unit): 
+class Azimuth(Cell): 
+    '''
+    An Azimuth should be used for locational and directional purposes.'''
     def __init__(self, idx):
         global gender_count 
-        super().__init__(idx, UnitType.Male if gender_count % 2 == 0 else UnitType.Female)
+        super().__init__(idx, CellType.Male if gender_count % 2 == 0 else CellType.Female)
         gender_count += 1
         self.magnitude = 0
+        self.target = None
         self.action_step = MoveAction.random()
         self.target_direction = self.action_step.xy()
-        self.reward = 0             # This will be interesting considering the potential for a Unit State to handle an enumeration of states
-        self.state = State.random()
+        self.reward = 0             # This will be interesting considering the potential for a Cell State to handle an enumeration of states
+        self.target_reached = False # This is to control our logic  - has the potential to be refactored
     
     def __str__(self):
-        return f"[AZMTH[{self.idx}]-({self.x},{self.y}) - {self.state} :: moving to '{self.target_direction}' :: \]"
+        return f"AZMTH[{self.idx}]-({self.x},{self.y}) - {self.state} :: target('{self.target_direction}') :: \]"
     
     def updateAzimuth(self, reward_obj):
         self.magnitude = reward_obj['magnitude']
         self.target_direction = reward_obj['target_direction_vector']
 
-        if reward_obj['reward'] == 'here':
+        if reward_obj['reward'] == 'here' and not self.target_reached:
             self.target_reached = True # We should be able to factor this out by checking state
             self.reward += 1000
-            # Change state from a moving state to an action state
+            
             # # TODO: We need to trigger a movement to some other state
             return
 
@@ -36,14 +39,13 @@ class Azimuth(Unit):
     def chooseRandomState(self):
         self.state = State.random()
         self.target_reached = False
-        Log(LogLevel.VERBOSE, f"Agent {self} is moving to {self.target}")   
+        Log(LogLevel.VERBOSE, "Azimuth", f"{self} chose random state {self.state}")
 
 
     # TODO: Create a map of updating functions
     def updateState(self, cell):
         Log(LogLevel.INFO, f" ~ Updating State of {self} with {cell}")
         if self.state == State.Hungry:
-            Log(LogLevel.INFO, f"Agent {self} is hungry")
-            if cell.type == UnitType.Market:
-
-                self.state = State.Buying_Food
+            Log(LogLevel.INFO, f"Unit {self} is hungry")
+            if cell.type == CellType.Market:
+                Log(LogLevel.INFO, f"Unit {self} is at Market {cell.idx}")

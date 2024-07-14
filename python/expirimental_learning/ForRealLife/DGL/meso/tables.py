@@ -91,7 +91,7 @@ class MateNetwork:#
             "agenda": 0,            # This is "What I want"
             "target_agenda": 0,     # This is "What my partner wants"
             "integrity": 0,         # This would steer behaviours regarding 'honesty' or 'deception'
-            "compassion": 0,        # This would steer behaviours regarding to community or 'selfishness'
+            "compassion": 0,        # This would steer behaviours regarding to commcelly or 'selfishness'
             "restlessness": 0       # This would be a multiplier for the 'impulsivity' , or as an aggregate of the other two
         }
 

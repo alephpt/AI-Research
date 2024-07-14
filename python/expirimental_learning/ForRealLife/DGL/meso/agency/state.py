@@ -10,7 +10,7 @@ import random
     # Eating = (3, (0, 129, 182), 2)
     # Farming = (4, (182, 122, 222), 2)
     # Fatigued = (3, (128, 200, 191), 2)
-    # Sex = (4, (182, 122, 222), 2) #TODO: Integrate at Home Unit
+    # Sex = (4, (182, 122, 222), 2) #TODO: Integrate at Home Cell
     # Harvesting = (9, (128, 200, 191), 2) # Creates a 'Token' in society that allows for 'generic' trading of goods
     # Building = (10, (128, 200, 191), 2) # Could lead to building Home or Business -> Could even evolve "construction" or "engineer" type
 

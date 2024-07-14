@@ -1,3 +1,3 @@
 from .settings import Settings, LogLevel
-from .unit import Unit, UnitType
+from .cell import Cell, CellType
 from .utilities import *
