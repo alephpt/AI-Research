@@ -1,9 +1,7 @@
-from DGL.micro import Log, LogLevel
-from .agency import State, calculateReward
-from .azimuth import Azimuth
-
-from DGL.micro import Settings
 import random
+from .agency.azimuth import Azimuth
+from .agency import State, calculateReward
+from DGL.cosmos import Log, LogLevel, Settings
 
 map_size = Settings.GRID_SIZE.value  
 
@@ -42,7 +40,7 @@ class Unit(Azimuth):
         # Calculate Rewards
         reward_obj = self.rewardFactor(self.target)
         Log(LogLevel.DEBUG, "Unit", f"\t{self.state} \
-                        \n\t\t\ttarget: {self.target.type if self.target.type else "None"} \
+                        \n\t\t\ttarget: {self.target.type if self.target else "None"} \
                         \n\t\t\t[{self}] \
                         \n\t\t\treward:{reward_obj}\n")
         self.updateAzimuth(reward_obj)

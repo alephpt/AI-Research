@@ -1,7 +1,7 @@
-import pygame
-from .agency import MoveAction, State
-from DGL.micro import Cell, CellType, Settings, Log, LogLevel
-import random
+from DGL.society.agency import MoveAction, State
+from DGL.engine.cell import Cell, CellType
+from DGL.cosmos import LogLevel, Log
+from ..unittype import UnitType
 
 global gender_count
 gender_count = 0
@@ -12,7 +12,7 @@ class Azimuth(Cell):
     An Azimuth should be used for locational and directional purposes.'''
     def __init__(self, idx):
         global gender_count 
-        super().__init__(idx, CellType.Male if gender_count % 2 == 0 else CellType.Female)
+        super().__init__(idx, UnitType.Male if gender_count % 2 == 0 else UnitType.Female)
         gender_count += 1
         self.magnitude = 0
         self.target = None

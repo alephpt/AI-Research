@@ -1,24 +1,28 @@
 import pygame
 
-from .genetics import Genome
-from DGL.meso import Grid
-from DGL.meso.agency import State
-from DGL.micro import Settings, Log, LogLevel, CellType
+from .society import Genome, Society
+from .engine import Engine
+from .engine.grid import Grid, CellType
+from .society.agency import State
+from .cosmos import Settings, LogLevel, Log
 
-cell_size = Settings.CELL_SIZE.value
+screen_size = Settings.SCREEN_SIZE.value
 grid_size = Settings.GRID_SIZE.value
+cell_size = Settings.CELL_SIZE.value
 
   ###############
   ## EVOLUTION ##
   ###############
 
-class World(Genome, Grid):
-    def __init__(self, screen):
+class World(Genome, Grid, Society, Engine):
+    def __init__(self):
         print(f'Creating World \tGrid Size: {grid_size},{grid_size}')
         print(f'\t\tTotal Grid Count: {Settings.TOTAL_GRID_COUNT.value}')
-        self.screen = screen
+        self.screen = pygame.display.set_mode((screen_size, screen_size))
         super().__init__()
         Grid.__init__(self)
+        Society.__init__(self)
+        Engine.__init__(self)
 
     def alive(self):
         '''
@@ -35,7 +39,7 @@ class World(Genome, Grid):
             self.repopulate()
             return
 
-        self.updateGrid(self.selected)
+        self.updatePopulation(self.selected)
         self.updateStatistics()
 
 

@@ -1,7 +1,6 @@
 from enum import Enum
 import random
 
-
 ## These are the Moves that we can move in
                 #  HERE   UPLEFT     LEFT   BACKLEFT   DOWN   DOWNRIGHT  RIGHT  UPRIGHT   UP 
 MOVE_MAP = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]

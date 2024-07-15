@@ -2,7 +2,6 @@ from enum import Enum
 import math
 import random
 
-
     ############
     ## LOGGER ##
     ############
@@ -11,13 +10,14 @@ class LogLevel(Enum):
     '''
     Defines the level of logging that will be output to the console.
     '''
-    VERBOSE = -1
-    DEBUG = 0
-    INFO = 1
-    ALERT = 2
-    WARNING = 3
-    ERROR = 4
-    FATAL = 5
+    VERBOSE = -4
+    DEBUG = -3
+    INFO = -2
+    ALERT = -1
+    RELEASE = 0
+    WARNING = 1
+    ERROR = 2
+    FATAL = 3
 
     def __str__(self):
         return self.name
@@ -25,7 +25,7 @@ class LogLevel(Enum):
 
 # This will act as our global accessor for configurations and constants
 class Settings(Enum):
-    DEBUG_LEVEL = LogLevel.DEBUG
+    DEBUG_LEVEL = LogLevel.VERBOSE.value
 
     # RL Learning Rate
     ALPHA = 0.1
@@ -41,11 +41,12 @@ class Settings(Enum):
     # MACRO SETTINGS
     GRID_SIZE = 10  # We started at 10
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
-    TOTAL_GRID_COUNT = GRID_SIZE ** 2
-    GRID_BORDER = (GRID_SIZE // 10) ** 2
-    SPAWN_AREA = int(TOTAL_GRID_COUNT - GRID_BORDER)
-    GRID_START = int((GRID_SIZE - math.sqrt(SPAWN_AREA)) // 2)
+    GRID_START = GRID_SIZE // 5
     GRID_END = GRID_SIZE - GRID_START
+
+    TOTAL_GRID_BORDER_SIZE = GRID_START ** 2
+    TOTAL_GRID_COUNT = GRID_SIZE ** 2
+    TOTAL_SPAWN_AREA = int(TOTAL_GRID_COUNT - TOTAL_GRID_BORDER_SIZE)
 
 
     # MESO-MACRO SETTINGS
@@ -90,3 +91,24 @@ class Settings(Enum):
     @staticmethod
     def randomLocation():
         return (random.randint(0, Settings.GRID_SIZE.value - 1), random.randint(0, Settings.GRID_SIZE.value - 1))
+    
+    @staticmethod
+    def UnitTest():
+        print(f"")
+
+        screen = Settings.SCREEN_SIZE.value
+        grid = Settings.GRID_SIZE.value
+        cell = Settings.CELL_SIZE.value
+        grid_count = Settings.TOTAL_GRID_COUNT.value
+        #border_count = Settings.TOTAL_GRID_BORDER_SIZE.value
+        spawn_start = Settings.GRID_START.value
+        spawn_end = Settings.GRID_END.value
+        spawn_area = Settings.TOTAL_SPAWN_AREA.value
+
+        print("Creating ")
+        print(f"\t({grid}x{grid}) Grid @ {screen}x{screen} Resolution")
+        print(f"\t{grid_count}x ({cell}x{cell}) Cells")
+
+        print(f"\t{spawn_area} - ({spawn_start}x{spawn_start}) to ({spawn_end}x{spawn_end}) Spawnable Area")
+
+        print(f"")

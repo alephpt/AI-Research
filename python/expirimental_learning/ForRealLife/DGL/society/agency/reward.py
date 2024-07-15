@@ -1,5 +1,4 @@
-
-from DGL.micro import p
+from DGL.cosmos.closet import p
 
 ## Reward Functions for our Units Movement towards the Target
 def calculateReward(prev_d, x, y, target):

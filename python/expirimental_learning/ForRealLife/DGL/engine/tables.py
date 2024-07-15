@@ -11,8 +11,6 @@ import numpy
 # State Space Includes
 #   - Current Magnitude
 
-
-
 class DecisionNetwork:
     def __init__(self):
         # TODO: IT WOULD BE INTERESTING TO SCALE ACROSS AGE

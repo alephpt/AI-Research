@@ -1,9 +1,8 @@
 import pygame
 
-from .world import World
-from DGL.micro import Settings, LogLevel, Log
+from DGL.cosmos import Log, LogLevel, Settings
+from DGL import world
 
-screen_size = Settings.SCREEN_SIZE.value
 background = Settings.BACKGROUND_COLOR.value
 
 class Engine:
@@ -11,8 +10,6 @@ class Engine:
         pygame.init()
         pygame.display.set_caption('For Real Life!?')
         self.running = True
-        self.screen = pygame.display.set_mode((screen_size, screen_size)) # Could abstract this out further - but not necessary
-        self.world = World(self.screen)
         self.clock = pygame.time.Clock()
 
     def events(self):
@@ -20,13 +17,13 @@ class Engine:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.world.selectCell(pygame.mouse.get_pos()) # Move this assignment to the World class
+                self.selectCell(pygame.mouse.get_pos()) # Move this assignment to the World class
             
 
     def draw(self):
         self.screen.fill(background)
-        self.world.draw()
-        self.world.gui()
+        self.draw()
+        self.gui()
         pygame.display.flip()
 
     def run(self):
@@ -34,7 +31,7 @@ class Engine:
 
         while self.running:
             self.events()
-            self.world.update()
+            self.update()
             self.draw()
             self.clock.tick(Settings.FPS.value)
             

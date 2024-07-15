@@ -1,6 +1,5 @@
 from enum import Enum
-from .utilities import Log
-from .settings import LogLevel, Settings
+from DGL.cosmos import Log, LogLevel, Settings
 import pygame
 
 class CellType(Enum):
@@ -9,11 +8,7 @@ class CellType(Enum):
     different type of Placement or Interaction, as defined by the the Azimuth.'''
     Reserved = (85, 85, 85) # This is to 'delimit' the map from spawning near the edge
     Available = (64, 64, 64)
-    Male = (128, 0, 0)
-    Female = (0, 0, 128)
-    HUMAN = [Male, Female]
-    Market = (128, 128, 0)
-    Home = (128, 128, 128) 
+
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
@@ -30,21 +25,21 @@ class Cell:
     cell_type: Cell = Cell.Available
     '''
     def __init__(self, idx, cell_type=CellType.Available):
-        Log(LogLevel.INFO, "Cell", f"Creating New Cell {idx} with type {cell_type.name}")
         self.x = idx % Settings.GRID_SIZE.value
         self.y = idx // Settings.GRID_SIZE.value
         self.idx = idx
         self.type = cell_type if self.inBounds() else CellType.Reserved
         self.size = Settings.CELL_SIZE.value
+        Log(LogLevel.INFO, "Cell", f"Creating New Cell {idx} with type {self.type.name}")
 
     def inBounds(self):
         start = Settings.GRID_START.value
         end = Settings.GRID_END.value
-        Log(LogLevel.WARNING, "Cell", f"Checking in bounds of {start, end} :: {self.x, self.y}")
-        in_bounds = (start, start) < (self.x, self.y) < (end, end)
+        Log(LogLevel.DEBUG, "Cell", f"Checking if {self.x, self.y} is within {start}xy - {end}xy")
+        in_bounds = start <= self.x < end and start <= self.y < end
 
-        Log(LogLevel.WARNING, "Cell", f"{self.idx} :: {self.x, self.y} " + "is in bounds" if {in_bounds} else "is out of bounds")
-        return 
+        Log(LogLevel.DEBUG, "Cell", f"\t\t - in bounds: {in_bounds}")
+        return in_bounds
 
     @staticmethod # Constructor that returns a set of the cells in their default state, as a set
     def set():

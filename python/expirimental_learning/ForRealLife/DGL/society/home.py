@@ -1,9 +1,11 @@
-from DGL.micro import Cell, CellType, Settings
-from . import State
+from DGL.engine.cell import Cell
+from .unittype import UnitType
+from DGL.cosmos import Settings
+from .agency import State
 
 class Home(Cell):
     def __init__(self, idx):
-        super().__init__(idx, CellType.Home)
+        super().__init__(idx, UnitType.Home)
         self.max_sleep = Settings.MAX_SLEEP.value
         self.state = State.Static
         self.home = []

@@ -1,5 +1,5 @@
-from DGL.meso.agency import State
-from DGL.micro import LogLevel, Log
+from .agency import State
+from DGL.cosmos import LogLevel, Log
 
 # TODO: Implement Utility functions that allow for the creation of a new generation of units
 # TODO: Integrate the Genome into the Genetic Evolution of the Society
@@ -7,6 +7,8 @@ from DGL.micro import LogLevel, Log
 class Genome:
     def __init__(self):
         self.reset()
+        self.population_count = 0 # TODO: Graph this over time
+        self.population = set()
 
     # When we Shuffle we want 
     # 15-30% of the Oldest Generations
@@ -18,26 +20,28 @@ class Genome:
     def alive():
         pass
 
+    # We are going to start our next generation with the following:
     def reset(self):
+        # When we repopulate, we need to graph our outputs of each generation, on an INDIVIDUAL basis - to check for 'overlap'
         self.min_age = 0
         self.avg_age = 0
-        self.max_age = 0
+        self.max_age = 0                # ~1/10th
 
         self.min_happiness = 0
-        self.avg_happiness = 0
-        self.max_happiness = 0
+        self.avg_happiness = 0          
+        self.max_happiness = 0          # ~1/10th
 
         self.min_health = 0
         self.avg_health = 0
-        self.max_health = 0
+        self.max_health = 0             # ~1/10th
 
         self.min_wealth = 0
         self.avg_wealth = 0
-        self.max_wealth = 0
+        self.max_wealth = 0             # ~1/10th
 
         self.min_reward = 0
         self.avg_reward = 0
-        self.max_reward = 0
+        self.max_reward = 0             # ~1/10th
 
         self.n_alive = 0
 
@@ -47,14 +51,17 @@ class Genome:
         self.total_wealth = 0
         self.total_reward = 0
 
-        self.n_generations = 0
+        self.n_generations = 0          # ~1/3 - ~1/2
 
     def updateStatistics(self):
+        # If there is none alive, then we don't update
         if 0 == len(self.alive()):
             return
         
+        # Otherwise, reset to be clean
         self.reset()
 
+        
         for unit in self.units:
             if unit.state == State.Dead:
                 Log.Error(LogLevel.INFO, "Dead Unit Found. - signed, Anamolous.")
