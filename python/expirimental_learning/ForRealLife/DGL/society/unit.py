@@ -39,10 +39,10 @@ class Unit(Azimuth):
     def takeStep(self):
         # Calculate Rewards
         reward_obj = self.rewardFactor(self.target)
-        Log(LogLevel.DEBUG, "Unit", f"\t{self.state} \
-                        \n\t\t\ttarget: {self.target.type if self.target else "None"} \
-                        \n\t\t\t[{self}] \
-                        \n\t\t\treward:{reward_obj}\n")
+        # Log(LogLevel.VERBOSE, "Unit", f"\t{self.state} \
+        #                 \n\t\t\ttarget: {self.target.type if self.target else "None"} \
+        #                 \n\t\t\t[{self}] \
+        #                 \n\t\t\treward:{reward_obj}\n")
         self.updateAzimuth(reward_obj)
         self.moving = True
 
@@ -51,7 +51,7 @@ class Unit(Azimuth):
 
     # These three functions form the foundations of our future for the Genetic Learning Algorithm
     def work(self):
-        Log(LogLevel.VERBOSE, "Unit", f"{self} is working")
+        #Log(LogLevel.VERBOSE, "Unit", f"{self} is working")
         if self.energy >= 10:
             self.wealth += Settings.WORK_REWARD.value
             self.energy -= Settings.WORK_COST.value
@@ -72,7 +72,7 @@ class Unit(Azimuth):
     # Option 1: Iterate through all a select group of targets, and choose the one with the lowest magnitude
     # Option 2: Iterate through all possible targets, and choose the one with the highest reward
     def chooseBestTarget(self, targets, value_fn): # We are going to pass a callback in to allow for a dynamic reward function
-        Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing the best target:")
+        #Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing the best target:")
         best_value = 0
         best_target = None
 
@@ -88,7 +88,7 @@ class Unit(Azimuth):
 
 
     def chooseBestAction(self):
-        Log(LogLevel.VERBOSE, "Unit", f"is looking at target {self.target.type if self.target else 'undefined'}")
+        #Log(LogLevel.VERBOSE, "Unit", f"is looking at target {self.target.type if self.target else 'undefined'}")
         
         if self.target is None:
             #
@@ -126,7 +126,7 @@ class Unit(Azimuth):
         '''
         increases age, decreases energy, and moves the unit in a direction
         '''
-        Log(LogLevel.VERBOSE, "Unit", f"{self} is updating values")
+        #Log(LogLevel.VERBOSE, "Unit", f"{self} is updating values")
         self.updateEnergy()
 
         ## Percent of Randomness
@@ -139,7 +139,7 @@ class Unit(Azimuth):
         self.chooseBestAction()
         self.takeStep()
 
-        Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a calculated action")
+        #Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a calculated action")
 
         # I think this is for 'catching' any potential lock states.
         if self.state in [State.Dead]:
@@ -161,10 +161,10 @@ class Unit(Azimuth):
         
         # Update location if we are moving
         if self.moving:
-            Log(LogLevel.VERBOSE, "Unit", f"{self.idx})")
+            #Log(LogLevel.VERBOSE, "Unit", f"ID:{self.idx}")
             
             if self.target_direction is not None:
-                Log(LogLevel.VERBOSE, "Unit", f"{self.idx} - Moving in ({self.target_direction})")
+                #og(LogLevel.VERBOSE, "Unit", f"Moving towards ({self.target_direction})")
                 self.energy -= 1
                 dx, dy = self.target_direction
 
@@ -172,6 +172,8 @@ class Unit(Azimuth):
                 if 0 <= self.x + dx <= map_size - 1 and 0 <= self.y + dy <= map_size - 1:
                     self.x += dx
                     self.y += dy
+            #else:
+                #Log(LogLevel.VERBOSE, "Unit", f"no target direction found.")
 
             self.moving = False
         

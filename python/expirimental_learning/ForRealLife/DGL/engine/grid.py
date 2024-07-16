@@ -1,5 +1,5 @@
 
-from .cell import Cell, CellType
+from .cell import Cell
 from DGL.cosmos import Log, LogLevel
 
 # The actions of the units depends more on the world around them, than what they are doing
@@ -17,13 +17,6 @@ class Grid:
         self.cells = Cell.list()
         self.selected = None
 
-    def alive(self):
-        pass
-
     def drawCells(self):
         for cell in self.cells:
             cell.draw(self.screen)
-
-    def availableCell(self, idx):
-        Log(LogLevel.VERBOSE, "Grid", f"Checking if {idx} is available.")
-        return self.cells[idx].type == CellType.Available

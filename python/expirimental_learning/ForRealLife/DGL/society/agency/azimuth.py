@@ -1,5 +1,5 @@
 from DGL.society.agency import MoveAction, State
-from DGL.engine.cell import Cell, CellType
+from DGL.engine.cell import Cell
 from DGL.cosmos import LogLevel, Log
 from ..unittype import UnitType
 
@@ -47,5 +47,5 @@ class Azimuth(Cell):
         Log(LogLevel.INFO, f" ~ Updating State of {self} with {cell}")
         if self.state == State.Hungry:
             Log(LogLevel.INFO, f"Unit {self} is hungry")
-            if cell.type == CellType.Market:
+            if cell.type == UnitType.Market:
                 Log(LogLevel.INFO, f"Unit {self} is at Market {cell.idx}")

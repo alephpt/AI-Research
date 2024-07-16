@@ -25,7 +25,7 @@ class LogLevel(Enum):
 
 # This will act as our global accessor for configurations and constants
 class Settings(Enum):
-    DEBUG_LEVEL = LogLevel.VERBOSE.value
+    DEBUG_LEVEL = LogLevel.DEBUG.value
 
     # RL Learning Rate
     ALPHA = 0.1
@@ -36,12 +36,12 @@ class Settings(Enum):
     # SCREEN SETTINGS
     SCREEN_SIZE = 1200
     BACKGROUND_COLOR = (24, 24, 24)
-    FPS = 30
+    FPS = 60
 
     # MACRO SETTINGS
-    GRID_SIZE = 10  # We started at 10
+    GRID_SIZE = 100  # We started at 10
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
-    GRID_START = GRID_SIZE // 5
+    GRID_START = GRID_SIZE // 10
     GRID_END = GRID_SIZE - GRID_START
 
     TOTAL_GRID_BORDER_SIZE = GRID_START ** 2
@@ -50,9 +50,9 @@ class Settings(Enum):
 
 
     # MESO-MACRO SETTINGS
-    N_POPULATION = 2
-    N_JOBS = 1                                  # This throttles supply and demand for food and money
-    N_HOUSES = 1
+    N_POPULATION = 20
+    N_JOBS = 5                                  # This throttles supply and demand for food and money
+    N_HOUSES = 5
 
     # Unit Defaults
     COST_OF_GOODS = 5                           # TODO: Let every Unit set their own cost of food
@@ -91,6 +91,10 @@ class Settings(Enum):
     @staticmethod
     def randomLocation():
         return (random.randint(0, Settings.GRID_SIZE.value - 1), random.randint(0, Settings.GRID_SIZE.value - 1))
+    
+    @staticmethod
+    def randomWithinBounds():
+        return random.randint(Settings.GRID_START.value, Settings.GRID_END.value - 1), random.randint(Settings.GRID_START.value, Settings.GRID_END.value - 1)
     
     @staticmethod
     def UnitTest():

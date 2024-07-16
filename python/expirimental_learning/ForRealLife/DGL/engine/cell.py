@@ -1,17 +1,11 @@
 from enum import Enum
 from DGL.cosmos import Log, LogLevel, Settings
+from DGL.society.unittype import UnitType
 import pygame
-
-class CellType(Enum):
-    '''
-    Defines whether a Cell is a Male or Female Unit, or a 
-    different type of Placement or Interaction, as defined by the the Azimuth.'''
-    Reserved = (85, 85, 85) # This is to 'delimit' the map from spawning near the edge
-    Available = (64, 64, 64)
-
 
 def realPosition(azimuth, size, offset): 
     return (azimuth * size) + (size / 2) - (offset / 2)
+
 
 class Cell:
     '''
@@ -24,22 +18,21 @@ class Cell:
     y: int
     cell_type: Cell = Cell.Available
     '''
-    def __init__(self, idx, cell_type=CellType.Available):
-        self.x = idx % Settings.GRID_SIZE.value
-        self.y = idx // Settings.GRID_SIZE.value
-        self.idx = idx
-        self.type = cell_type if self.inBounds() else CellType.Reserved
+    def __init__(self, idx, cell_type=UnitType.CELL):
+        #Log(LogLevel.ALERT, "Cell", f" ~~ Creating Cell {idx} - received type {cell_type} ~~")
         self.size = Settings.CELL_SIZE.value
-        Log(LogLevel.INFO, "Cell", f"Creating New Cell {idx} with type {self.type.name}")
+        self.idx = idx
+        self.type = cell_type
+        self.x, self.y = self.getXY()
+        #Log(LogLevel.ALERT, "Cell", f" ~~ New Cell {self.idx} created with type {self.type.name} ~~ \n")
 
-    def inBounds(self):
-        start = Settings.GRID_START.value
-        end = Settings.GRID_END.value
-        Log(LogLevel.DEBUG, "Cell", f"Checking if {self.x, self.y} is within {start}xy - {end}xy")
-        in_bounds = start <= self.x < end and start <= self.y < end
+    def xy(self):
+        return self.x, self.y
 
-        Log(LogLevel.DEBUG, "Cell", f"\t\t - in bounds: {in_bounds}")
-        return in_bounds
+    def getXY(self):
+        if self.type in [UnitType.Male, UnitType.Female]:
+            return Settings.randomLocation()
+        return Settings.randomWithinBounds()
 
     @staticmethod # Constructor that returns a set of the cells in their default state, as a set
     def set():
@@ -47,9 +40,6 @@ class Cell:
     
     def list():
         return [Cell(i) for i in range(Settings.TOTAL_GRID_COUNT.value)]
-
-    def xy(self):
-        return self.x, self.y
 
     def __hash__(self) -> int:
         return hash((self.x, self.y))
@@ -70,15 +60,17 @@ class Cell:
 
     def draw(self, screen):
         rect = (self.x * self.size, self.y * self.size, self.size, self.size)
+        #Log(LogLevel.ALERT, "Cell", f"Drawing ~ {self.type.name}-{self.idx} at {self.x}, {self.y}")
+        #Log(LogLevel.ALERT, "Cell", f"Drawing ~ \t\t [{rect}]")
 
-        if self.type in [CellType.Reserved, CellType.Available]:
+        if self.type == UnitType.CELL:
             pygame.draw.rect(screen, self.type.value, rect, 1)
             return
         
-        if self.type in [CellType.Male, CellType.Female, CellType.Market, CellType.Home]:
+        if self.type in [UnitType.Male, UnitType.Female, UnitType.Market, UnitType.Home]:
             pygame.draw.rect(screen, self.type.value, rect)
 
-            label = pygame.font.Font(None, 24).render(f"{self.type.name}", True, (255, 255, 255))
+            label = pygame.font.Font(None, 24).render(f"{self.type.name}-{self.idx}", True, (255, 255, 255))
             lx_position = realPosition(self.x, self.size, label.get_width())
             ly_position = realPosition(self.y, self.size, label.get_height() * 2)
 
