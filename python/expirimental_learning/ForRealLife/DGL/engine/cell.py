@@ -30,6 +30,9 @@ class Cell:
         return self.x, self.y
 
     def getXY(self):
+        if self.type == UnitType.CELL:
+            return self.idx % Settings.GRID_SIZE.value, self.idx // Settings.GRID_SIZE.value
+
         if self.type in [UnitType.Male, UnitType.Female]:
             return Settings.randomLocation()
         return Settings.randomWithinBounds()

@@ -42,4 +42,4 @@ def p(x1, y1, x2, y2):
     magnitude = (dx ** 2 + dy ** 2) ** 0.5
     dxm = round(dx / magnitude)
     dym = round(dy / magnitude)
-    return (dxm, dym), magnitude
+    return magnitude, (dxm, dym)

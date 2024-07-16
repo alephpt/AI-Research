@@ -19,14 +19,15 @@ class State(Enum): # (enumerated state, color value, lerp value)
     Static = (-1, (0, 0, 0), 1)         # Fixed State e.g. Market, Home, etc.
     Dead = (-1, (24, 24, 24), 4)        # End State
     Alive = (0, (111, 55, 111), 2)      # Default State
-    #Sleeping = (2, (0, 64, 222), 3)
+    Growing = (1, (0, 129, 182), 2)     # Takes place when either farming, or learning, or potentially sick/workout states (could contribute to 'health')
+    Sleeping = (2, (0, 64, 222), 3)
+    Tired = (3, (128, 200, 191), 2)     # Could be a result of working, or a long day
     
     # These could be 'Chooseable' States
     # Content = (8, (128, 200, 191), 2) // I'd romanticize this to be resulting of compassion and happiness, and a certain level of fatigue
     Broke = (6, (64, 77, 12), 2)            # We really want out Neural Network to be choosing what state we are in
     Hungry = (7, (0, 64, 91), 2)
-    Horny = (5, (149, 90, 166), 2)    #Sleeping = (0, (0, 64, 222), 3)
-
+    Horny = (5, (149, 90, 166), 2)    
 
     def idx(self):
         return self.value[0]

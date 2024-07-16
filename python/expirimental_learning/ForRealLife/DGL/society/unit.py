@@ -1,7 +1,8 @@
 import random
 from .agency.azimuth import Azimuth
-from .agency import State, calculateReward
+from .agency import State
 from DGL.cosmos import Log, LogLevel, Settings
+from DGL.cosmos.closet import p
 
 map_size = Settings.GRID_SIZE.value  
 
@@ -21,9 +22,9 @@ class Unit(Azimuth):
         self.energy = Settings.INITIAL_E.value # Should we clamp energy
         self.wealth = Settings.INITIAL_W.value # Should we add 'economic' factors? .. If we add a "legal" requirement, will it figure it out?
         self.generation = 0
-        #self.happiness = 0
-        #self.food_counter = 0
-        #self.sleep_counter = 0
+        self.happiness = 0
+        self.food_counter = 0
+        self.sleep_counter = 0
         self.success = False
         self.markets = set() 
         self.home = None
@@ -33,18 +34,40 @@ class Unit(Azimuth):
     def index(self):
         return self.y * map_size + self.x
 
-    def rewardFactor(self, target):
-        return calculateReward(self.magnitude, self.x, self.y, target)
+    ## Reward Functions for our Units Movement towards the Target
+    def seekReward(self, prev_d, x, y, target):
+        '''
+        'findBest' utility function to calculate the reward for the unit
+
+        Returns:
+        (distance, cartesian_direction_vector)
+
+        Parameters:
+        prev_d: float - The previous distance to the target
+        x: int - The x coordinate of the unit
+        y: int - The y coordinate of the unit
+        target: Cell - The target of the unit
+                '''
+        # If the previous distance is 0, we are at the target
+        if prev_d is 0 or target is None:
+            return (0, (0, 0))
+
+        return p(x, y, target.x, target.y)
 
     def takeStep(self):
-        # Calculate Rewards
-        reward_obj = self.rewardFactor(self.target)
-        # Log(LogLevel.VERBOSE, "Unit", f"\t{self.state} \
-        #                 \n\t\t\ttarget: {self.target.type if self.target else "None"} \
-        #                 \n\t\t\t[{self}] \
-        #                 \n\t\t\treward:{reward_obj}\n")
-        self.updateAzimuth(reward_obj)
-        self.moving = True
+        self.magnitude, self.target_direction = self.seekReward(self.magnitude, self.x, self.y, self.target)
+
+        # These variables could be mapped to the State Space with a random deviation
+        if self.magnitude == 0:
+            self.happiness += 100 # These are considered short term rewards
+            self.energy += 10 # This should also insentivize the unit to move short distances
+            Log(LogLevel.INFO, "Azimuth", f"{self} has reached target")
+            self.target_reached = True # We should be able to factor this out by checking state
+            self.reward += 1000
+            
+            # # TODO: We need to trigger a movement to some other state
+            self.moving = True
+
 
         # Longer Lives are better
         self.reward += int(Settings.LIFETIME_REWARD_SCALAR.value * 0.01)
@@ -55,12 +78,12 @@ class Unit(Azimuth):
         if self.energy >= 10:
             self.wealth += Settings.WORK_REWARD.value
             self.energy -= Settings.WORK_COST.value
-            self.happiness += Settings.WORK_PLEASURE_FACTOR
+            self.happiness += Settings.WORK_PLEASURE_FACTOR.value
 
     def eat(self):
         if self.wealth >= Settings.COST_OF_GOODS.value:
             self.wealth -= Settings.COST_OF_GOODS.value
-            self.energy += Settings.FOOD_REWARD # TODO: HUGE TEST - In Isolation, determine if fixed values or random values are better
+            self.energy += Settings.FOOD_REWARD.value # TODO: HUGE TEST - In Isolation, determine if fixed values or random values are better
             self.happiness += Settings.FOOD_PLEASURE_FACTOR.value
     
     # This function forms as the gradle of our generational genetics
@@ -71,17 +94,18 @@ class Unit(Azimuth):
 
     # Option 1: Iterate through all a select group of targets, and choose the one with the lowest magnitude
     # Option 2: Iterate through all possible targets, and choose the one with the highest reward
-    def chooseBestTarget(self, targets, value_fn): # We are going to pass a callback in to allow for a dynamic reward function
+    def chooseBestTarget(self, targets, vector_fn): # We are going to pass a callback in to allow for a dynamic reward function
         #Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing the best target:")
         best_value = 0
         best_target = None
 
         for target in targets:
-            Log(LogLevel.VERBOSE, "Unit", f"\tTarget: {target}")
-            value = value_fn(target)
+            #Log(LogLevel.ALERT, "Unit", f"\tTarget: {target.type if target else 'undefined'}")
+            distance, direction = vector_fn(target)
 
-            if value > best_value: # or value < 0: # This would account for a negative reward
-                best_value = value
+            if distance < best_value or best_value == 0: # or value < 0: # This would account for a negative reward
+                Log(LogLevel.WARNING, "Unit", f"\t\tFound New Best Value: {distance} > {best_value}")
+                best_value = distance
                 best_target = target
 
         return best_target
@@ -95,10 +119,11 @@ class Unit(Azimuth):
             # Step 1. Let the unit choose a random target ?
             #
             if self.state.needy():
+                Log(LogLevel.ALERT, "Unit", f"{self} is in a needy state of {self.state}")
                 if self.state in [State.Broke, State.Hungry]:
-                    self.target = self.chooseBestTarget(self.markets, lambda market: self.rewardFactor(market)['magnitude'])
+                    self.target = self.chooseBestTarget(self.markets, lambda market: self.seekReward(self.magnitude, self.x, self.y, market))
                 elif self.state == State.Horny:
-                    self.target = self.chooseBestTarget(self.home, lambda home: self.rewardFactor(home)['magnitude'])
+                    self.target = self.chooseBestTarget(self.home, lambda home: self.seekReward(self.magnitude, self.x, self.y, home))
 
             #
             # Step 2. Let the unit choose the best target
@@ -122,7 +147,7 @@ class Unit(Azimuth):
 
     # This update function should way potential opportcellies, and pick a course of actions,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
-    def updateValues(self):
+    def UpdateState(self):
         '''
         increases age, decreases energy, and moves the unit in a direction
         '''
@@ -131,7 +156,7 @@ class Unit(Azimuth):
 
         ## Percent of Randomness
         # We have the ability to move in a direction with some randomness
-        if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.IMPULSIVITY.value:
+        if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.randomImpulse():
             Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a random action")
             self.chooseRandomState()
 

@@ -36,7 +36,7 @@ class Settings(Enum):
     # SCREEN SETTINGS
     SCREEN_SIZE = 1200
     BACKGROUND_COLOR = (24, 24, 24)
-    FPS = 60
+    FPS = 15
 
     # MACRO SETTINGS
     GRID_SIZE = 100  # We started at 10
@@ -56,10 +56,10 @@ class Settings(Enum):
 
     # Unit Defaults
     COST_OF_GOODS = 5                           # TODO: Let every Unit set their own cost of food
-    INITIAL_E = 150                              # Default Energy Level -   Units should inherit this with their DNA -  What is the ideal energy level? We started at 25. 
+    INITIAL_E = 150                             # Default Energy Level -   Units should inherit this with their DNA -  What is the ideal energy level? We started at 25. 
     INITIAL_W = 50                              # Default Money Level -    Units should inherit this with their DNA -   We want to see how far we can take this down. We started at 50.
     LIFETIME_REWARD_SCALAR = 10                 # Incentivizes living longer - this should start as 10:1 energy cost - # Maybe we add Random bonus factor for genetic alterations.
-    IMPULSIVITY = 0.01                          # How likely are you to make a random decision? - We started at 0.5 and need to end with near absolute
+    IMPULSIVITY = 0.1    # 1 would be 100%      # How likely are you to make a random decision? - We started at 0.5 and need to end with near absolute
     CHANCE_TO_REPRODUCE = 0.5                   # How likely are you to reproduce? - We started at 50%, but need to pick randomly, to allow for 'happy accidents'
 
     # Sleep Values
@@ -86,7 +86,34 @@ class Settings(Enum):
     SEX_REWARD = 10
     SEX_PLEASURE_FACTOR = 5
     REPRODUCTION_PLEASURE_FACTOR = 100
-    REPRODUCTION_COST = .5                      # This is the cost of reproduction - do we want to make this a random factor, or define our economy?
+    REPRODUCTION_COST = .5                       # This is the cost of reproduction - do we want to make this a random factor, or define our economy?
+    Population_Randomness_Factor = .50 # %       # This is the factor that will allow for random population growth
+    Population_Deviation = .667                   # This is the deviation that will allow for random population growth
+
+    @staticmethod
+    def randomPopulation():
+        random.seed()
+        percent_population = Settings.N_POPULATION.value * Settings.Population_Randomness_Factor.value
+        deviation = percent_population * Settings.Population_Deviation.value
+        return 
+
+    @staticmethod
+    def randomImpulse():
+        impulse_factor = Settings.IMPULSIVITY.value
+        impulse_offset = impulse_factor * 1.5
+        return impulse_factor + Settings.randomDeviationf(impulse_offset)
+
+    @staticmethod
+    def randomDeviationf(deviation):
+        '''Returns some value +/- some deviation / 2'''
+        random.seed()
+        return random.uniform(0.0, deviation) - (deviation / 2)
+
+    @staticmethod
+    def randomDeviationi(deviation):
+        '''Returns some value +/- some deviation / 2'''
+        random.seed()
+        return random.randint(0, deviation) - (deviation / 2)
 
     @staticmethod
     def randomLocation():

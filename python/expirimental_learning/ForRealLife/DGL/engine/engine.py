@@ -1,5 +1,5 @@
 import pygame
-
+from pygame_widgets.slider import Slider
 from DGL.cosmos import Log, LogLevel, Settings
 from DGL.society.agency import State
 from .grid import Grid
@@ -41,21 +41,28 @@ class Engine(Grid):
         self.gui()
 
     def gui(self):
+        blit_length = Settings.CELL_SIZE.value * 13
+        relative_offset = Settings.GRID_END.value * Settings.CELL_SIZE.value - blit_length * 1.35
+        frame_height = Settings.CELL_SIZE.value * 19
+        frame_start = 11
+
+        # Transparent Frame
+        new_surface = pygame.Surface((blit_length * 2, frame_height))
+        new_surface.set_alpha(80)
+        new_surface.fill((0, 0, 0))
+        self.screen.blit(new_surface, (relative_offset, frame_start))
+
+        # Draw Text
+        height_offset = 24
+        
         sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward", 'Selected']
         values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward, self.selected.__class__.__name__]
         font = pygame.font.Font(None, 22)
 
-        relative_size = grid_size * .1
-        relative_offset = grid_size - relative_size
+        for i in range(len(sections)):
+            section = sections[i]
+            value = values[i]
 
-        # Transparent Frame
-        new_surface = pygame.Surface((relative_offset * cell_size, 8.2 * 22))
-        new_surface.set_alpha(80)
-        new_surface.fill((0, 0, 0))
-        self.screen.blit(new_surface, (relative_size * cell_size * 7.2, 11))
-
-        height_offset = 24
-        for i, (section, value) in enumerate(zip(sections, values)):
             section = font.render(f"{section}:", True, (222, 222, 222, 80))
             value = font.render(f"{value}", True, (255, 255, 255, 80))
             width_offset = value.get_width() + 16

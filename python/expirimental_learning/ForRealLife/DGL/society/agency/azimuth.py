@@ -24,17 +24,6 @@ class Azimuth(Cell):
     def __str__(self):
         return f"AZMTH[{self.idx}]-({self.x},{self.y}) - {self.state} :: target('{self.target_direction}') :: \]"
     
-    def updateAzimuth(self, reward_obj):
-        self.magnitude = reward_obj['magnitude']
-        self.target_direction = reward_obj['target_direction_vector']
-
-        if reward_obj['reward'] == 'here' and not self.target_reached:
-            self.target_reached = True # We should be able to factor this out by checking state
-            self.reward += 1000
-            
-            # # TODO: We need to trigger a movement to some other state
-            return
-
     # Needs to be as random as possible to explore all possible states
     def chooseRandomState(self):
         self.state = State.random()

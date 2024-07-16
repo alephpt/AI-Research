@@ -46,7 +46,7 @@ class Society:
         if not isinstance(self.selected, tuple):
             return
 
-        Log(LogLevel.ALERT, "Society", f"Checking {unit.type}-[{unit.idx}]({unit.xy()}) against Selected-{self.selected}")
+        #Log(LogLevel.ALERT, "Society", f"Checking {unit.type}-[{unit.idx}]({unit.xy()}) against Selected-{self.selected}")
 
         if unit.xy() == self.selected:
             Log(LogLevel.VERBOSE, "Society", f"Selected {unit} at {unit.xy()}")
@@ -95,24 +95,33 @@ class Society:
         Log(LogLevel.VERBOSE, "Society", f"Population: {len(self.units)}")
 
         for unit in self.units:
+            if unit.happiness > 0:
+                unit.happiness -= 1
+
             # Remove iterables from units list, to prevent excessive steps
             if unit.state == State.Dead:
                 self.units.remove(unit)
                 continue
 
+                # This hook exists for us to be able to update state via the GUI
             # Prevents us from selecting None, but allows us to select a target during the simulation.
-            if selected is not None and not type(selected) == tuple:
-                unit.target = selected
-                unit.target_direction = unit.target.xy()
+            if selected not in [unit.target, None] and not type(selected) == tuple:
+                unit.target = selected # This piece of code updates all units to focus on a single selected target
+                unit.target_direction = unit.target.xy()    # defined by the User
                 # We actually need to determine the target direction aka Action Step unit.target.xy()
 
             # Determine if the Unit is at a Market or Home
             if unit.type in [UnitType.Male, UnitType.Female]:
-                # TODO: Determine if we are 'broke' or 'hungry'
-                if self.cells[unit.index()].type == UnitType.Market:
-                    # We need to determine Hungry, Broke, Working, or Buying Food
-                    Log(LogLevel.VERBOSE, "Society", f"Unit {unit} is at Market {self.cells[unit.index()].idx}")
-                elif self.cells[unit.index()].type == UnitType.Home:
-                    Log(LogLevel.VERBOSE, "Society", f"Unit {unit} is at Home {self.cells[unit.index()].idx}")
+                if unit.magnitude == 0:
+                    if unit.state == State.Broke:
+                        unit.work()
+                    elif unit.state == State.Hungry:
+                        unit.eat()
+                    elif unit.state == State.Horny:
+                        unit.sex()
                     
-            unit.updateValues()
+
+
+                    unit.chooseRandomState()
+                    
+            unit.UpdateState()
