@@ -72,12 +72,12 @@ class Cell:
         #Log(LogLevel.ALERT, "Cell", f"Drawing ~ \t\t [{rect}]")
 
         if self.type == UnitType.CELL:
-            pygame.draw.rect(screen, self.type.value, rect, 1)
+            pygame.draw.rect(screen, self.type.color().value, rect, 1)
             return
         
         if self.type in [UnitType.Male, UnitType.Female, UnitType.Market, UnitType.Home]:
             pygame.draw.circle(screen, self.type.add((50, 50, 50)), (self.x * self.size + self.size / 2, self.y * self.size + self.size / 2), self.radius, 1)
-            pygame.draw.rect(screen, self.type.value, rect)
+            pygame.draw.rect(screen, self.type.color().value, rect)
 
             label = pygame.font.Font(None, 24).render(f"{self.type.name}-{self.idx}", True, (255, 255, 255))
             lx_position = realPosition(self.x, self.size, label.get_width())

@@ -42,7 +42,6 @@ class Settings(Enum):
     BACKGROUND_COLOR = (24, 24, 24)
     FPS = 15
 
-    UNIT_RADIUS = 5
 
     GRID_SIZE = 100  # We started at 10
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
@@ -53,6 +52,7 @@ class Settings(Enum):
     TOTAL_GRID_COUNT = GRID_SIZE ** 2
     TOTAL_SPAWN_AREA = int(TOTAL_GRID_COUNT - TOTAL_GRID_BORDER_SIZE)
 
+    UNIT_RADIUS = 5 * CELL_SIZE
 
     # MESO-MACRO SETTINGS
     N_POPULATION = 20

@@ -1,12 +1,27 @@
 from enum import Enum
+from DGL.cosmos.closet.color import Color
+from DGL.cosmos import LogLevel, Log
+
 
 class UnitType(Enum):
-    CELL = (0, 125, 55)
-    Male = (128, 0, 0)
-    Female = (0, 0, 128)
-    Market = (128, 128, 0)
-    Home = (128, 128, 128)
+    CELL = Color.CELLULAR_GREEN
+    Male = Color.UNIT_RED
+    Female = Color.UNIT_BLUE
+    Market = Color.Olive
+    Home = Color.Brown
 
-    def add(self, y): 
-        x = self.value
-        return (x[0] + y[0], x[1] + y[1], x[2] + y[2])
+    def __str__(self):
+        return self.name
+    
+    def color(self):
+        return self.value
+    
+    def add(self, other):
+        if isinstance(other, UnitType):
+            return self.value.add(other.color())
+        
+        if isinstance(other, Color):
+            return self.value.add(other)
+        
+        return self.color().add(other)
+        
