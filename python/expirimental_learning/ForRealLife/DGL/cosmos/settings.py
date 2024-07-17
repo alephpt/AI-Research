@@ -43,7 +43,7 @@ class Settings(Enum):
     FPS = 15
 
 
-    GRID_SIZE = 100  # We started at 10
+    GRID_SIZE = 10  # We started at 10
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
     GRID_START = GRID_SIZE // 10
     GRID_END = GRID_SIZE - GRID_START
@@ -55,9 +55,9 @@ class Settings(Enum):
     UNIT_RADIUS = 5 * CELL_SIZE
 
     # MESO-MACRO SETTINGS
-    N_POPULATION = 20
-    N_JOBS = 5                                  # This throttles supply and demand for food and money
-    N_HOUSES = 5
+    N_POPULATION = 2
+    N_JOBS = 1                                  # This throttles supply and demand for food and money
+    N_HOUSES = 1
 
     # Unit Defaults
     COST_OF_GOODS = 5                           # TODO: Let every Unit set their own cost of food

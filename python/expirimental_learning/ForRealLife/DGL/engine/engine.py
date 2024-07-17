@@ -35,15 +35,10 @@ class Engine(Grid):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.selectCell(pygame.mouse.get_pos()) # Move this assignment to the World class     
 
-    def draw(self):
-        self.screen.fill(background)
-        self.drawCells()
-        self.gui()
-
     def gui(self):
-        blit_length = Settings.CELL_SIZE.value * 13
+        blit_length = Settings.CELL_SIZE.value * Settings.GRID_SIZE.value // 8
         relative_offset = Settings.GRID_END.value * Settings.CELL_SIZE.value - blit_length * 1.35
-        frame_height = Settings.CELL_SIZE.value * 19
+        frame_height = Settings.CELL_SIZE.value * Settings.GRID_SIZE.value // 6
         frame_start = 11
 
         # Transparent Frame
@@ -60,24 +55,26 @@ class Engine(Grid):
         font = pygame.font.Font(None, 22)
 
         for i in range(len(sections)):
-            section = sections[i]
-            value = values[i]
 
+            section = sections[i]
             section = font.render(f"{section}:", True, (222, 222, 222, 80))
+            self.screen.blit(section, (relative_offset + 22, i * 22 + height_offset))
+
+            value = values[i]
             value = font.render(f"{value}", True, (255, 255, 255, 80))
             width_offset = value.get_width() + 16
-            self.screen.blit(section, ((grid_size - cell_size * 2 - 2) * cell_size, i * 22 + height_offset))
             self.screen.blit(value, (grid_size * cell_size - width_offset - 22, i * 22 + height_offset))
 
-    def runLoop(self, callback):
+    def runLoop(self, world_update):
         Log(LogLevel.INFO, "Ingine", " ~ Running MAIN Engine Loop ~")
 
         while self.running:
-            self.events()
-            self.update()
-            self.draw()
-            callback()
+            self.screen.fill(background)
+            self.drawCells()
+            world_update() # This is coming from the 'World' class, where we are drawing the unites
+            self.gui()
             self.updatePopulation(self.selected)
+            self.events()
             pygame.display.flip()
             self.clock.tick(Settings.FPS.value)
             

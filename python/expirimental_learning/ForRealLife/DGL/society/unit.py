@@ -120,14 +120,14 @@ class Unit(Azimuth):
             # Step 1. Let the unit choose a random target ?
             #
             if self.state.needy():
-                Log(LogLevel.ALERT, "Unit", f"{self} is in a needy state of {self.state}")
+                Log(LogLevel.INFO, "Unit", f"{self} is in a needy state of {self.state}")
                 if self.state in [State.Broke, State.Hungry]:
                     self.target = self.chooseBestTarget(self.markets)
                 elif self.state == State.Horny:
                     self.target = self.chooseBestTarget(self.home)
 
                 if self.target is None:
-                    Log(LogLevel.ERROR, "Unit", f"{self} is in a needy state, but no target was found")
+                    Log(LogLevel.WARNING, "Unit", f"{self} is in a needy state, but no target was found")
 
             #
             # Step 2. Let the unit choose the best target

@@ -22,3 +22,6 @@ def softmax(x):
 # TODO: Audio/Signals w/ Nova Engine
 def cross_entropy_loss(y, y_hat):
     return -n.sum(y * n.log(y_hat))
+
+def realPosition(azimuth, size, offset): 
+    return (azimuth * size) + (size / 2) - (offset / 2)

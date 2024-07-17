@@ -1,11 +1,8 @@
 from enum import Enum
-from DGL.cosmos import Log, LogLevel, Settings
+from DGL.cosmos import Log, LogLevel, Settings 
+from DGL.cosmos.closet.color import Color, clamp
 from DGL.society.unittype import UnitType
 import pygame
-
-def realPosition(azimuth, size, offset): 
-    return (azimuth * size) + (size / 2) - (offset / 2)
-
 
 class Cell:
     '''
@@ -76,16 +73,5 @@ class Cell:
             return
         
         if self.type in [UnitType.Male, UnitType.Female, UnitType.Market, UnitType.Home]:
-            pygame.draw.circle(screen, self.type.add((50, 50, 50)), (self.x * self.size + self.size / 2, self.y * self.size + self.size / 2), self.radius, 1)
-            pygame.draw.rect(screen, self.type.color().value, rect)
-
-            label = pygame.font.Font(None, 24).render(f"{self.type.name}-{self.idx}", True, (255, 255, 255))
-            lx_position = realPosition(self.x, self.size, label.get_width())
-            ly_position = realPosition(self.y, self.size, label.get_height() * 2)
-
-            state = pygame.font.Font(None, 16).render(f"{self.state}", True, (255, 255, 255))
-            sx_position = realPosition(self.x, self.size, state.get_width())
-            sy_position = realPosition(self.y, self.size, state.get_height() / 4)
-
-            screen.blit(label, (lx_position, ly_position))
-            screen.blit(state, (sx_position, sy_position))
+            self.type.drawUnit(screen, self.x, self.y, self.size, self.radius, rect)
+            self.type.labelUnit(self.idx, screen, self.x, self.y, self.size, self.state)

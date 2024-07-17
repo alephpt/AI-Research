@@ -22,7 +22,7 @@ class Azimuth(Cell):
         self.target_reached = False # This is to control our logic  - has the potential to be refactored
     
     def __str__(self):
-        return f"AZMTH[{self.idx}]-({self.x},{self.y}) - {self.state} :: target('{self.target_direction}') :: \]"
+        return f"[{self.idx}]-({self.x},{self.y}) - {self.state} :: target('{self.target_direction}') :: \]"
     
     # Needs to be as random as possible to explore all possible states
     def chooseRandomState(self):
