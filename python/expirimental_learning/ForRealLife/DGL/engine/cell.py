@@ -20,10 +20,12 @@ class Cell:
     '''
     def __init__(self, idx, cell_type=UnitType.CELL):
         #Log(LogLevel.ALERT, "Cell", f" ~~ Creating Cell {idx} - received type {cell_type} ~~")
+        self.radius = Settings.UNIT_RADIUS.value
         self.size = Settings.CELL_SIZE.value
         self.idx = idx
         self.type = cell_type
         self.x, self.y = self.getXY()
+
         #Log(LogLevel.ALERT, "Cell", f" ~~ New Cell {self.idx} created with type {self.type.name} ~~ \n")
 
     def xy(self):
@@ -48,8 +50,11 @@ class Cell:
         return hash((self.x, self.y))
     
     def __eq__(self, other):
+        if other is None:
+            return False
+
         if not isinstance(other, Cell):
-            Log(LogLevel.FATAL, "Cell", f"!! FATAL !!  Cannot compare Cell to {type(other)}.")
+            Log(LogLevel.FATAL, "Cell", f"!! FATAL !!  Cannot compare {self.type} to {type(other)}.")
 
         # THIS IS NOT BROKEN IF IT FAILS.
         Log(LogLevel.INFO, "Cell", f"Comparing {self.type}-{self.idx} to {other.type}-{other.idx}. Cannot compare Cell to {type(other)}.")
@@ -71,6 +76,7 @@ class Cell:
             return
         
         if self.type in [UnitType.Male, UnitType.Female, UnitType.Market, UnitType.Home]:
+            pygame.draw.circle(screen, self.type.add((50, 50, 50)), (self.x * self.size + self.size / 2, self.y * self.size + self.size / 2), self.radius, 1)
             pygame.draw.rect(screen, self.type.value, rect)
 
             label = pygame.font.Font(None, 24).render(f"{self.type.name}-{self.idx}", True, (255, 255, 255))

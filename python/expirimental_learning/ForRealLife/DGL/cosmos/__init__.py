@@ -1,3 +1,3 @@
 
 from .settings import LogLevel, Settings 
-from .closet import Log
+from .closet import *

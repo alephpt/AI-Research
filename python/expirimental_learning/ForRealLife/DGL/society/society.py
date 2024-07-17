@@ -95,6 +95,7 @@ class Society:
         Log(LogLevel.VERBOSE, "Society", f"Population: {len(self.units)}")
 
         for unit in self.units:
+            # Life sucks the happiness out of all of the units.
             if unit.happiness > 0:
                 unit.happiness -= 1
 

@@ -35,7 +35,7 @@ class Unit(Azimuth):
         return self.y * map_size + self.x
 
     ## Reward Functions for our Units Movement towards the Target
-    def seekReward(self, prev_d, x, y, target):
+    def seekTarget(self, prev_d, x, y, target):
         '''
         'findBest' utility function to calculate the reward for the unit
 
@@ -49,13 +49,16 @@ class Unit(Azimuth):
         target: Cell - The target of the unit
                 '''
         # If the previous distance is 0, we are at the target
-        if prev_d is 0 or target is None:
+        if target is None:
+            return (None, (0, 0)) 
+
+        if prev_d is 0:
             return (0, (0, 0))
 
         return p(x, y, target.x, target.y)
 
     def takeStep(self):
-        self.magnitude, self.target_direction = self.seekReward(self.magnitude, self.x, self.y, self.target)
+        self.magnitude, self.target_direction = self.seekTarget(self.magnitude, self.x, self.y, self.target)
 
         # These variables could be mapped to the State Space with a random deviation
         if self.magnitude == 0:
@@ -94,16 +97,14 @@ class Unit(Azimuth):
 
     # Option 1: Iterate through all a select group of targets, and choose the one with the lowest magnitude
     # Option 2: Iterate through all possible targets, and choose the one with the highest reward
-    def chooseBestTarget(self, targets, vector_fn): # We are going to pass a callback in to allow for a dynamic reward function
-        #Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing the best target:")
+    def chooseBestTarget(self, targets): # We are going to pass a callback in to allow for a dynamic reward function
         best_value = 0
         best_target = None
 
         for target in targets:
-            #Log(LogLevel.ALERT, "Unit", f"\tTarget: {target.type if target else 'undefined'}")
-            distance, direction = vector_fn(target)
+            distance, _ = self.seekTarget(self.magnitude, self.x, self.y, target)
 
-            if distance < best_value or best_value == 0: # or value < 0: # This would account for a negative reward
+            if distance < best_value or (distance == 0 and best_value != 0): # or value < 0: # This would account for a negative reward
                 Log(LogLevel.WARNING, "Unit", f"\t\tFound New Best Value: {distance} > {best_value}")
                 best_value = distance
                 best_target = target
@@ -121,9 +122,12 @@ class Unit(Azimuth):
             if self.state.needy():
                 Log(LogLevel.ALERT, "Unit", f"{self} is in a needy state of {self.state}")
                 if self.state in [State.Broke, State.Hungry]:
-                    self.target = self.chooseBestTarget(self.markets, lambda market: self.seekReward(self.magnitude, self.x, self.y, market))
+                    self.target = self.chooseBestTarget(self.markets)
                 elif self.state == State.Horny:
-                    self.target = self.chooseBestTarget(self.home, lambda home: self.seekReward(self.magnitude, self.x, self.y, home))
+                    self.target = self.chooseBestTarget(self.home)
+
+                if self.target is None:
+                    Log(LogLevel.ERROR, "Unit", f"{self} is in a needy state, but no target was found")
 
             #
             # Step 2. Let the unit choose the best target
@@ -145,16 +149,14 @@ class Unit(Azimuth):
             return
 
 
-    # This update function should way potential opportcellies, and pick a course of actions,
+    # This update function should pick a state,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
     def UpdateState(self):
         '''
         increases age, decreases energy, and moves the unit in a direction
         '''
-        #Log(LogLevel.VERBOSE, "Unit", f"{self} is updating values")
         self.updateEnergy()
 
-        ## Percent of Randomness
         # We have the ability to move in a direction with some randomness
         if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.randomImpulse():
             Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a random action")
@@ -201,7 +203,7 @@ class Unit(Azimuth):
                 #Log(LogLevel.VERBOSE, "Unit", f"no target direction found.")
 
             self.moving = False
-        
+
         # Check if we are dead yet
         if self.energy < 0:
             print(f"Unit {self} has died")

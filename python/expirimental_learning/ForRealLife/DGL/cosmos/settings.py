@@ -28,7 +28,11 @@ class Settings(Enum):
     DEBUG_LEVEL = LogLevel.DEBUG.value
 
     # RL Learning Rate
-    ALPHA = 0.1
+    N_INS = 12
+    HL1 = 7
+    HL2 = 5
+    N_OUTS = 4 #  # Lookat 3 at a time with the option of None being the best
+    ALPHA = 0.01
     GAMMA = 0.95
     EPSILON = 0.7
 
@@ -38,7 +42,8 @@ class Settings(Enum):
     BACKGROUND_COLOR = (24, 24, 24)
     FPS = 15
 
-    # MACRO SETTINGS
+    UNIT_RADIUS = 5
+
     GRID_SIZE = 100  # We started at 10
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
     GRID_START = GRID_SIZE // 10

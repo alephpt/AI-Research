@@ -14,7 +14,7 @@ class Azimuth(Cell):
         global gender_count 
         super().__init__(idx, UnitType.Male if gender_count % 2 == 0 else UnitType.Female)
         gender_count += 1
-        self.magnitude = 0
+        self.magnitude = None
         self.target = None
         self.action_step = MoveAction.random()
         self.target_direction = self.action_step.xy()
