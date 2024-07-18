@@ -1,6 +1,6 @@
 import random
 
-class Agent:
+class Unit:
     def __init__(self, id, x, y, sex):
         self.id = id
         self.x = x

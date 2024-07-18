@@ -26,6 +26,7 @@ class LogLevel(Enum):
 # This will act as our global accessor for configurations and constants
 class Settings(Enum):
     DEBUG_LEVEL = LogLevel.DEBUG.value
+    MEMORY_SIZE = 2048
 
     # RL Learning Rate
     N_STATE_INPUTS = 4

@@ -22,7 +22,7 @@ NUM_EPOCHS = 100
 ENERGY_COST = 0.1
 NUM_PROCESSES = 24  # Number of parallel processes
 
-class Agent:
+class Unit:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -33,7 +33,7 @@ class Agent:
         new_x = self.x + dx
         new_y = self.y + dy
         
-        # Ensure agents stay within bounds
+        # Ensure units stay within bounds
         if 0 <= new_x < GRID_SIZE:
             self.x = new_x
         if 0 <= new_y < GRID_SIZE:
@@ -71,33 +71,33 @@ class DQN(nn.Module):
     def forward(self, x):
         return self.fc(x)
 
-def agent_update(agent, model, grid):
-    if not agent.is_alive():
-        return agent
+def unit_update(unit, model, grid):
+    if not unit.is_alive():
+        return unit
 
-    state = np.array([agent.x, agent.y, agent.energy, agent.money])
+    state = np.array([unit.x, unit.y, unit.energy, unit.money])
     action = model(torch.tensor(state, dtype=torch.float32)).argmax().item()
 
     if action == 0:
-        agent.move(1, 0)
+        unit.move(1, 0)
     elif action == 1:
-        agent.move(-1, 0)
+        unit.move(-1, 0)
     elif action == 2:
-        agent.move(0, 1)
+        unit.move(0, 1)
     else:
-        agent.move(0, -1)
+        unit.move(0, -1)
 
     reward = 0
-    if grid[agent.x][agent.y] == 'food':
-        agent.eat()
+    if grid[unit.x][unit.y] == 'food':
+        unit.eat()
         reward = 10
-    elif grid[agent.x][agent.y] == 'job':
-        agent.work()
+    elif grid[unit.x][unit.y] == 'job':
+        unit.work()
         reward = 10
     else:
         reward = -1
 
-    return agent
+    return unit
 
 def train_dqn():
     model = DQN()
@@ -116,14 +116,14 @@ def train_dqn():
             model.load_state_dict(torch.load('model.pth'))
 
         for epoch in range(NUM_EPOCHS):
-            agents = [Agent(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(NUM_AGENTS)]
+            units = [Unit(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(NUM_AGENTS)]
             grid = [['empty'] * GRID_SIZE for _ in range(GRID_SIZE)]
             spawn_jobs_and_food(grid)
-            epoch_alive_agents = NUM_AGENTS
+            epoch_alive_units = NUM_AGENTS
 
             with Pool(NUM_PROCESSES) as pool:
-                while any(agent.is_alive() for agent in agents):
-                    agents = pool.starmap(agent_update, [(agent, model, grid) for agent in agents])
+                while any(unit.is_alive() for unit in units):
+                    units = pool.starmap(unit_update, [(unit, model, grid) for unit in units])
 
                     # Visualization
                     screen.fill((0, 0, 0))
@@ -134,22 +134,22 @@ def train_dqn():
                             elif grid[x][y] == 'job':
                                 pygame.draw.rect(screen, (0, 0, 255), (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-                    for agent in agents:
-                        if agent.is_alive():
-                            pygame.draw.rect(screen, (255, 0, 0), (agent.x * CELL_SIZE, agent.y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+                    for unit in units:
+                        if unit.is_alive():
+                            pygame.draw.rect(screen, (255, 0, 0), (unit.x * CELL_SIZE, unit.y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
                         else:
-                            epoch_alive_agents -= 1
+                            epoch_alive_units -= 1
 
                     # Display stats
-                    alive_agents = sum(agent.is_alive() for agent in agents)
-                    if alive_agents > 0:
-                        avg_energy = np.mean([agent.energy for agent in agents if agent.is_alive()])
-                        avg_money = np.mean([agent.money for agent in agents if agent.is_alive()])
+                    alive_units = sum(unit.is_alive() for unit in units)
+                    if alive_units > 0:
+                        avg_energy = np.mean([unit.energy for unit in units if unit.is_alive()])
+                        avg_money = np.mean([unit.money for unit in units if unit.is_alive()])
                     else:
                         avg_energy = 0.0
                         avg_money = 0.0
 
-                    stats_text = f'Epoch: {epoch + 1}/{NUM_EPOCHS} - Alive Agents: {alive_agents} - Avg Energy: {avg_energy:.2f} - Avg Money: {avg_money:.2f}'
+                    stats_text = f'Epoch: {epoch + 1}/{NUM_EPOCHS} - Alive Units: {alive_units} - Avg Energy: {avg_energy:.2f} - Avg Money: {avg_money:.2f}'
                     stats_surface = font.render(stats_text, True, (255, 255, 255))
 
                     screen.blit(stats_surface, (10, 10))

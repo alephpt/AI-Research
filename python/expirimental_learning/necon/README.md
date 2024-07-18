@@ -5,7 +5,7 @@
 ### Overview
 This Python project utilizes Pygame for creating a simple game engine and demonstrating basic object-oriented programming concepts. It includes modules for engine management (`engine.py`) and object rendering (`blit.py`), enabling interactive shape manipulation within a graphical window.
 
-Ideally this could grow into a system of agents that are able to 'play' against you.
+Ideally this could grow into a system of units that are able to 'play' against you.
 
 ### engine.py
 - **Engine Class:** Initializes Pygame, manages the game window, and handles event processing.
