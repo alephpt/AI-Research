@@ -37,3 +37,9 @@ class TargetingSystem(Enum):
     @staticmethod
     def random():
         return TargetingSystem(random.choice([*TargetingSystem]))
+    
+def testTargetingSystem():
+    print("Testing Targeting System")
+    print(f"Random Targeting System: {TargetingSystem.random().name}")
+    print("Targeting System Test Complete")
+    print()

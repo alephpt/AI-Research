@@ -110,16 +110,16 @@ class Settings(Enum):
     def randomImpulse():
         impulse_factor = Settings.IMPULSIVITY.value
         impulse_offset = impulse_factor * 1.5
-        return impulse_factor + Settings.randomDeviationf(impulse_offset)
+        return impulse_factor + Settings.randFluxFloat(impulse_offset)
 
     @staticmethod
-    def randomDeviationf(deviation):
+    def randFluxFloat(deviation):
         '''Returns some value +/- some deviation / 2'''
         random.seed()
         return random.uniform(0.0, deviation) - (deviation / 2)
 
     @staticmethod
-    def randomDeviationi(deviation):
+    def randFluxInt(deviation):
         '''Returns some value +/- some deviation / 2'''
         random.seed()
         return random.randint(0, deviation) - (deviation / 2)
