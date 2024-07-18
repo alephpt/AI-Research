@@ -28,11 +28,13 @@ class Settings(Enum):
     DEBUG_LEVEL = LogLevel.DEBUG.value
 
     # RL Learning Rate
-    N_INS = 12
-    HL1 = 7
-    HL2 = 5
-    N_OUTS = 4 #  # Lookat 3 at a time with the option of None being the best
-    ALPHA = 0.01
+    N_STATE_INPUTS = 4
+    N_STATE_OUTPUTS = 5
+
+    N_TARGETING_INPUTS = 4
+    N_TARGETING_OUTPUTS = 3
+
+    LEARNING_RATE = 0.01
     GAMMA = 0.95
     EPSILON = 0.7
 

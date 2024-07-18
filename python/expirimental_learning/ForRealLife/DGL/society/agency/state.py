@@ -14,20 +14,29 @@ import random
     # Harvesting = (9, (128, 200, 191), 2) # Creates a 'Token' in society that allows for 'generic' trading of goods
     # Building = (10, (128, 200, 191), 2) # Could lead to building Home or Business -> Could even evolve "construction" or "engineer" type
 
+# These are potential Action states that we could be in
+class Action(Enum):
+    Wuwei = 0
+    Moving = 1
+    Trading = 2
+    Eating = 3
+    Sleeping = 4
+    Growing = 5
+
+
+
 # These are Determined by the Choice we make from the Neural Network
 class State(Enum): # (enumerated state, color value, lerp value)
     Static = (-1, (0, 0, 0), 1)         # Fixed State e.g. Market, Home, etc.
     Dead = (-1, (24, 24, 24), 4)        # End State
     Alive = (0, (111, 55, 111), 2)      # Default State
-    Growing = (1, (0, 129, 182), 2)     # Takes place when either farming, or learning, or potentially sick/workout states (could contribute to 'health')
-    Sleeping = (2, (0, 64, 222), 3)
-    Tired = (3, (128, 200, 191), 2)     # Could be a result of working, or a long day
     
     # These could be 'Chooseable' States
-    # Content = (8, (128, 200, 191), 2) // I'd romanticize this to be resulting of compassion and happiness, and a certain level of fatigue
     Broke = (6, (64, 77, 12), 2)            # We really want out Neural Network to be choosing what state we are in
     Hungry = (7, (0, 64, 91), 2)
-    Horny = (5, (149, 90, 166), 2)    
+    Tired = (3, (128, 200, 191), 2)     # Happens as a result of fatigue onset
+    Horny = (5, (149, 90, 166), 2)      # This acts as a Non-Crucial State
+    # Content = (8, (128, 200, 191), 2) // I'd romanticize this to be resulting of compassion and happiness, and a certain level of fatigue
 
     def idx(self):
         return self.value[0]
