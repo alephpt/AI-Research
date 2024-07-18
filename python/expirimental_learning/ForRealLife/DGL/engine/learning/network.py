@@ -1,6 +1,6 @@
 import numpy as np
 from enum import Enum
-from .targetingsystem import TargetingSystem
+from .targetingsystem import TargetAction, TargetingSystem
 from DGL.society.agency.state import State
 from DGL.cosmos.closet import relu, sigmoid_derivative
 
@@ -52,6 +52,8 @@ state_outputs = [State.Alive, State.Hungry, State.Broke, State.Horny, State.Tire
 
 def testDRL():
     # State Inputs
+    integrity_level = 0 
+    compassion_level = 0
     energy = 25         # Comes from 'eating' or 'resting'
     money = 25          # Comes from 'working' or 'trading' - and decays when buying, having kids, and we could create an economy
     happiness = 0       # Comes from rewarding actions like 'mating', 'eating', 'trading' or 'sleeping' - and decays over time
@@ -59,9 +61,11 @@ def testDRL():
     state = 0           # State Conditions are based on 'world' "acheivements" through the AI acheiving certain goals or conditions
     choice = 0          # State Condition from Enum             0-4
     tsa = 0             # Target Selected Action from Enum      0-8
-    targeting_pool = [(0, (0, 0), 0, 0), (0, (0, 0), 0, 0), (0, (0, 0), 0, 0)]      # Target Pool - Tuple of (Type, Direction Vector, Magnitude, Potential)
-    items = [item for t in targeting_pool for item in t]
-    inputs = [None, energy, money, happiness, fatigue, state, choice, tsa, *items]
+    targeting_pool = TargetingSystem().poolValues()
+    inputs = [None, energy, money, happiness, fatigue, state, choice, tsa, *targeting_pool]
+
+    # Comes from TargetingSystem
+    # Target Pool - Tuple of (Type, Direction Vector, Magnitude, Potential) 
 
     print("\n\t~~ Testing DRL ~~\n")
     state_inputs = len(inputs)
@@ -72,7 +76,7 @@ def testDRL():
     # After we query the DRL, we should have a choice, and a target_system_action
 
     chosen_state = state_outputs[choice]
-    chosen_target_action = TargetingSystem(tsa)
+    chosen_target_action = TargetAction(tsa)
 
     # TODO: Implement "training" and "choice" step to determine which actions we want to take
 
