@@ -6,6 +6,7 @@ from DGL.cosmos import LogLevel, Log
 # TODO: Create Batch Functions and Parallelize the Genetic Evolution of the Society
 class Genome:
     def __init__(self):
+        Log(LogLevel.INFO, "Genome", "Creating Genome")
         self.reset()
         self.population_count = 0 # TODO: Graph this over time
         self.population = set()

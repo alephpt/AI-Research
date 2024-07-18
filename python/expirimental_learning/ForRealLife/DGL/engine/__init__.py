@@ -1,2 +1,2 @@
 from .engine import Engine
-from .network import network
+from .learning import network, targetingsystem

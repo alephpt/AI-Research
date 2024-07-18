@@ -16,9 +16,12 @@ cell_size = Settings.CELL_SIZE.value
 
 class World(Genome, Society, Engine):
     def __init__(self):
-        print(f'Creating World \tGrid Size: {grid_size},{grid_size}')
-        print(f'\t\tTotal Grid Count: {Settings.TOTAL_GRID_COUNT.value}')
+        Log(LogLevel.INFO, "World", f'Creating Grid Size: {grid_size},{grid_size}')
+        Log(LogLevel.INFO, "World", f'Creating Total Grid Count: {Settings.TOTAL_GRID_COUNT.value}')
+        Log(LogLevel.INFO, "World", f'Creating Cell Size: {cell_size}')
+        Log(LogLevel.INFO, "World", f'Creating Screen Size: {screen_size}')
         self.screen = pygame.display.set_mode((screen_size, screen_size))
+        Log(LogLevel.INFO, "World", f'Creating Screen Size: {screen_size},{screen_size}')
         self.running = False        # TODO: Dedup
         self.cells = set()          # TODO: Dedup
         self.units = set()          # TODO: Dedup

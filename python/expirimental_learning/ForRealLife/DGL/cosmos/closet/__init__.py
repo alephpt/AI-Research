@@ -15,6 +15,9 @@ def sigmoid_derivative(x):
 def relu(x):
     return n.maximum(0, x)
 
+def relu_derivative(x):
+    return n.where(x <= 0, 0, 1)
+
 def softmax(x):
     exps = n.exp(x - n.max(x))
     return exps / n.sum(exps)

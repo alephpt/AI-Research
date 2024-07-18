@@ -63,7 +63,7 @@ class State(Enum): # (enumerated state, color value, lerp value)
     @staticmethod
     def random():
         # TODO: Graph the initial curve of the Alive space against the long term trends of the other states
-        return random.choice([State.Alive, State.Horny, State.Broke, State.Hungry])
+        return random.choice([State.Alive, State.Horny, State.Broke, State.Hungry, State.Tired])
 
     # TODO: Integrate this as an optimization once each time we update the state
     def combine(self, other):

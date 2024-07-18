@@ -133,7 +133,7 @@ class Unit(Azimuth):
             # Step 2. Let the unit choose the best target
             # 
             else:
-                self.target = random.choice([*self.markets, *self.home])
+                self.target = self.randomTarget()
 
 
                 # Step 3. Let the unit choose when to change targets
@@ -148,6 +148,8 @@ class Unit(Azimuth):
             # This is where we would increase happiness and compassion, integrity, and decrease fatigue
             return
 
+    def randomTarget(self):
+        return random.choice([*self.markets, *self.home])
 
     # This update function should pick a state,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level

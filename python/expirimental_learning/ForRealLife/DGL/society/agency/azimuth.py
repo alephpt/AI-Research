@@ -1,5 +1,6 @@
 from DGL.society.agency import MoveAction, State
 from DGL.engine.cell import Cell
+from DGL.engine.learning import TargetingSystem, EthicsMatrix
 from DGL.cosmos import LogLevel, Log
 from ..unittype import UnitType
 
@@ -7,7 +8,7 @@ global gender_count
 gender_count = 0
 
 # State Space ? Q
-class Azimuth(Cell): 
+class Azimuth(Cell, EthicsMatrix): 
     '''
     An Azimuth should be used for locational and directional purposes.'''
     def __init__(self, idx):
@@ -16,6 +17,7 @@ class Azimuth(Cell):
         gender_count += 1
         self.magnitude = None
         self.target = None
+        self.target_decision = TargetingSystem.random()
         self.action_step = MoveAction.random()
         self.target_direction = self.action_step.xy()
         self.reward = 0             # This will be interesting considering the potential for a Cell State to handle an enumeration of states
@@ -30,11 +32,3 @@ class Azimuth(Cell):
         self.target_reached = False
         Log(LogLevel.VERBOSE, "Azimuth", f"{self} chose random state {self.state}")
 
-
-    # TODO: Create a map of updating functions
-    def updateState(self, cell):
-        Log(LogLevel.INFO, f" ~ Updating State of {self} with {cell}")
-        if self.state == State.Hungry:
-            Log(LogLevel.INFO, f"Unit {self} is hungry")
-            if cell.type == UnitType.Market:
-                Log(LogLevel.INFO, f"Unit {self} is at Market {cell.idx}")
