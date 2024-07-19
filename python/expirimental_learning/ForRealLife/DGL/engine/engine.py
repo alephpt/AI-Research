@@ -73,7 +73,6 @@ class Engine(Grid):
             self.drawCells()
             world_update() # This is coming from the 'World' class, where we are drawing the unites
             self.gui()
-            self.updatePopulation(self.selected)
             self.events()
             pygame.display.flip()
             self.clock.tick(Settings.FPS.value)

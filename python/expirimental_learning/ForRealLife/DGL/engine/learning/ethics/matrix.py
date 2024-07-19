@@ -1,78 +1,21 @@
-from enum import Enum
-import random
+
 from DGL.cosmos import Settings, Log, LogLevel
-
-# Integrity is our Y-Axis
-class Integrity(Enum):
-    Duplicit = -3
-    Deceitful = -2
-    Deceptive = -1
-    Neutral = 0
-    Honest = 1
-    Trustworthy = 2
-    Integral = 3
-
-    @staticmethod
-    def random():
-        return Integrity(random.choice([*Integrity]))
-    
-    @staticmethod
-    def clamp(value):
-        if value < -150:
-            return Integrity.Duplicit
-        elif value < -100:
-            return Integrity.Deceitful
-        elif value < -50:
-            return Integrity.Deceptive
-        elif value < 50:
-            return Integrity.Neutral
-        elif value < 100:
-            return Integrity.Honest
-        elif value < 150:
-            return Integrity.Trustworthy
-        else:
-            return Integrity.Integral
-
-# Compassion is our X-Axis
-class Compassion(Enum):
-    Heartless = -3
-    Cold = -2
-    Inconsiderate = -1
-    Indifferent = 0
-    Content = 1
-    Empathetic = 2
-    Altruistic = 3
-
-    @staticmethod
-    def random():
-        return Compassion(random.choice([*Compassion]))
-    
-    @staticmethod
-    def clamp(value):
-        if value < -150:
-            return Compassion.Heartless
-        elif value < -100:
-            return Compassion.Cold
-        elif value < -50:
-            return Compassion.Inconsiderate
-        elif value < 50:
-            return Compassion.Indifferent
-        elif value < 100:
-            return Compassion.Content
-        elif value < 150:
-            return Compassion.Empathetic
-        else:
-            return Compassion.Altruistic
+from .integrity import Integrity
+from .compassion import Compassion
 
 class EthicsMatrix:
+    '''
+    The Ethics Matrix is designed in a way that gives more opportunities for a more negative index, and more stable outcomes for a more positive index.
+    '''
     def __init__(self):
+        Log(LogLevel.INFO, "EthicsMatrix", f"Unit {self.idx} Creating an Ethics Matrix")
         self.integrity_points = Settings.randFluxInt(300)
         self.integrity = Integrity.clamp(self.integrity_points)
         self.compassion_points = Settings.randFluxInt(300)
         self.compassion = Compassion.clamp(self.compassion_points)
 
     def __str__(self):
-        return f"x: {self.compassion.name}, y: {self.integrity.name}"
+        return f"compassion: {self.compassion.name}, integrity: {self.integrity.name}"
 
     def gainIntegrity(self, value):
         '''Can be used to +/- integrity points'''
@@ -119,14 +62,14 @@ class EthicsMatrix:
             Log(LogLevel.INFO, "EthicsMatrix", f"Greater compassion observed: {potential}")
 
 
-    def xy(self):
+    def ethicsXY(self):
         '''Returns the compassion and integrity values, respectively.'''
         return self.compassion.value, self.integrity.value
     
-def testEthicsMatrix():
-    print("Testing Ethics Matrix")
-    ethics = EthicsMatrix()
-    print(f"Ethics: {ethics}")
-    print(f"Ethics XY: {ethics.xy()}")
-    print("Ethics Matrix Test Complete")
-    print()
+    def ethics(self):
+        '''Returns the compassion and integrity types, respectively.'''
+        return self.compassion, self.integrity
+    
+    def ethicsNames(self):
+        '''Returns the compassion and integrity names, respectively.'''
+        return self.compassion.name, self.integrity.name

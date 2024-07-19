@@ -16,24 +16,27 @@ class Cell:
     cell_type: Cell = Cell.Available
     '''
     def __init__(self, idx, cell_type=UnitType.CELL):
-        #Log(LogLevel.ALERT, "Cell", f" ~~ Creating Cell {idx} - received type {cell_type} ~~")
         self.radius = Settings.UNIT_RADIUS.value
         self.size = Settings.CELL_SIZE.value
         self.idx = idx
         self.type = cell_type
         self.x, self.y = self.getXY()
-
-        #Log(LogLevel.ALERT, "Cell", f" ~~ New Cell {self.idx} created with type {self.type.name} ~~ \n")
+        Log(LogLevel.INFO, "Cell", f" ~~ Creating Cell {idx} - received type {cell_type} ~~")
+        Log(LogLevel.INFO, "Cell", f" ~~ \tx: {self.x}, y: {self.y} ~~")
 
     def xy(self):
         return self.x, self.y
 
     def getXY(self):
         if self.type == UnitType.CELL:
+            #Log(LogLevel.ALERT, "Cell", f"Cell {self.idx} is a Cell")
             return self.idx % Settings.GRID_SIZE.value, self.idx // Settings.GRID_SIZE.value
 
         if self.type in [UnitType.Male, UnitType.Female]:
+            Log(LogLevel.ALERT, "Cell", f"Cell {self.idx} is a Unit")
             return Settings.randomLocation()
+        
+        Log(LogLevel.ALERT, "Cell", f"Cell {self.idx} is a {self.type.name}")
         return Settings.randomWithinBounds()
 
     @staticmethod # Constructor that returns a set of the cells in their default state, as a set

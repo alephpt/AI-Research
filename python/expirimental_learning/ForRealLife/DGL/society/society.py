@@ -1,8 +1,9 @@
 from multiprocessing import Pool
 from DGL.cosmos import Log, LogLevel
 from .unit import Unit
+from .home import Home
 from .market import Market
-from .agency import Home, State
+from .agency import State
 from .unittype import UnitType
 from DGL.cosmos import Settings
 
@@ -89,7 +90,7 @@ class Society:
 
         return units, markets, homes
 
-    def updatePopulation(self, selected):
+    def updateUnits(self, selected):
         Log(LogLevel.VERBOSE, "Society", f" ~ Updating Population ~")
         Log(LogLevel.VERBOSE, "Society", f"Grid of size {len(self.cells)}")
         Log(LogLevel.VERBOSE, "Society", f"Population: {len(self.units)}")
@@ -99,6 +100,11 @@ class Society:
             if unit.happiness > 0:
                 unit.happiness -= 1
 
+            if unit.content():
+                unit.happiness += 1
+                unit.gainCompassion(10)
+ 
+
             # Remove iterables from units list, to prevent excessive steps
             if unit.state == State.Dead:
                 self.units.remove(unit)
@@ -106,10 +112,10 @@ class Society:
 
                 # This hook exists for us to be able to update state via the GUI
             # Prevents us from selecting None, but allows us to select a target during the simulation.
-            if selected not in [unit.target, None] and not type(selected) == tuple:
-                unit.target = selected # This piece of code updates all units to focus on a single selected target
-                unit.target_direction = unit.target.xy()    # defined by the User
-                # We actually need to determine the target direction aka Action Step unit.target.xy()
+            if selected not in [unit.cursor, None] and not type(selected) == tuple:
+                unit.cursor = selected # This piece of code updates all units to focus on a single selected target
+                unit.target_direction = unit.cursor.xy()    # defined by the User
+                # We actually need to determine the target direction aka Action Step unit.cursor.xy()
 
             # Determine if the Unit is at a Market or Home
             if unit.type in [UnitType.Male, UnitType.Female]:
@@ -121,8 +127,9 @@ class Society:
                     elif unit.state == State.Horny:
                         unit.sex()
                     
-
-
-                    unit.chooseRandomState()
+                    #unit.chooseRandomState()
                     
             unit.UpdateState()
+            unit.updateAzimuth()
+            unit.updateReward()
+            unit.updateEthics()

@@ -14,14 +14,6 @@ import random
     # Harvesting = (9, (128, 200, 191), 2) # Creates a 'Token' in society that allows for 'generic' trading of goods
     # Building = (10, (128, 200, 191), 2) # Could lead to building Home or Business -> Could even evolve "construction" or "engineer" type
 
-# These are potential Action states that we could be in based on some given conditions of the AI
-class Action(Enum):
-    Wuwei = 0           # Doing not doing.
-    Moving = 1          # Actually Pursuing a Target
-    Trading = 2         # These are more 'conditional' internal states for triggering world events
-    Eating = 3
-    Sleeping = 4
-    Growing = 5
 
 
 

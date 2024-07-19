@@ -1,6 +1,8 @@
 import numpy as np
 from enum import Enum
-from .targetingsystem import TargetAction, TargetingSystem
+
+from DGL.cosmos import Log, LogLevel
+from .targeting.targetingsystem import TargetingSystem
 from DGL.society.agency.state import State
 from DGL.cosmos.closet import relu, sigmoid_derivative
 
@@ -32,8 +34,6 @@ class DRL:
             model.append(Layer(input_count, hidden_layer_size[i]), relu, factor=0.01)
             input_count = hidden_layer_size[i]
             
-
-
         return model
 
     def forward(self, model, state):
@@ -51,6 +51,8 @@ class DRL:
 state_outputs = [State.Alive, State.Hungry, State.Broke, State.Horny, State.Tired]
 
 def testDRL():
+    target_system = TargetingSystem()
+
     # State Inputs
     integrity_level = 0 
     compassion_level = 0
@@ -61,7 +63,8 @@ def testDRL():
     state = 0           # State Conditions are based on 'world' "acheivements" through the AI acheiving certain goals or conditions
     choice = 0          # State Condition from Enum             0-4
     tsa = 0             # Target Selected Action from Enum      0-8
-    targeting_pool = TargetingSystem().poolValues()
+    state_dimension = 0 # State Dimension from Enum             0-8
+    targeting_pool = target_system.poolValues()
     inputs = [None, energy, money, happiness, fatigue, state, choice, tsa, *targeting_pool]
 
     # Comes from TargetingSystem
@@ -71,12 +74,19 @@ def testDRL():
     state_inputs = len(inputs)
     targeting_outputs = Settings.N_TARGETING_OUTPUTS.value
     d_state_hidden = [7,5,3]
-    #DRL_T = DRL(state_inputs, targeting_outputs, d_state_hidden)
+    DRL_T = DRL(state_inputs, targeting_outputs, d_state_hidden)
 
     # After we query the DRL, we should have a choice, and a target_system_action
+    state_dimension = choice % len(state_outputs)
+    tsa = choice // len(state_outputs)
 
-    chosen_state = state_outputs[choice]
-    chosen_target_action = TargetAction(tsa)
+    chosen_state = state_outputs[state_dimension]
+    chosen_target_action = target_system.setAction(tsa)
+    Log(LogLevel.INFO, "DRL", f"Chose State.{chosen_state}, TargetAction.{chosen_target_action}")
+    target_system.doAction()
+    # TODO: Implement a Target Action Step, and all potential actions
+    # TODO: Implement all stateful occurrences, and the reward/consequence of potential state
+
 
     # TODO: Implement "training" and "choice" step to determine which actions we want to take
 

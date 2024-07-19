@@ -4,12 +4,10 @@ from DGL.cosmos import LogLevel, Log
 # TODO: Implement Utility functions that allow for the creation of a new generation of units
 # TODO: Integrate the Genome into the Genetic Evolution of the Society
 # TODO: Create Batch Functions and Parallelize the Genetic Evolution of the Society
-class Genome:
+class Genome: # Ephemeral Statistical Interface
     def __init__(self):
         Log(LogLevel.INFO, "Genome", "Creating Genome")
         self.reset()
-        self.population_count = 0 # TODO: Graph this over time
-        self.population = set()
 
     # When we Shuffle we want 
     # 15-30% of the Oldest Generations
@@ -17,9 +15,6 @@ class Genome:
     # 50% to be Split
     #    20% is Crossover of the Oldest and Top Performers
     #    30% is Crossover of random Slices of Worst Performers
-
-    def alive():
-        pass
 
     # We are going to start our next generation with the following:
     def reset(self):

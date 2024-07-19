@@ -1,3 +1,3 @@
 from .network import DRL, testDRL
-from .targetingsystem import TargetingSystem
-from .ethics import EthicsMatrix
+from .targeting.targetingsystem import TargetingSystem
+from .ethics.matrix import EthicsMatrix

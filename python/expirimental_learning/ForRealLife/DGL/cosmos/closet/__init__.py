@@ -1,5 +1,7 @@
 from .utilities import *
 from .logger import Log
+from .basetype import BaseType
+from .cursor import MoveAction
 
 import numpy as n
 

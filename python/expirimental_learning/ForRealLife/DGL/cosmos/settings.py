@@ -29,7 +29,8 @@ class Settings(Enum):
     MEMORY_SIZE = 2048 # NOT IMPLEMENTED
     POOL_SIZE = 3
 
-    # RL Learning Rate
+    # RL Settings
+    HIDDEN_LAYERS = [7,5,3]
     N_STATE_INPUTS = 4
     N_STATE_OUTPUTS = 5
 

@@ -1,3 +1,3 @@
 from .state import State
-from .cursor import MoveAction
-from ..home import Home
+from DGL.cosmos import MoveAction
+from .action import Action

@@ -26,20 +26,21 @@ class World(Genome, Society, Engine):
         self.cells = set()          # TODO: Dedup
         self.units = set()          # TODO: Dedup
         self.selected = None        # TODO: Dedup
-        Genome().__init__()
+        Genome.__init__(self)
         Society.__init__(self)
         Engine.__init__(self)
-
-    def run(self):
-        Engine.runLoop(self, self.update)
 
     def alive(self):
         '''
         Returns all of the alive unites in the grid.'''
         return [unit for unit in self.units if unit.state != State.Dead]
 
+    # This is a callback function that we pass down to the engine to give us a higher order of control
     def update(self):
-        Log(LogLevel.VERBOSE, "World", "Updating World")
+        Log(LogLevel.ALERT, "World", "Updating World")
+
+        # This updates the units
+        self.updateUnits(self.selected)
 
         # This draws the characters, markets and homes (or should)
         self.drawUnits()
@@ -52,3 +53,5 @@ class World(Genome, Society, Engine):
 
         self.updateStatistics()
 
+    def run(self):
+        Engine.runLoop(self, self.update)

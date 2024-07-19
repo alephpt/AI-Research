@@ -3,6 +3,7 @@ from .agency.azimuth import Azimuth
 from .agency import State
 from DGL.cosmos import Log, LogLevel, Settings
 from DGL.cosmos.closet import p
+from DGL.engine.learning import EthicsMatrix
 
 map_size = Settings.GRID_SIZE.value  
 
@@ -30,6 +31,13 @@ class Unit(Azimuth):
         self.home = None
         self.moving = False         # We ONLY use this to update the Draw and 'Moving' Logics
         self.state = State.random()
+        print(self)
+    
+    def __str__(self):
+        return f"Unit {self.idx}-[{self.xy()}][{self.ethicsNames()}]"
+
+    def logState(self):
+        Log(LogLevel.INFO, "Unit", f"{self} is in state {self.state}")
     
     def index(self):
         return self.y * map_size + self.x
@@ -55,10 +63,16 @@ class Unit(Azimuth):
         if prev_d is 0:
             return (0, (0, 0))
 
-        return p(x, y, target.x, target.y)
+        t_x, t_y = (0, 0)
+        if isinstance(target, tuple):
+            t_x, t_y = target
+        else:
+            t_x, t_y = target.xy()
+
+        return p(x, y, t_x, t_y)
 
     def takeStep(self):
-        self.magnitude, self.target_direction = self.seekTarget(self.magnitude, self.x, self.y, self.target)
+        self.magnitude, self.target_direction = self.seekTarget(self.magnitude, self.x, self.y, self.cursor)
 
         # These variables could be mapped to the State Space with a random deviation
         if self.magnitude == 0:
@@ -115,7 +129,7 @@ class Unit(Azimuth):
     def chooseBestAction(self):
         #Log(LogLevel.VERBOSE, "Unit", f"is looking at target {self.target.type if self.target else 'undefined'}")
         
-        if self.target is None:
+        if self.cursor is None:
             #
             # Step 1. Let the unit choose a random target ?
             #
@@ -163,6 +177,7 @@ class Unit(Azimuth):
         if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.randomImpulse():
             Log(LogLevel.VERBOSE, "Unit", f"{self} is choosing a random action")
             self.chooseRandomState()
+            self.chooseRandomAction()
 
         # TODO: Look ahead at the next square based on the choice given from the Q Table
         self.chooseBestAction()
@@ -211,3 +226,19 @@ class Unit(Azimuth):
             print(f"Unit {self} has died")
             self.state = State.Dead
 
+
+
+
+
+
+def testEthicsMatrix():
+    print("Testing Ethics Matrix")
+
+    Unit1 = Unit(0)
+    Unit2 = Unit(1)
+    
+    print(f"Unit1 Ethics XY: {Unit1.ethics()}")
+    print(f"Unit2 Ethics XY: {Unit2.ethics()}")
+
+    Unit1.evaluatePotential(Unit2)
+    Unit2.evaluatePotential(Unit1)
