@@ -11,7 +11,7 @@ class TargetingSystem:
         self.potential_targets = []
         self.target_pool_size = 0
         self.next_target_idx = 0
-        self.action = TargetAction.Nothing
+        self.target_action = TargetAction.Nothing
         self.state = State.Alive
         self.moving = False
 
@@ -70,9 +70,9 @@ class TargetingSystem:
             return self.pool[0]
         elif self.action == TargetAction.Drop_First:
             self.selectNew(0)
-        elif self.action == TargetAction.Pull_Segundo:
+        elif self.action == TargetAction.Pull_Segun:
             return self.pool[1]
-        elif self.action == TargetAction.Drop_Segundo:
+        elif self.action == TargetAction.Drop_Segun:
             self.selectNew(1)
         elif self.action == TargetAction.Pull_Tre:
             return self.pool[2]

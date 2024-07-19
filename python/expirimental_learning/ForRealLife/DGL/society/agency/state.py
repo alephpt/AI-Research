@@ -24,10 +24,10 @@ class State(Enum): # (enumerated state, color value, lerp value)
     
     # These could be 'Chooseable' States
     Alive = (0, (111, 55, 111), 2)      # Default State
-    Broke = (6, (64, 77, 12), 2)        # We really want out Neural Network to be choosing what state we are in
-    Hungry = (7, (0, 64, 91), 2)
+    Broke = (1, (64, 77, 12), 2)        # We really want out Neural Network to be choosing what state we are in
+    Hungry = (2, (0, 64, 91), 2)
     Tired = (3, (128, 200, 191), 2)     # Happens as a result of fatigue onset
-    Horny = (5, (149, 90, 166), 2)      # This acts as a Non-Crucial State
+    Horny = (4, (149, 90, 166), 2)      # This acts as a Non-Crucial State
     # Content = (8, (128, 200, 191), 2) // I'd romanticize this to be resulting of compassion and happiness, and a certain level of fatigue
 
     def idx(self):
