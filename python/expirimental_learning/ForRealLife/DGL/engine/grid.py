@@ -15,7 +15,7 @@ class Grid:
         by the units, or cells, without regard for the other elements,
         '''
         self.cells = Cell.list()
-        self.selected = None
+        self.target_selection = None # This triggers a reset on the World level
 
     def drawCells(self):
         for cell in self.cells:

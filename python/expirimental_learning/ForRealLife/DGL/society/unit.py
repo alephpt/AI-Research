@@ -28,8 +28,6 @@ class Unit(Azimuth):
         self.food_counter = 0
         self.sleep_counter = 0
         self.success = False
-        self.markets = set() 
-        self.home = None
         self.moving = False         # We ONLY use this to update the Draw and 'Moving' Logics
         self.state = State.random()
         print(self)
@@ -42,23 +40,6 @@ class Unit(Azimuth):
     
     def index(self):
         return self.y * map_size + self.x
-
-    def lookAhead(self):
-        ## TODO: Calculate the entire number of steps needed to reach the target in a list and move this to whenever we 'Pull_*' from the pool
-        self.directionVec = track(self.magnitude, self.x, self.y, self.cursor)
-        self.magnitude = self.directionVec.magnitude
-        self.selected = self.directionVec.MoveAction()
-
-        # These variables could be mapped to the State Space with a random deviation
-        if self.magnitude == 0:
-            self.happiness += 100 # These are considered short term rewards
-            self.fatigue -= 10 # This should also insentivize the unit to move short distances
-            Log(LogLevel.INFO, "Azimuth", f"{self} has reached target")
-            self.target_reached = True # We should be able to factor this out by checking state
-            self.reward += 1000
-            
-            # # TODO: We need to trigger a movement to some other state
-            self.moving = True
 
     def move(self):
         if self.target_direction is not None:
@@ -107,22 +88,6 @@ class Unit(Azimuth):
             self.sleep_counter = 0
         return
 
-    # Option 1: Iterate through all a select group of targets, and choose the one with the lowest magnitude
-    # Option 2: Iterate through all possible targets, and choose the one with the highest reward
-    def chooseBestTarget(self, targets): # We are going to pass a callback in to allow for a dynamic reward function
-        best_value = 0
-        best_target = None
-
-        for target in targets:
-            distance, _ = self.track(self.magnitude, self.x, self.y, target)
-
-            if distance < best_value or (distance == 0 and best_value != 0): # or value < 0: # This would account for a negative reward
-                Log(LogLevel.WARNING, "Unit", f"\t\tFound New Best Value: {distance} > {best_value}")
-                best_value = distance
-                best_target = target
-
-        return best_target
-
     def getOlder(self):
         '''Adds 1 to our age'''
         self.age += 1
@@ -150,12 +115,29 @@ class Unit(Azimuth):
     def randomTarget(self):
         return random.choice([*self.markets, *self.home])
 
-    def express(self):
+    def act(self):
         if self.moving:
             Log(LogLevel.WARNING, "Unit", f"{self} is moving to {self.target_direction}")
             self.move()
         #if self.state == State.Sleeping:
         #    self.sleep()
+
+    def orient(self):
+        ## TODO: Calculate the entire number of steps needed to reach the target in a list and move this to whenever we 'Pull_*' from the pool
+        self.directionVec = track(self.magnitude, self.x, self.y, self.target_selection)
+        self.magnitude = self.directionVec.magnitude
+        self.target_action = self.directionVec.MoveAction()
+
+        # These variables could be mapped to the State Space with a random deviation
+        if self.magnitude == 0:
+            self.happiness += 100 # These are considered short term rewards
+            self.fatigue -= 10 # This should also insentivize the unit to move short distances
+            Log(LogLevel.INFO, "Azimuth", f"{self} has reached target")
+            self.target_reached = True # We should be able to factor this out by checking state
+            self.reward += 1000
+            
+            # # TODO: We need to trigger a movement to some other state
+            self.moving = True
 
     # This update function should pick a state,
     # and then update state, reward, and update the Q Table. # 'Caching' happens on the Epoch level
@@ -175,16 +157,16 @@ class Unit(Azimuth):
         # This will randomly spike randomness in the system 'interupting' our Agents decision making process
         if self.state == State.Alive or random.uniform(0.0, 1.0) < Settings.randomImpulse():
             self.chooseRandomState()
-            self.chooseRandomAction()
+            self.chooseRandomEncoder()
         
-        # We can have some random action and still not do anything.
+        # We can have some random action and still not do anything if we have a target_action of Nothing.
         if self.wuwei():
             return
 
         # TODO: Look ahead at the next square based on the choice given from the Q Table
         self.coincidence()
-        self.lookAhead()
-        self.express()
+        self.orient()
+        self.act()
 
         # Check if we are dead yet
         if self.energy < 0:

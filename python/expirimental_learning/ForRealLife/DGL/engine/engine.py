@@ -15,7 +15,7 @@ class Engine(Grid):
         pygame.display.set_caption('For Real Life!?')
         self.clock = pygame.time.Clock()
         self.running = True
-        self.selected = None
+        self.target_selection = None # Starts as an XY and finds a given Cell Type, and passes to update_world
 
     def selectCell(self, mouse_pos):
         '''
@@ -24,7 +24,7 @@ class Engine(Grid):
         x = x // Settings.CELL_SIZE.value
         y = y // Settings.CELL_SIZE.value
 
-        self.selected = (x, y)
+        self.target_selection = (x, y)
 
         Log(LogLevel.INFO, "World", f"Selected {x}, {y}")
 
@@ -51,7 +51,7 @@ class Engine(Grid):
         height_offset = 24
         
         sections = ["Status", "AvgAge", "AvgHealth", "AvgWealth", "AvgHappiness", "AvgReward", 'Selected']
-        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward, self.selected.__class__.__name__]
+        values = [State.fromValue(self.n_alive), self.avg_age, self.avg_health, self.avg_wealth, self.avg_happiness, self.avg_reward, self.target_selection.__class__.__name__]
         font = pygame.font.Font(None, 22)
 
         for i in range(len(sections)):

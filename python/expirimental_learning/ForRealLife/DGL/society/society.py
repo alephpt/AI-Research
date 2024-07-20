@@ -1,5 +1,5 @@
 from multiprocessing import Pool
-from DGL.cosmos import Log, LogLevel
+from DGL.cosmos import Log, LogLevel, MoveAction
 from .unit import Unit
 from .home import Home
 from .market import Market
@@ -32,26 +32,31 @@ def helper(t, n):
 
 class Society:
     def __init__(self):
-        self.repopulate()
-
-    def repopulate(self):
-        self.selected = None
         self.units, self.markets, self.homes = self.populate()
+        self.weaveUnits()
 
+    def weaveUnits(self):
         for unit in self.units:
             unit.markets = self.markets
-            unit.home = self.homes 
+            unit.home = self.homes
+
+    def repopulate(self):
+        self.target_selection = None # Triggers a reset on the World level
+        del self.units, self.markets, self.homes
+        self.units, self.markets, self.homes = self.populate()
+        self.weaveUnits()
 
     # THIS SHOULD BE FORBIDDEN.
     def checkSelected(self, unit):
-        if not isinstance(self.selected, tuple):
+        '''
+        We are checking if a given unit matches the selection of the grid coordinates provided by the user input'''
+        if not isinstance(self.target_selection, tuple):
             return
 
-        #Log(LogLevel.ALERT, "Society", f"Checking {unit.type}-[{unit.idx}]({unit.xy()}) against Selected-{self.selected}")
-
-        if unit.xy() == self.selected:
+        # If we have the same XY as a given unit, then we select that unit
+        if unit.xy() == self.target_selection:
             Log(LogLevel.VERBOSE, "Society", f"Selected {unit} at {unit.xy()}")
-            self.selected = unit
+            self.target_selection = unit
 
     def drawUnits(self):
         Log(LogLevel.VERBOSE, "Society", " ~ Drawing Units ~")
@@ -90,7 +95,7 @@ class Society:
 
         return units, markets, homes
 
-    def updateUnits(self, selected):
+    def updateUnits(self, target_selection):
         Log(LogLevel.VERBOSE, "Society", f" ~ Updating Population ~")
         Log(LogLevel.VERBOSE, "Society", f"Grid of size {len(self.cells)}")
         Log(LogLevel.VERBOSE, "Society", f"Population: {len(self.units)}")
@@ -102,10 +107,10 @@ class Society:
 
                 # This hook exists for us to be able to update state via the GUI
             # Prevents us from selecting None, but allows us to select a target during the simulation.
-            if selected not in [unit.cursor, None] and not type(selected) == tuple:
-                unit.cursor = selected # This piece of code updates all units to focus on a single selected targe
+            if target_selection not in [unit.target_selection, None] and not type(target_selection) == tuple:
+                unit.target_selection = target_selection # This piece of code updates all units to focus on a single selected targe
                     
-            unit.updateState()
             unit.updateAzimuth()
+            unit.updateState()
             #unit.updateReward()
             unit.updateEthics()

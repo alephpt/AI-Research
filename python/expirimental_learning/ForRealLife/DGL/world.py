@@ -25,7 +25,7 @@ class World(Genome, Society, Engine):
         self.running = False        # TODO: Dedup
         self.cells = set()          # TODO: Dedup
         self.units = set()          # TODO: Dedup
-        self.selected = None        # TODO: Dedup
+        self.target_selection = None        # TODO: Dedup
         Genome.__init__(self)
         Society.__init__(self)
         Engine.__init__(self)
@@ -38,7 +38,7 @@ class World(Genome, Society, Engine):
     # This is a callback function that we pass down to the engine to give us a higher order of control
     def update(self):
         #Log(LogLevel.VERBOSE, "World", "Updating World")
-        self.updateUnits(self.selected)
+        self.updateUnits(self.target_selection)
         self.drawUnits()
 
         # We should only hit this if all units are dead

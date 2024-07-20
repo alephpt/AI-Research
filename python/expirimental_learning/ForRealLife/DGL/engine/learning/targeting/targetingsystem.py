@@ -8,19 +8,19 @@ class TargetingSystem:
         Log(LogLevel.INFO, "TargetingSystem", f"Unit {self.idx} Initializing Targeting System")
         self.pool_size = Settings.POOL_SIZE.value
         self.pool = [Target.new() for _ in range(self.pool_size)]
-        self.potential_targets = []
         self.target_pool_size = 0
         self.next_target_idx = 0
-        self.target_action = EncoderState.Nothing
+        self.encoder_state = EncoderState.Nothing
         self.state = State.Alive
         self.moving = False
+        self.targets = []
 
     def content(self):
-        return self.target_action == EncoderState.Nothing and self.state == State.Alive
+        return self.encoder_state == EncoderState.Nothing and self.state == State.Alive
     
     def wuwei(self):
         #Log(LogLevel.WARNING, "TargetingSystem", "Wu Wei")
-        return self.target_action == EncoderState.Nothing
+        return self.encoder_state == EncoderState.Nothing
 
     @staticmethod
     def randomAction():
@@ -32,20 +32,20 @@ class TargetingSystem:
         '''Select a new target from the pool'''
         if self.target_pool_size == 0 or self.target_pool_size == self.pool_size:
             Log(LogLevel.ERROR, "TargetingSystem", "\tNo potential new targets to select from")
-            Log(LogLevel.WARNING, "TargetingSystem", f"\t{self.potential_targets} potential targets : {self.pool_size} pool size: Returning None.")
+            Log(LogLevel.WARNING, "TargetingSystem", f"\t{self.targets} potential targets : {self.pool_size} pool size: Returning None.")
             return
 
-        while self.potential_targets[self.next_target_idx] in self.pool:
+        while self.targets[self.next_target_idx] in self.pool:
             # This has a potential to run forever
             self.next_target_idx += 1 % self.target_pool_size
         
-        self.pool[idx] = self.potential_targets[self.next_target_idx]
+        self.pool[idx] = self.targets[self.next_target_idx]
 
     # We want to take a given set of potential targets and fill our pool with them
     # While also keeping track of which index we are querying
     def fill(self, target_pool):
         self.target_pool_size = len(target_pool)
-        self.potential_targets = target_pool
+        self.targets = target_pool
 
         # We want to iterate through the potential targets and fill our pool
         # as long as we are under the size of the pool
@@ -63,25 +63,25 @@ class TargetingSystem:
     
     def coincidence(self):
         '''Perform an action on the target pool'''
-        Log(LogLevel.ALERT, "TargetingSystem", f"Performing action {self.target_action.name}")
-        if self.target_action == EncoderState.Pursue:
+        Log(LogLevel.ALERT, "TargetingSystem", f"Performing action {self.encoder_state.name}")
+        if self.encoder_state == EncoderState.Pursue:
             Log(LogLevel.ALERT, "TargetingSystem", "Pursuant!")
             self.moving = True
-        elif self.target_action == EncoderState.Pull_First:
+        elif self.encoder_state == EncoderState.Pull_First:
             return self.pool[0]
-        elif self.target_action == EncoderState.Drop_First:
+        elif self.encoder_state == EncoderState.Drop_First:
             self.selectNew(0)
-        elif self.target_action == EncoderState.Pull_Segun:
+        elif self.encoder_state == EncoderState.Pull_Segun:
             return self.pool[1]
-        elif self.target_action == EncoderState.Drop_Segun:
+        elif self.encoder_state == EncoderState.Drop_Segun:
             self.selectNew(1)
-        elif self.target_action == EncoderState.Pull_Tre:
+        elif self.encoder_state == EncoderState.Pull_Tre:
             return self.pool[2]
-        elif self.target_action == EncoderState.Drop_Tre:
+        elif self.encoder_state == EncoderState.Drop_Tre:
             self.selectNew(2)
-        elif self.target_action == EncoderState.Flush_ALL:
+        elif self.encoder_state == EncoderState.Flush_ALL:
             self.pool = [Target.new() for _ in range(self.pool_size)]
-        elif self.target_action == EncoderState.Nothing:
+        elif self.encoder_state == EncoderState.Nothing:
             Log(LogLevel.ALERT, "TargetingSystem", "No action taken")
             self.moving = False
 
