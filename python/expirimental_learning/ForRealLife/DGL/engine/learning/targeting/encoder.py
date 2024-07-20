@@ -3,7 +3,7 @@ from DGL.cosmos import BaseType
 
 
 # There are our "eyes" in our agent
-class TargetAction(BaseType):
+class EncoderState(BaseType):
     Pursue = 0                              # This will be the trigger action that will do Nothing until a target is selected
     Pull_First = 1                        # This should map to the first target in the target pool
     Drop_First = 2
@@ -19,5 +19,5 @@ class TargetAction(BaseType):
 
     @staticmethod
     def random():
-        return TargetAction(random.choice([*TargetAction]))
+        return EncoderState(random.choice([*EncoderState]))
 

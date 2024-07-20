@@ -1,10 +1,10 @@
 import pygame
 from pygame_widgets.slider import Slider
-from DGL.cosmos import Log, LogLevel, Settings
+from DGL.cosmos import Log, LogLevel, Settings, Color
 from DGL.society.agency import State
 from .grid import Grid
 
-background = Settings.BACKGROUND_COLOR.value
+background = Color.BACKGROUND.value
 grid_size = Settings.GRID_SIZE.value
 cell_size = Settings.CELL_SIZE.value
 
@@ -66,6 +66,9 @@ class Engine(Grid):
             self.screen.blit(value, (grid_size * cell_size - width_offset - 22, i * 22 + height_offset))
 
     def runLoop(self, world_update):
+        '''
+        Simply handles pygame, and drawing the cells and gui, and calls the world_update function
+        '''        
         Log(LogLevel.INFO, "Ingine", " ~ Running MAIN Engine Loop ~")
 
         while self.running:

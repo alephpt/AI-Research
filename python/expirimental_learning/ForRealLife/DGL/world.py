@@ -37,12 +37,8 @@ class World(Genome, Society, Engine):
 
     # This is a callback function that we pass down to the engine to give us a higher order of control
     def update(self):
-        Log(LogLevel.ALERT, "World", "Updating World")
-
-        # This updates the units
+        #Log(LogLevel.VERBOSE, "World", "Updating World")
         self.updateUnits(self.selected)
-
-        # This draws the characters, markets and homes (or should)
         self.drawUnits()
 
         # We should only hit this if all units are dead

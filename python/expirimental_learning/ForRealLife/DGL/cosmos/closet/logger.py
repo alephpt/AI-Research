@@ -3,6 +3,7 @@ from enum import Enum
 from ..settings import Settings, LogLevel
 
 
+
     ############
     ## LOGGER ##
     ############

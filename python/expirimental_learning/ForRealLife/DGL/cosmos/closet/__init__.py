@@ -1,7 +1,8 @@
 from .utilities import *
 from .logger import Log
 from .basetype import BaseType
-from .cursor import MoveAction
+from .direction import MoveAction
+from .color import Color
 
 import numpy as n
 

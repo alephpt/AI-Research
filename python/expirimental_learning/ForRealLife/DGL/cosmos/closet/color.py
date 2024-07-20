@@ -26,9 +26,11 @@ class ColorType:
     
 
 class Color(Enum):
+    BACKGROUND = (24, 24, 24)
+    
     # Primary Colors for Individuals are Blue, Red and Yellow.. 
     Blue = (0, 0, 255)
-    UNIT_BLUE = (0, 0, 128)
+    UNIT_BLUE = (25, 0, 188)
     Red = (255, 0, 0)
     UNIT_RED = (128, 0, 0)
     Yellow = (255, 255, 0)
@@ -36,7 +38,7 @@ class Color(Enum):
     # Seconary Colors are Purple, Green and Orange
     Purple = (255, 0, 255)          # Offspring of Blue and Red
     Green = (0, 255, 0)             # Offspring of Blue and Yellow
-    CELLULAR_GREEN = (0, 128, 55)    # Offspring of Blue and Yellow
+    CELLULAR_GREEN = (0, 78, 35)    # Offspring of Blue and Yellow
     Orange = (255, 165, 0)          # Offspring of Red and Yellow
 
     # Territiary Colors for 'cross-breeding'

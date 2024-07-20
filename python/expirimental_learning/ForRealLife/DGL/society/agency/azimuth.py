@@ -27,8 +27,15 @@ class Azimuth(Cell, EthicsMatrix, TargetingSystem):
 
     def __str__(self):
         return f"[{self.idx}]-({self.x},{self.y}) - {self.state} :: target('{self.target_direction}') :: \]"
-    
+
+    def moveAction(self):
+        if self.cursor is None:
+            return
+        
+        self.target_direction = self.cursor.xy()
+
     def updateAzimuth(self):
+        self.moveAction()
         if self.moving:
             self.action = Action.Move
 
@@ -40,10 +47,9 @@ class Azimuth(Cell, EthicsMatrix, TargetingSystem):
     def chooseRandomState(self):
         self.state = State.random()
         self.target_reached = False
-        Log(LogLevel.VERBOSE, "Azimuth", f"{self} chose random state {self.state}")
+        Log(LogLevel.ALERT, "Azimuth", f"{self} chose random state {self.state}")
     
     def chooseRandomAction(self):
-        self.action = self.randomAction()
-
-        Log(LogLevel.VERBOSE, "Azimuth", f"{self} chose random action {self.action}")
+        self.target_action = self.randomAction()
+        Log(LogLevel.ALERT, "Azimuth", f"{self} chose random action {self.target_action}")
 

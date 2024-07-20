@@ -52,14 +52,14 @@ Working Space:
  -[X] Define Policies
  -[X] Add an 'Impulse Factor' to the Unit
  -[X] Be able to 'hone' target
- -[ ] Be able to acheive interaction with a cell
+ -[?] Be able to acheive interaction with a cell
  -[ ] Implement 'Random' choices
  -[ ] Implement 'Sleep' with No Reward except Sleep and Age (and 'refreshing' Fatigue (tbd))
  -[ ] Remove Home and implement Building
- -[ ] Configure Table for State: Action determination
-    -[ ] Integrate State as Key
-    -[ ] Define Action Table
-    -[ ] Determine Reward factor for for 'Best Action'
+ -[ ] Implement DRL
+    -[ ] Implement Neural Network for State Determination
+    -[ ] Implement Q-Table to Determine best Action from State + s
+    -[ ] Consider Hindsight Mechanism for EOL learning? <-> cross entropy 'shared' learning between Child and Parent
  -[ ] Make type safe
  -[ ] Write Nova Bindings
 

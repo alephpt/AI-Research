@@ -2,7 +2,7 @@ from enum import Enum
 import random
 
 ## These are the Moves that we can move in
-                #  HERE   UPLEFT     LEFT   BACKLEFT   DOWN   DOWNRIGHT  RIGHT  UPRIGHT   UP 
+          #  HERE   UPLEFT     LEFT   BACKLEFT   DOWN   DOWNRIGHT  RIGHT  UPRIGHT   UP 
 MOVE_MAP = [(0, 0), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
 
 # Movement Option by Name
@@ -34,6 +34,12 @@ class MoveAction(Enum):
             MoveAction.UpRight, 
             MoveAction.Up])
     
+    def fromValue(value: tuple):
+        for i, m in enumerate(MOVE_MAP):
+            if value == m:
+                return MoveAction(i)
+        return MoveAction.NoWhere
+
     def  __eq__(self, value: object) -> bool:
         return super().__eq__(value)
 

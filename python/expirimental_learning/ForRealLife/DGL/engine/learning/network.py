@@ -82,7 +82,7 @@ def testDRL():
 
     chosen_state = state_outputs[state_dimension]
     chosen_target_action = target_system.setAction(tsa)
-    Log(LogLevel.INFO, "DRL", f"Chose State.{chosen_state}, TargetAction.{chosen_target_action}")
+    Log(LogLevel.INFO, "DRL", f"Chose State.{chosen_state}, EncoderState.{chosen_target_action}")
     target_system.doAction()
     # TODO: Implement a Target Action Step, and all potential actions
     # TODO: Implement all stateful occurrences, and the reward/consequence of potential state

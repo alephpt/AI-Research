@@ -1,37 +1,38 @@
 from DGL.cosmos import Settings, Log, LogLevel
 from .target import Target
-from .action import TargetAction
+from .encoder import EncoderState
 from DGL.society.agency.state import State
 
 class TargetingSystem:
     def __init__(self):
         Log(LogLevel.INFO, "TargetingSystem", f"Unit {self.idx} Initializing Targeting System")
         self.pool_size = Settings.POOL_SIZE.value
-        self.pool = set(Target.new() for _ in range(self.pool_size))
+        self.pool = [Target.new() for _ in range(self.pool_size)]
         self.potential_targets = []
         self.target_pool_size = 0
         self.next_target_idx = 0
-        self.target_action = TargetAction.Nothing
+        self.target_action = EncoderState.Nothing
         self.state = State.Alive
         self.moving = False
 
     def content(self):
-        return self.action == TargetAction.Nothing and self.state == State.Alive
+        return self.target_action == EncoderState.Nothing and self.state == State.Alive
     
     def wuwei(self):
-        Log(LogLevel.WARNING, "TargetingSystem", "Wu Wei")
-        return self.action == TargetAction.Nothing
+        #Log(LogLevel.WARNING, "TargetingSystem", "Wu Wei")
+        return self.target_action == EncoderState.Nothing
 
     @staticmethod
     def randomAction():
-        '''Return a random TargetAction type'''
-        return TargetAction.random()
+        '''Return a random EncoderState type'''
+        return EncoderState.random()
 
     def selectNew(self, idx):
+        Log(LogLevel.INFO, "TargetingSystem", "Selecting New: ")
         '''Select a new target from the pool'''
         if self.target_pool_size == 0 or self.target_pool_size == self.pool_size:
-            Log(LogLevel.ERROR, "TargetingSystem", "No potential new targets to select from")
-            Log(LogLevel.Warning, "TargetingSystem", f"{self.potential_targets} potential targets : {self.pool_size} pool size: Returning None.")
+            Log(LogLevel.ERROR, "TargetingSystem", "\tNo potential new targets to select from")
+            Log(LogLevel.WARNING, "TargetingSystem", f"\t{self.potential_targets} potential targets : {self.pool_size} pool size: Returning None.")
             return
 
         while self.potential_targets[self.next_target_idx] in self.pool:
@@ -53,40 +54,40 @@ class TargetingSystem:
 
     def setAction(self, e):
         '''Set the action of the targeting system'''
-        self.action = TargetAction(e)
+        self.action = EncoderState(e)
         return self.action
 
     def poolValues(self):
         '''Return a list of tuples of the pool of targets'''
         return [t.pool() for t in self.pool]
     
-    def doAction(self):
+    def coincidence(self):
         '''Perform an action on the target pool'''
-        Log(LogLevel.ALERT, "TargetingSystem", f"Performing action {self.action.name}")
-        if self.action == TargetAction.Pursue:
+        Log(LogLevel.ALERT, "TargetingSystem", f"Performing action {self.target_action.name}")
+        if self.target_action == EncoderState.Pursue:
             Log(LogLevel.ALERT, "TargetingSystem", "Pursuant!")
             self.moving = True
-        elif self.action == TargetAction.Pull_First:
+        elif self.target_action == EncoderState.Pull_First:
             return self.pool[0]
-        elif self.action == TargetAction.Drop_First:
+        elif self.target_action == EncoderState.Drop_First:
             self.selectNew(0)
-        elif self.action == TargetAction.Pull_Segun:
+        elif self.target_action == EncoderState.Pull_Segun:
             return self.pool[1]
-        elif self.action == TargetAction.Drop_Segun:
+        elif self.target_action == EncoderState.Drop_Segun:
             self.selectNew(1)
-        elif self.action == TargetAction.Pull_Tre:
+        elif self.target_action == EncoderState.Pull_Tre:
             return self.pool[2]
-        elif self.action == TargetAction.Drop_Tre:
+        elif self.target_action == EncoderState.Drop_Tre:
             self.selectNew(2)
-        elif self.action == TargetAction.Flush_ALL:
+        elif self.target_action == EncoderState.Flush_ALL:
             self.pool = [Target.new() for _ in range(self.pool_size)]
-        elif self.action == TargetAction.Nothing:
+        elif self.target_action == EncoderState.Nothing:
             Log(LogLevel.ALERT, "TargetingSystem", "No action taken")
             self.moving = False
 
 def testTargetingSystem():
     print("Testing Targeting System")
-    print(f"Random Targeting System: {TargetAction.random().name}")
+    print(f"Random Targeting System: {EncoderState.random().name}")
     print("Targeting System Test Complete")
     print()
 

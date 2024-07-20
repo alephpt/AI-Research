@@ -60,7 +60,7 @@ class Genome: # Ephemeral Statistical Interface
         
         for unit in self.units:
             if unit.state == State.Dead:
-                Log.Error(LogLevel.INFO, "Dead Unit Found. - signed, Anamolous.")
+                Log(LogLevel.ERROR, "Genetics", "Dead Unit Found. - signed, Anamolous.")
                 continue
             
             self.n_alive += 1

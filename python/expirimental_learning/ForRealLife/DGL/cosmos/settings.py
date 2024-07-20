@@ -25,7 +25,13 @@ class LogLevel(Enum):
 
 # This will act as our global accessor for configurations and constants
 class Settings(Enum):
-    DEBUG_LEVEL = LogLevel.DEBUG.value
+    # SCREEN SETTINGS
+    SCREEN_SIZE = 1200
+    
+    FPS = 90
+
+    # System Settings
+    DEBUG_LEVEL = LogLevel.VERBOSE.value
     MEMORY_SIZE = 2048 # NOT IMPLEMENTED
     POOL_SIZE = 3
 
@@ -42,13 +48,7 @@ class Settings(Enum):
     EPSILON = 0.7
 
 
-    # SCREEN SETTINGS
-    SCREEN_SIZE = 1200
-    BACKGROUND_COLOR = (24, 24, 24)
-    FPS = 15
-
-
-    GRID_SIZE = 10  # We started at 10
+    GRID_SIZE = 100  # We started at 10
     CELL_SIZE = SCREEN_SIZE // GRID_SIZE
     GRID_START = GRID_SIZE // 10
     GRID_END = GRID_SIZE - GRID_START
@@ -60,16 +60,16 @@ class Settings(Enum):
     UNIT_RADIUS = 5 * CELL_SIZE
 
     # MESO-MACRO SETTINGS
-    N_POPULATION = 2
-    N_JOBS = 1                                  # This throttles supply and demand for food and money
-    N_HOUSES = 1
+    N_POPULATION = 10
+    N_JOBS = 3                                  # This throttles supply and demand for food and money
+    N_HOUSES = 3
 
     # Unit Defaults
     COST_OF_GOODS = 5                           # TODO: Let every Unit set their own cost of food
     INITIAL_E = 150                             # Default Energy Level -   Units should inherit this with their DNA -  What is the ideal energy level? We started at 25. 
     INITIAL_W = 50                              # Default Money Level -    Units should inherit this with their DNA -   We want to see how far we can take this down. We started at 50.
     LIFETIME_REWARD_SCALAR = 10                 # Incentivizes living longer - this should start as 10:1 energy cost - # Maybe we add Random bonus factor for genetic alterations.
-    IMPULSIVITY = 0.1    # 1 would be 100%      # How likely are you to make a random decision? - We started at 0.5 and need to end with near absolute
+    IMPULSIVITY = 0.05    # 1 would be 100%      # How likely are you to make a random decision? - We started at 0.5 and need to end with near absolute
     CHANCE_TO_REPRODUCE = 0.5                   # How likely are you to reproduce? - We started at 50%, but need to pick randomly, to allow for 'happy accidents'
 
     # Sleep Values
